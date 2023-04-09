@@ -1,0 +1,14 @@
+version: '3.9'
+services:
+  app:
+    image: lost-and-found
+    ports:
+      - '3000:3000'
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      NEXTAUTH_URL: ${NEXTAUTH_URL}
+      MIREA_CLIENT_ID: ${MIREA_CLIENT_ID}
+      MIREA_CLIENT_SECRET: ${MIREA_CLIENT_SECRET}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
