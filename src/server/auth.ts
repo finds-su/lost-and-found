@@ -1,8 +1,14 @@
 import { type GetServerSidePropsContext } from 'next'
-import { getServerSession, type NextAuthOptions, type DefaultSession } from 'next-auth'
+import { getServerSession, type NextAuthOptions, type DefaultSession, DefaultUser } from 'next-auth'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '@/server/db'
-import GoogleProvider from 'next-auth/providers/google'
+import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google'
+import { DateTime } from 'next-auth/providers/kakao'
+import { mockProviders, mockSession } from 'next-auth/client/__tests__/helpers/mocks'
+import authorize = mockProviders.credentials.authorize
+import { OAuthConfig } from 'next-auth/providers'
+import { User } from '@prisma/client'
+import image = mockSession.user.image
 
 interface ArUser {
   ID: string
@@ -26,18 +32,29 @@ interface MireaProfile {
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
 declare module 'next-auth' {
-  interface Session extends DefaultSession {
+  interface Session {
     user: {
       id: string
-      // ...other properties
-      // role: UserRole;
-    } & DefaultSession['user']
+      nickname: string
+      role?: Role
+      telegramLink?: string
+    } & DefaultSession['user'] & { user: { name: unknown } }
   }
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface User {
+    nickname: string
+    firstName: string
+    secondName?: string
+    lastName: string
+    role?: Role
+    telegramLink?: string
+  }
+}
+
+enum Role {
+  USER = 'USER',
+  MODERATOR = 'MODERATOR',
+  ADMIN = 'ADMIN',
 }
 
 /**
@@ -54,7 +71,8 @@ export const authOptions: NextAuthOptions = {
     session({ session, user }) {
       if (session.user) {
         session.user.id = user.id
-        // session.user.role = user.role; <-- put other properties on the session here
+        session.user.nickname = user.nickname
+        session.user.role = user.role
       }
       return session
     },
@@ -72,6 +90,19 @@ export const authOptions: NextAuthOptions = {
           access_type: 'offline',
           response_type: 'code',
         },
+      },
+      profile(profile: GoogleProfile) {
+        return {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          id: profile.at_hash,
+          nickname: profile.name,
+          name: profile.name,
+          email: profile.email,
+          emailVerified: profile.email_verified ? new Date() : null,
+          firstName: profile.given_name,
+          lastName: profile.family_name,
+          image: profile.picture,
+        }
       },
     }),
     {
@@ -98,10 +129,16 @@ export const authOptions: NextAuthOptions = {
         if (profile.arUser.SECOND_NAME == '') {
           name = profile.arUser.NAME + ' ' + profile.arUser.LAST_NAME
         }
-
         return {
           id: profile.arUser.ID,
-          name: name,
+          name,
+          nickname:
+            profile.arUser.NAME +
+            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+            (profile.arUser.LAST_NAME ? ` ${profile.arUser.LAST_NAME.at(0)}.` : ''),
+          firstName: profile.arUser.NAME,
+          secondName: profile.arUser.SECOND_NAME,
+          lastName: profile.arUser.LAST_NAME,
           email: profile.arUser.LOGIN,
           image: 'https://lk.mirea.ru' + profile.arUser.PHOTO,
         }

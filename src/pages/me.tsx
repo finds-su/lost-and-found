@@ -6,6 +6,17 @@ import { getServerSession } from 'next-auth'
 
 export default function Me() {
   const { data: session, status } = useSession()
+  let profileInfo: { name: string; value: string }[] = []
+
+  if (session) {
+    profileInfo = [
+      { name: 'Имя', value: session.user.name ? session.user.name : '-' },
+      { name: 'Никнейм', value: session.user.nickname ? session.user.nickname : '-' },
+      { name: 'Почта', value: session.user.email ? session.user.email : '-' },
+      { name: 'Роль', value: session.user.role ? session.user.role : '-' },
+      { name: 'Telegram', value: session.user.telegramLink ? session.user.telegramLink : '-' },
+    ]
+  }
 
   if (session) {
     return (
@@ -13,13 +24,13 @@ export default function Me() {
         <div className='shadow-blur relative mb-4 flex min-w-0 flex-auto flex-col overflow-hidden break-words rounded-2xl border-0 bg-white/80 bg-clip-border p-4'>
           <div className='-mx-3 flex flex-wrap'>
             <div className='w-auto max-w-full flex-none px-3'>
-              <div className='text-size-base ease-soft-in-out h-18.5 w-18.5 relative inline-flex items-center justify-center rounded-xl text-white transition-all duration-200'>
+              <div className='min-w-20 min-h-20 text-size-base ease-soft-in-out relative inline-flex items-center justify-center rounded-xl text-white transition-all duration-200'>
                 <Image
                   src={session.user.image ? session.user.image : '/assets/kudzh.jpeg'}
                   alt='profile_image'
-                  className='shadow-soft-sm w-full rounded-xl'
-                  width={100}
-                  height={100}
+                  className='shadow-soft-sm object-fit w-20 w-full rounded-xl'
+                  width={200}
+                  height={200}
                 />
               </div>
             </div>
@@ -27,7 +38,7 @@ export default function Me() {
               <div className='h-full'>
                 <h5 className='mb-1'>{session.user.name}</h5>
                 <p className='text-size-sm mb-0 font-semibold leading-normal'>
-                  {session.user.email}
+                  {session.user.role}
                 </p>
               </div>
             </div>
@@ -182,43 +193,14 @@ export default function Me() {
                   </p>
                   <hr className='bg-gradient-horizontal-light my-6 h-px bg-transparent' />
                   <ul className='mb-0 flex flex-col rounded-lg pl-0'>
-                    <li className='text-size-sm relative block rounded-t-lg border-0 bg-white px-4 py-2 pl-0 pt-0 leading-normal text-inherit'>
-                      <strong className='text-slate-700'>Full Name:</strong> &nbsp; Alec M. Thompson
-                    </li>
-                    <li className='text-size-sm relative block border-0 border-t-0 bg-white px-4 py-2 pl-0 leading-normal text-inherit'>
-                      <strong className='text-slate-700'>Mobile:</strong> &nbsp; (44) 123 1234 123
-                    </li>
-                    <li className='text-size-sm relative block border-0 border-t-0 bg-white px-4 py-2 pl-0 leading-normal text-inherit'>
-                      <strong className='text-slate-700'>Email:</strong> &nbsp;
-                      alecthompson@mail.com
-                    </li>
-                    <li className='text-size-sm relative block border-0 border-t-0 bg-white px-4 py-2 pl-0 leading-normal text-inherit'>
-                      <strong className='text-slate-700'>Location:</strong> &nbsp; USA
-                    </li>
-                    <li className='relative block rounded-b-lg border-0 border-t-0 bg-white px-4 py-2 pb-0 pl-0 text-inherit'>
-                      <strong className='text-size-sm leading-normal text-slate-700'>
-                        Social:
-                      </strong>{' '}
-                      &nbsp;
-                      <a
-                        className='leading-pro text-size-xs ease-soft-in mb-0 inline-block cursor-pointer rounded-lg border-0 bg-transparent bg-none py-0 pl-1 pr-2 text-center align-middle font-bold text-blue-800 shadow-none transition-all'
-                        href='javascript:'
+                    {profileInfo.map((item) => (
+                      <li
+                        key={item.name}
+                        className='text-size-sm relative block rounded-t-lg border-0 bg-white px-4 py-2 pl-0 pt-0 leading-normal text-inherit'
                       >
-                        <i className='fab fa-facebook fa-lg' aria-hidden='true'></i>
-                      </a>
-                      <a
-                        className='leading-pro text-size-xs ease-soft-in mb-0 inline-block cursor-pointer rounded-lg border-0 bg-transparent bg-none py-0 pl-1 pr-2 text-center align-middle font-bold text-sky-600 shadow-none transition-all'
-                        href='javascript:'
-                      >
-                        <i className='fab fa-twitter fa-lg' aria-hidden='true'></i>
-                      </a>
-                      <a
-                        className='leading-pro text-size-xs ease-soft-in mb-0 inline-block cursor-pointer rounded-lg border-0 bg-transparent bg-none py-0 pl-1 pr-2 text-center align-middle font-bold text-sky-900 shadow-none transition-all'
-                        href='javascript:'
-                      >
-                        <i className='fab fa-instagram fa-lg' aria-hidden='true'></i>
-                      </a>
-                    </li>
+                        <strong className='text-slate-700'>{item.name}:</strong> &nbsp; {item.value}
+                      </li>
+                    ))}
                   </ul>
                 </div>
               </div>

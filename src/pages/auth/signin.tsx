@@ -1,21 +1,5 @@
-/*
-  This example requires Tailwind CSS v2.0+
-
-  This example requires some changes to your config:
-
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
 import Image from 'next/image'
-import { signIn, useSession } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/server/auth'
@@ -23,6 +7,7 @@ import { authOptions } from '@/server/auth'
 export default function SignIn() {
   const router = useRouter()
   const callbackUrl = router.query.callbackUrl ? (router.query.callbackUrl as string) : '/'
+  const error = router.query.error
 
   return (
     <main className='h-screen bg-white'>
@@ -38,7 +23,7 @@ export default function SignIn() {
                 height={100}
               />
               <h2 className='mt-6 text-3xl font-bold tracking-tight text-gray-900'>
-                Войти в систему
+                Войти в Бюро находок
               </h2>
             </div>
 
@@ -53,7 +38,7 @@ export default function SignIn() {
                         onClick={() => void signIn('mirea', { callbackUrl })}
                         className='inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50'
                       >
-                        <span className='sr-only'>Войти через ЛКС</span>
+                        <span className='sr-only'>ЛКС</span>
                         <Image
                           src='/assets/mirea-emblem.svg'
                           alt=''
@@ -68,7 +53,7 @@ export default function SignIn() {
                         onClick={() => void signIn('google', { callbackUrl })}
                         className='inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50'
                       >
-                        <span className='sr-only'>Войти через Google</span>
+                        <span className='sr-only'>Google</span>
                         <Image
                           src='/assets/google-logo.svg'
                           alt=''
@@ -79,6 +64,11 @@ export default function SignIn() {
                       </button>
                     </div>
                   </div>
+                  {error && (
+                    <p className='mt-1 text-sm text-red-600'>
+                      Ошибка авторизации. Попробуйте другой способ
+                    </p>
+                  )}
                 </div>
 
                 <div className='relative mt-6'>
@@ -104,7 +94,7 @@ export default function SignIn() {
                         type='email'
                         autoComplete='email'
                         required
-                        className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
+                        className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm'
                       />
                     </div>
                   </div>
@@ -120,7 +110,7 @@ export default function SignIn() {
                         type='password'
                         autoComplete='current-password'
                         required
-                        className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
+                        className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm'
                       />
                     </div>
                   </div>
@@ -128,7 +118,7 @@ export default function SignIn() {
                   <div>
                     <button
                       type='submit'
-                      className='flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
+                      className='flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
                     >
                       Войти
                     </button>
