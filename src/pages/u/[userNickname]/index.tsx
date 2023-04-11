@@ -1,25 +1,41 @@
 import Layout from '@/components/Layout'
 import Image from 'next/image'
-import { useSession } from 'next-auth/react'
 import { authOptions } from '@/server/auth'
 import { getServerSession } from 'next-auth'
 import { PencilIcon } from '@heroicons/react/24/solid'
+import { useRouter } from 'next/router'
+import { api } from '@/utils/api'
+import { useEffect, useState } from 'react'
+import { type PublicUser } from '@/server/api/routers/users'
+import { Spinner } from 'flowbite-react'
 
-export default function Me() {
-  const { data: session, status } = useSession()
+export default function Profile() {
+  const router = useRouter()
+  const userNickname = router.query.userNickname as string
+  const getUser = api.users.getOne.useQuery({ nickname: userNickname })
+  const [user, setUser] = useState<PublicUser>()
+
+  useEffect(() => {
+    if (getUser.data) {
+      setUser(getUser.data)
+    }
+  }, [getUser.data])
+
+  useEffect(() => {
+    if (getUser.status === 'error') {
+      void router.push(`/u/${userNickname}/error`)
+    }
+  }, [getUser.status, router, userNickname])
+
   let profileInfo: { name: string; value: string }[] = []
-
-  if (session) {
+  if (user) {
     profileInfo = [
-      { name: 'Имя', value: session.user.name ? session.user.name : '-' },
-      { name: 'Никнейм', value: session.user.nickname ? session.user.nickname : '-' },
-      { name: 'Почта', value: session.user.email ? session.user.email : '-' },
-      { name: 'Роль', value: session.user.role ? session.user.role : '-' },
-      { name: 'Telegram', value: session.user.telegramLink ? session.user.telegramLink : '-' },
+      { name: 'Никнейм', value: user.nickname ? user.nickname : '-' },
+      { name: 'Роль', value: user.role ? user.role : '-' },
     ]
   }
 
-  if (session) {
+  if (user) {
     return (
       <div className='loopple-min-height-78vh mx-auto w-full text-slate-500'>
         <div className='shadow-blur relative mb-4 flex min-w-0 flex-auto flex-col overflow-hidden break-words rounded-2xl border-0 bg-white/80 bg-clip-border p-4'>
@@ -27,7 +43,7 @@ export default function Me() {
             <div className='w-auto max-w-full flex-none px-3'>
               <div className='min-w-20 min-h-20 text-size-base ease-soft-in-out relative inline-flex items-center justify-center rounded-xl text-white transition-all duration-200'>
                 <Image
-                  src={session.user.image ? session.user.image : '/assets/kudzh.jpeg'}
+                  src={user.image ? user.image : '/assets/kudzh.jpeg'}
                   alt='profile_image'
                   className='shadow-soft-sm h-20 w-20 w-full rounded-xl object-cover'
                   width={300}
@@ -37,10 +53,8 @@ export default function Me() {
             </div>
             <div className='my-auto w-auto max-w-full flex-none px-3'>
               <div className='h-full'>
-                <h5 className='mb-1'>{session.user.name}</h5>
-                <p className='text-size-sm mb-0 font-semibold leading-normal'>
-                  {session.user.role}
-                </p>
+                <h5 className='mb-1'>{user.nickname}</h5>
+                <p className='text-size-sm mb-0 font-semibold leading-normal'>{user.role}</p>
               </div>
             </div>
             <div className='mx-auto mt-4 w-full max-w-full px-3 sm:my-auto sm:mr-0 md:w-1/2 md:flex-none lg:w-4/12'></div>
@@ -333,24 +347,37 @@ export default function Me() {
     )
   }
 
-  if (status === 'loading') {
-    return <p>Загрузка</p>
+  if (getUser.status === 'loading') {
+    return (
+      <div className='flex h-[40vh] items-center justify-center'>
+        <Spinner size='xl' />
+      </div>
+    )
   }
-  return <p>Доступ запрещён</p>
+
+  return <p>Неизветсная ошибка.</p>
 }
 
-Me.getLayout = function getLayout(page: any) {
+Profile.getLayout = function getLayout(page: any) {
   return <Layout pageName='Профиль'>{page}</Layout>
 }
 
 export async function getServerSideProps(context: any) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
   const session = await getServerSession(context.req, context.res, authOptions)
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  const userNickname = context.params.userNickname as string
+  if (session?.user.nickname === userNickname) {
+    return {
+      redirect: {
+        destination: '/me',
+        permanent: false,
+      },
+    }
+  }
   if (session) {
     return {
-      props: {
-        session,
-      },
+      props: {},
     }
   }
   return {

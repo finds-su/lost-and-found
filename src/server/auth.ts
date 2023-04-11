@@ -1,14 +1,9 @@
 import { type GetServerSidePropsContext } from 'next'
-import { getServerSession, type NextAuthOptions, type DefaultSession, DefaultUser } from 'next-auth'
+import { getServerSession, type NextAuthOptions, type DefaultSession } from 'next-auth'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '@/server/db'
-import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google'
-import { DateTime } from 'next-auth/providers/kakao'
-import { mockProviders, mockSession } from 'next-auth/client/__tests__/helpers/mocks'
-import authorize = mockProviders.credentials.authorize
-import { OAuthConfig } from 'next-auth/providers'
-import { User } from '@prisma/client'
-import image = mockSession.user.image
+import GoogleProvider, { type GoogleProfile } from 'next-auth/providers/google'
+import { getUniqueNickname } from '@/utils/getUniqueNickname'
 
 interface ArUser {
   ID: string
@@ -43,9 +38,6 @@ declare module 'next-auth' {
 
   interface User {
     nickname: string
-    firstName: string
-    secondName?: string
-    lastName: string
     role?: Role
     telegramLink?: string
   }
@@ -91,16 +83,14 @@ export const authOptions: NextAuthOptions = {
           response_type: 'code',
         },
       },
-      profile(profile: GoogleProfile) {
+      async profile(profile: GoogleProfile) {
         return {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          id: profile.at_hash,
-          nickname: profile.name,
+          id: profile.sub,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          nickname: await getUniqueNickname(profile.email.split('@')[0]!),
           name: profile.name,
           email: profile.email,
-          emailVerified: profile.email_verified ? new Date() : null,
-          firstName: profile.given_name,
-          lastName: profile.family_name,
           image: profile.picture,
         }
       },
@@ -123,22 +113,18 @@ export const authOptions: NextAuthOptions = {
         url: 'https://lks.mirea.ninja/api/?action=getData&url=https://lk.mirea.ru/profile/',
       },
       checks: ['state'],
-      profile(profile: MireaProfile) {
+      async profile(profile: MireaProfile) {
         let name =
           profile.arUser.NAME + ' ' + profile.arUser.SECOND_NAME + ' ' + profile.arUser.LAST_NAME
         if (profile.arUser.SECOND_NAME == '') {
           name = profile.arUser.NAME + ' ' + profile.arUser.LAST_NAME
         }
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const nickname = await getUniqueNickname(profile.arUser.LOGIN.split('@')[0]!)
         return {
           id: profile.arUser.ID,
           name,
-          nickname:
-            profile.arUser.NAME +
-            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-            (profile.arUser.LAST_NAME ? ` ${profile.arUser.LAST_NAME.at(0)}.` : ''),
-          firstName: profile.arUser.NAME,
-          secondName: profile.arUser.SECOND_NAME,
-          lastName: profile.arUser.LAST_NAME,
+          nickname,
           email: profile.arUser.LOGIN,
           image: 'https://lk.mirea.ru' + profile.arUser.PHOTO,
         }
