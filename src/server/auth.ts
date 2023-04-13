@@ -4,6 +4,7 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '@/server/db'
 import GoogleProvider, { type GoogleProfile } from 'next-auth/providers/google'
 import { getUniqueNickname } from '@/utils/getUniqueNickname'
+import GithubProvider, { type GithubProfile } from 'next-auth/providers/github'
 
 interface ArUser {
   ID: string
@@ -32,6 +33,7 @@ declare module 'next-auth' {
       id: string
       nickname: string
       role?: Role
+      userInfo?: string
       telegramLink?: string
     } & DefaultSession['user'] & { user: { name: unknown } }
   }
@@ -39,6 +41,7 @@ declare module 'next-auth' {
   interface User {
     nickname: string
     role?: Role
+    userInfo?: string
     telegramLink?: string
   }
 }
@@ -64,6 +67,7 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.id = user.id
         session.user.nickname = user.nickname
+        session.user.userInfo = user.userInfo
         session.user.role = user.role
       }
       return session
@@ -71,6 +75,23 @@ export const authOptions: NextAuthOptions = {
   },
   adapter: PrismaAdapter(prisma),
   providers: [
+    GithubProvider({
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      clientId: process.env.GITHUB_CLIENT_ID!,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+      async profile(profile: GithubProfile) {
+        return {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          id: profile.id.toString(),
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          nickname: await getUniqueNickname(profile.login),
+          name: profile.name ?? profile.login,
+          email: profile.email,
+          image: profile.avatar_url,
+        }
+      },
+    }),
     GoogleProvider({
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       clientId: process.env.GOOGLE_CLIENT_ID!,

@@ -29,7 +29,7 @@ export default function Error(props: ErrorProps) {
       <main className='mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8'>
         <div className='flex-shrink-0 pt-16'>
           <Image
-            className='mx-auto h-12 w-auto'
+            className='mx-auto h-12 w-auto transform transition duration-1000 hover:scale-105'
             src='/assets/ninja-logo-black.svg'
             alt='Mirea Ninja'
             width={100}

@@ -9,7 +9,12 @@ const config = {
   reactStrictMode: true,
   output: 'standalone',
   images: {
-    domains: ['www.mirea.ru', 'cdn.cms.mirea.ninja', 'lk.mirea.ru'],
+    domains: [
+      'www.mirea.ru',
+      'cdn.cms.mirea.ninja',
+      'lk.mirea.ru',
+      'avatars.githubusercontent.com',
+    ],
     remotePatterns: [{ hostname: '*.googleusercontent.com' }],
   },
   compiler: {

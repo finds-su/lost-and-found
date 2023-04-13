@@ -1,149 +1,105 @@
 import Image from 'next/image'
-import { signIn } from 'next-auth/react'
+import { getProviders, signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/server/auth'
+import { getServerAuthSession } from '@/server/auth'
+import Head from 'next/head'
 
 export default function SignIn() {
   const router = useRouter()
   const callbackUrl = router.query.callbackUrl ? (router.query.callbackUrl as string) : '/'
   const error = router.query.error
 
+  const providers: { id: string; name: string; image: string }[] = [
+    {
+      id: 'mirea',
+      name: 'ЛКC',
+      image: '/assets/providers/mirea.svg',
+    },
+    {
+      id: 'google',
+      name: 'Google',
+      image: '/assets/providers/google.svg',
+    },
+    {
+      id: 'github',
+      name: 'GitHub',
+      image: '/assets/providers/github.svg',
+    },
+  ]
+
   return (
-    <main className='h-screen bg-white'>
-      <div className='flex min-h-full'>
-        <div className='flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24'>
-          <div className='mx-auto w-full max-w-sm lg:w-96'>
-            <div>
-              <Image
-                className='h-12 w-auto'
-                src='/assets/ninja-logo-black.svg'
-                alt='Mirea Ninja'
-                width={100}
-                height={100}
-              />
-              <h2 className='mt-6 text-3xl font-bold tracking-tight text-gray-900'>
-                Войти в Бюро находок
-              </h2>
-            </div>
-
-            <div className='mt-8'>
+    <>
+      <Head>
+        <title>Войти в Бюро находок</title>
+      </Head>
+      <main className='h-screen bg-white'>
+        <div className='flex min-h-full'>
+          <div className='flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24'>
+            <div className='mx-auto w-full max-w-sm lg:w-96'>
               <div>
-                <div>
-                  <p className='text-sm font-medium text-gray-700'>Войти через</p>
-
-                  <div className='mt-1 grid grid-cols-2 gap-3'>
-                    <div>
-                      <button
-                        onClick={() => void signIn('mirea', { callbackUrl })}
-                        className='inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50'
-                      >
-                        <span className='sr-only'>ЛКС</span>
-                        <Image
-                          src='/assets/mirea-emblem.svg'
-                          alt=''
-                          width={100}
-                          height={100}
-                          className='h-5 w-5'
-                        />
-                      </button>
-                    </div>
-                    <div>
-                      <button
-                        onClick={() => void signIn('google', { callbackUrl })}
-                        className='inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50'
-                      >
-                        <span className='sr-only'>Google</span>
-                        <Image
-                          src='/assets/google-logo.svg'
-                          alt=''
-                          width={100}
-                          height={100}
-                          className='h-5 w-5'
-                        />
-                      </button>
-                    </div>
-                  </div>
-                  {error && (
-                    <p className='mt-1 text-sm text-red-600'>
-                      Ошибка авторизации. Попробуйте другой способ
-                    </p>
-                  )}
-                </div>
-
-                <div className='relative mt-6'>
-                  <div className='absolute inset-0 flex items-center' aria-hidden='true'>
-                    <div className='w-full border-t border-gray-300' />
-                  </div>
-                  <div className='relative flex justify-center text-sm'>
-                    <span className='bg-white px-2 text-gray-500'>Или с помощью</span>
-                  </div>
-                </div>
+                <Image
+                  className='h-12 w-auto'
+                  src='/assets/ninja-logo-black.svg'
+                  alt='Mirea Ninja'
+                  width={100}
+                  height={100}
+                />
+                <h2 className='mt-6 text-3xl font-bold tracking-tight text-gray-900'>
+                  Войти в Бюро находок
+                </h2>
               </div>
 
-              <div className='mt-6'>
-                <form action='#' method='POST' className='space-y-6'>
+              <div className='mt-8'>
+                <div>
                   <div>
-                    <label htmlFor='email' className='block text-sm font-medium text-gray-700'>
-                      Email адрес
-                    </label>
-                    <div className='mt-1'>
-                      <input
-                        id='email'
-                        name='email'
-                        type='email'
-                        autoComplete='email'
-                        required
-                        className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm'
-                      />
-                    </div>
-                  </div>
+                    <p className='text-sm font-medium text-gray-700'>Войти через</p>
 
-                  <div className='space-y-1'>
-                    <label htmlFor='password' className='block text-sm font-medium text-gray-700'>
-                      Пароль
-                    </label>
                     <div className='mt-1'>
-                      <input
-                        id='password'
-                        name='password'
-                        type='password'
-                        autoComplete='current-password'
-                        required
-                        className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm'
-                      />
+                      {providers.map((item) => (
+                        <div key={item.name}>
+                          <button
+                            onClick={() => void signIn(item.id, { callbackUrl })}
+                            className='my-1 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50'
+                          >
+                            <Image
+                              src={item.image}
+                              alt=''
+                              width={100}
+                              height={100}
+                              className='h-5 w-5'
+                            />
+                            <span className='ml-2'>{item.name}</span>
+                          </button>
+                        </div>
+                      ))}
                     </div>
+                    {error && (
+                      <p className='mt-1 text-sm text-red-600'>
+                        Ошибка авторизации. Воспользуйтесь другим способом
+                      </p>
+                    )}
                   </div>
-
-                  <div>
-                    <button
-                      type='submit'
-                      className='flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
-                    >
-                      Войти
-                    </button>
-                  </div>
-                </form>
+                </div>
               </div>
             </div>
           </div>
+          <div className='relative hidden w-0 flex-1 lg:block'>
+            <Image
+              className='absolute inset-0 h-full w-full object-cover'
+              src='https://www.mirea.ru/upload/medialibrary/1b3/01.jpg'
+              alt=''
+              fill
+            />
+          </div>
         </div>
-        <div className='relative hidden w-0 flex-1 lg:block'>
-          <Image
-            className='absolute inset-0 h-full w-full object-cover'
-            src='https://www.mirea.ru/upload/medialibrary/1b3/01.jpg'
-            alt=''
-            fill
-          />
-        </div>
-      </div>
-    </main>
+      </main>
+    </>
   )
 }
 
 export async function getServerSideProps(context: any) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
-  const session = await getServerSession(context.req, context.res, authOptions)
+  const session = await getServerAuthSession(context)
   if (session) {
     return {
       redirect: {
@@ -152,5 +108,7 @@ export async function getServerSideProps(context: any) {
       },
     }
   }
-  return { props: {} }
+
+  const providers = await getProviders()
+  return { props: { providers: providers ?? [] } }
 }

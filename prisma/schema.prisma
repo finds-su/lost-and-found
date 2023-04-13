@@ -40,10 +40,13 @@ model User {
   telegramLink  String?
   email         String?   @unique
   emailVerified DateTime?
+  userInfo      String?   @db.VarChar(280)
   role          Role      @default(USER)
   image         String?
   accounts      Account[]
   sessions      Session[]
+
+  @@index([nickname], type: Hash)
 }
 
 model VerificationToken {

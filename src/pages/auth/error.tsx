@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import Error from '@/components/Error'
 
 export default function AuthError() {

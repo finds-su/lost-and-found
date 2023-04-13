@@ -6,11 +6,6 @@ import { signIn, signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
-const userNavigation: { name: string; href?: string; func?: () => void }[] = [
-  { name: 'Ваш профиль', href: '/me' },
-  { name: 'Выйти', func: () => void signOut() },
-]
-
 const social = [
   {
     name: 'Форум',
@@ -26,6 +21,11 @@ const social = [
   },
 ]
 
+const navigation = [
+  { name: 'Найденные вещи', href: '/finds' },
+  { name: 'Потерянные вещи', href: '/losses' },
+]
+
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
@@ -34,15 +34,15 @@ interface LayoutProps {
   pageName: string
   children: React.ReactNode
 }
-
 export default function Layout(props: LayoutProps) {
-  const { data: sessionData, status } = useSession()
+  const { data: session, status } = useSession()
   const router = useRouter()
 
-  const navigation = [
-    { name: 'Найденные вещи', href: '/finds' },
-    { name: 'Потерянные вещи', href: '/losses' },
+  const userNavigation: { name: string; href?: string; func?: () => void }[] = [
+    { name: 'Ваш профиль', href: session ? `/u/${session.user.nickname}/edit` : '/' },
+    { name: 'Выйти', func: () => void signOut() },
   ]
+
   return (
     <div className='min-h-full'>
       <Disclosure as='nav' className='bg-gray-800'>
@@ -80,7 +80,7 @@ export default function Layout(props: LayoutProps) {
                     </div>
                   </div>
                 </div>
-                {sessionData && (
+                {session && (
                   <div className='hidden md:block'>
                     <div className='ml-4 flex items-center md:ml-6'>
                       <button
@@ -98,11 +98,7 @@ export default function Layout(props: LayoutProps) {
                             <span className='sr-only'>Открыть пользовательское меню</span>
                             <Image
                               className='h-8 w-8 rounded-full object-cover'
-                              src={
-                                sessionData.user.image
-                                  ? sessionData.user.image
-                                  : '/assets/kudzh.jpeg'
-                              }
+                              src={session.user.image ? session.user.image : '/assets/kudzh.jpeg'}
                               alt=''
                               width={100}
                               height={100}
@@ -199,26 +195,22 @@ export default function Layout(props: LayoutProps) {
                 ))}
               </div>
               <div className='border-t border-gray-700 pb-3 pt-4'>
-                {sessionData && (
+                {session && (
                   <>
                     <div className='flex items-center px-5'>
                       <div className='flex-shrink-0'>
                         <Image
                           className='h-10 w-10 rounded-full object-cover'
-                          src={
-                            sessionData.user.image ? sessionData.user.image : '/assets/kudzh.jpeg'
-                          }
+                          src={session.user.image ? session.user.image : '/assets/kudzh.jpeg'}
                           alt=''
                           width={100}
                           height={100}
                         />
                       </div>
                       <div className='ml-3'>
-                        <div className='text-base font-medium text-white'>
-                          {sessionData.user.name}
-                        </div>
+                        <div className='text-base font-medium text-white'>{session.user.name}</div>
                         <div className='text-sm font-medium text-gray-400'>
-                          {sessionData.user.email}
+                          {session.user.email}
                         </div>
                       </div>
                       <button
