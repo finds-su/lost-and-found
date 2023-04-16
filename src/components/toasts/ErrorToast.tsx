@@ -18,6 +18,8 @@ function SuccessToast(props: { toastOptions: Toast; message: string; icon?: Reac
   )
 }
 
-export default function errorToast(message: string, icon: ReactNode) {
-  toast.custom((t) => <SuccessToast toastOptions={t} message={message} icon={icon} />)
+export default function errorToast(message: string, icon?: ReactNode, duration?: number) {
+  toast.custom((t) => <SuccessToast toastOptions={t} message={message} icon={icon} />, {
+    duration: duration ?? 1000,
+  })
 }

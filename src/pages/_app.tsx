@@ -22,7 +22,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
     <>
       <SessionProvider session={session}>{getLayout(<Component {...pageProps} />)}</SessionProvider>
-      <Toaster position='top-center' />
+      <Toaster position='top-center' reverseOrder={false} />
     </>
   )
 }

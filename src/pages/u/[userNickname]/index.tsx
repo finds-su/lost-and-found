@@ -30,7 +30,7 @@ export default function Profile(props: { isOwner: boolean }) {
     { nickname: userNickname },
     {
       enabled: !props.isOwner,
-      onSuccess: (user) => !props.isOwner && setUser(user),
+      onSuccess: (user) => setUser(user),
       onError: () => void router.push(`/u/${userNickname}/error`),
     },
   )
@@ -40,15 +40,7 @@ export default function Profile(props: { isOwner: boolean }) {
   useEffect(() => {
     if (session.data && session.data.user.nickname === userNickname) {
       const sessionUser = session.data.user
-      setUser({
-        nickname: sessionUser.nickname,
-        name: sessionUser.name,
-        email: sessionUser.email,
-        role: sessionUser.role,
-        image: sessionUser.image,
-        userInfo: sessionUser.userInfo,
-        telegramLink: sessionUser.telegramLink,
-      } as User)
+      setUser(sessionUser as User)
     }
   }, [session.data, userNickname])
 
@@ -253,7 +245,10 @@ export default function Profile(props: { isOwner: boolean }) {
     )
   }
 
-  if (getUser.status === 'loading' && session.status === 'loading') {
+  if (
+    (!props.isOwner && getUser.status === 'loading') ||
+    (props.isOwner && session.status === 'loading')
+  ) {
     return (
       <div className='flex h-[40vh] items-center justify-center'>
         <Spinner size='xl' />

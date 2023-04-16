@@ -5,7 +5,6 @@ import Image from 'next/image'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { Toaster } from 'react-hot-toast'
 
 const social = [
   {
@@ -157,7 +156,7 @@ export default function Layout(props: LayoutProps) {
                     onClick={() => {
                       void signIn()
                     }}
-                    className='rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white'
+                    className='rounded-md border px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white'
                   >
                     Войти
                   </button>
