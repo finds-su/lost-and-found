@@ -7,6 +7,7 @@ import { api } from '@/utils/api'
 import '@/styles/globals.css'
 import { type ReactElement, type ReactNode } from 'react'
 import { type NextPage } from 'next'
+import { Toaster } from 'react-hot-toast'
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
@@ -19,7 +20,10 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   const getLayout = (Component as NextPageWithLayout).getLayout ?? ((page) => page)
   return (
-    <SessionProvider session={session}>{getLayout(<Component {...pageProps} />)}</SessionProvider>
+    <>
+      <SessionProvider session={session}>{getLayout(<Component {...pageProps} />)}</SessionProvider>
+      <Toaster position='top-center' />
+    </>
   )
 }
 

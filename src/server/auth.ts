@@ -35,7 +35,7 @@ declare module 'next-auth' {
       role?: Role
       userInfo?: string
       telegramLink?: string
-    } & DefaultSession['user'] & { user: { name: unknown } }
+    } & DefaultSession['user']
   }
 
   interface User {

@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import { Toaster } from 'react-hot-toast'
 
 const social = [
   {
@@ -39,7 +40,7 @@ export default function Layout(props: LayoutProps) {
   const router = useRouter()
 
   const userNavigation: { name: string; href?: string; func?: () => void }[] = [
-    { name: 'Ваш профиль', href: session ? `/u/${session.user.nickname}/edit` : '/' },
+    { name: 'Ваш профиль', href: session ? `/u/${session.user.nickname}/` : '/' },
     { name: 'Выйти', func: () => void signOut() },
   ]
 
@@ -266,7 +267,7 @@ export default function Layout(props: LayoutProps) {
           <div className='-mx-3 flex flex-wrap items-center lg:justify-between'>
             <div className='mb-6 mt-0 w-full max-w-full shrink-0 px-3 lg:mb-0 lg:w-1/2 lg:flex-none'>
               <div className='text-size-sm items-center space-x-1 text-center leading-normal text-slate-500 lg:text-left'>
-                © 2023, сделано с ♥ командой
+                © {new Date().getFullYear()}, сделано с ♥ командой
                 <Link
                   href='https://mirea.ninja'
                   className='mx-1 font-semibold text-slate-700'
