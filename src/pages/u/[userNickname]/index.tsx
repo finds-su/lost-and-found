@@ -7,7 +7,7 @@ import { Spinner } from 'flowbite-react'
 import { useSession } from 'next-auth/react'
 import { type User } from '@/components/profile/ProfileBody'
 import dynamic from 'next/dynamic'
-import { GetServerSideProps } from 'next'
+import { type GetServerSideProps } from 'next'
 
 const ProfileBody = dynamic(() => import('@/components/profile/ProfileBody'), {
   ssr: false,
@@ -49,7 +49,7 @@ export default function Profile(props: { isOwner: boolean }) {
     )
   }
 
-  return
+  return <div className='flex h-[40vh] items-center justify-center' />
 }
 
 Profile.getLayout = function getLayout(page: any) {

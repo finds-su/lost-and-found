@@ -34,17 +34,18 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String
-  nickname      String    @unique
-  telegramLink  String?
-  email         String?   @unique
-  emailVerified DateTime?
-  userInfo      String?   @db.VarChar(280)
-  role          Role      @default(USER)
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
+  id             String    @id @default(cuid())
+  name           String
+  nickname       String    @unique
+  telegramLink   String?
+  email          String?   @unique
+  emailVerified  DateTime?
+  userInfo       String?   @db.VarChar(280)
+  role           Role      @default(USER)
+  image          String?
+  isBlockedUntil DateTime?
+  accounts       Account[]
+  sessions       Session[]
 
   @@index([nickname], type: Hash)
 }

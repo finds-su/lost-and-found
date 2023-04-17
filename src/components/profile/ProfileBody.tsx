@@ -5,7 +5,8 @@ import { ClipboardDocumentCheckIcon } from '@heroicons/react/24/outline'
 import ProfileWindow from '@/components/profile/ProfileWindow'
 import { PencilIcon } from '@heroicons/react/24/solid'
 import { type Role } from '@prisma/client'
-import { Avatar } from 'flowbite-react'
+import { Avatar, Button } from 'flowbite-react'
+import { formatDate } from '@/utils/formatDate'
 
 export interface User {
   nickname: string
@@ -15,6 +16,7 @@ export interface User {
   image?: string
   userInfo?: string
   telegramLink?: string
+  isBlockedUntil?: string
 }
 
 export default function ProfileBody(props: { user: User; isOwner: boolean }) {
@@ -24,6 +26,10 @@ export default function ProfileBody(props: { user: User; isOwner: boolean }) {
     { name: 'Почта', value: props.user.email ?? '-' },
     { name: 'Telegram', value: props.user.telegramLink ?? '-' },
     { name: 'Роль', value: props.user.role ?? '-' },
+    {
+      name: 'Заблокирован до',
+      value: props.user.isBlockedUntil ? formatDate(props.user.isBlockedUntil) : '-',
+    },
   ]
 
   return (
@@ -63,7 +69,12 @@ export default function ProfileBody(props: { user: User; isOwner: boolean }) {
               <div className='-mx-3 flex flex-wrap'>
                 <div className='flex w-full max-w-full shrink-0 items-center justify-between px-3 md:flex-none'>
                   <h6 className='mb-0 md:w-8/12'>Профиль</h6>
-                  <PencilIcon className='h-5 w-5' />
+                  {props.isOwner && (
+                    <Button href={`/u/${props.user.nickname}/edit`} color='light'>
+                      <PencilIcon className='mr-2 h-5 w-5' />
+                      Редактировать
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>

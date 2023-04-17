@@ -35,6 +35,7 @@ declare module 'next-auth' {
       role?: Role
       userInfo?: string
       telegramLink?: string
+      isBlockedUntil?: Date
     } & DefaultSession['user']
   }
 
@@ -43,6 +44,7 @@ declare module 'next-auth' {
     role?: Role
     userInfo?: string
     telegramLink?: string
+    isBlockedUntil?: Date
   }
 }
 
@@ -69,6 +71,7 @@ export const authOptions: NextAuthOptions = {
         session.user.nickname = user.nickname
         session.user.userInfo = user.userInfo
         session.user.role = user.role
+        session.user.isBlockedUntil = user.isBlockedUntil
       }
       return session
     },

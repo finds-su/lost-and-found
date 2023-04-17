@@ -1,7 +1,7 @@
 import Layout from '@/components/layout/Layout'
 import { authOptions } from '@/server/auth'
 import { getServerSession } from 'next-auth'
-import { GetServerSideProps } from 'next'
+import { type GetServerSideProps } from 'next'
 
 export default function Me() {
   return
