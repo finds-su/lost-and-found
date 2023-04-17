@@ -1,4 +1,4 @@
-import Layout from '@/components/Layout'
+import Layout from '@/components/layout/Layout'
 import { getServerAuthSession } from '@/server/auth'
 import { useRouter } from 'next/router'
 import { api } from '@/utils/api'
@@ -7,6 +7,7 @@ import { Spinner } from 'flowbite-react'
 import { useSession } from 'next-auth/react'
 import { type User } from '@/components/profile/ProfileBody'
 import dynamic from 'next/dynamic'
+import { GetServerSideProps } from 'next'
 
 const ProfileBody = dynamic(() => import('@/components/profile/ProfileBody'), {
   ssr: false,
@@ -55,11 +56,11 @@ Profile.getLayout = function getLayout(page: any) {
   return <Layout pageName='Профиль'>{page}</Layout>
 }
 
-export async function getServerSideProps(context: any) {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
   const session = await getServerAuthSession(context)
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  const userNickname = context.params.userNickname as string
+  const userNickname = context.params?.userNickname as string
   if (session?.user.nickname === userNickname) {
     return {
       props: { isOwner: true },

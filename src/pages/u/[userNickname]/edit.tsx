@@ -1,4 +1,4 @@
-import Layout from '@/components/Layout'
+import Layout from '@/components/layout/Layout'
 import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import { getServerAuthSession } from '@/server/auth'

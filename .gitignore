@@ -43,3 +43,6 @@ yarn-error.log*
 
 # JetBrains
 /.idea
+
+# @next/bundle-analyzer
+/analyze

@@ -5,6 +5,7 @@ import { ClipboardDocumentCheckIcon } from '@heroicons/react/24/outline'
 import ProfileWindow from '@/components/profile/ProfileWindow'
 import { PencilIcon } from '@heroicons/react/24/solid'
 import { type Role } from '@prisma/client'
+import { Avatar } from 'flowbite-react'
 
 export interface User {
   nickname: string
@@ -30,15 +31,12 @@ export default function ProfileBody(props: { user: User; isOwner: boolean }) {
       <div className='shadow-blur relative mb-4 flex min-w-0 flex-auto flex-col overflow-hidden break-words rounded-2xl border-0 bg-white/80 bg-clip-border p-4'>
         <div className='-mx-3 flex flex-wrap'>
           <div className='w-auto max-w-full flex-none px-3'>
-            <div className='min-w-20 min-h-20 text-size-base ease-soft-in-out relative inline-flex items-center justify-center rounded-xl text-white transition-all duration-200'>
-              <Image
-                src={props.user.image ?? '/assets/kudzh.jpeg'}
-                alt='profile_image'
-                className='shadow-soft-sm h-20 w-20 w-full rounded-xl object-cover'
-                width={300}
-                height={300}
-              />
-            </div>
+            <Avatar
+              size='lg'
+              placeholderInitials={props.user.nickname.slice(0, 2).toUpperCase()}
+              img={props.user.image ?? ''}
+              rounded
+            />
           </div>
           <div className='my-auto w-auto max-w-full flex-none px-3'>
             <div className='h-full'>
