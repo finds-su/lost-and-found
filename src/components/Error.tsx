@@ -29,7 +29,6 @@ export default function Error(props: ErrorProps) {
     <>
       <Head>
         <title>{props.name}</title>
-        <meta name='description' content='Сайт Бюро находок РТУ МИРЭА.' />
       </Head>
       <div className='h-screen bg-white'>
         <main className='mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8'>

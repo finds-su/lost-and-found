@@ -52,8 +52,6 @@ export default function Layout(props: LayoutProps) {
     <>
       <Head>
         <title>{props.pageName}</title>
-        <meta name='description' content='Сайт Бюро находок РТУ МИРЭА.' />
-        <meta property='og:image' content='/assets/ninja-logo-black.svg' />
       </Head>
       <div className='min-h-full'>
         <Disclosure as='nav' className='bg-gray-800'>
