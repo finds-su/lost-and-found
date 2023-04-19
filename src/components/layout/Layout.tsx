@@ -8,6 +8,7 @@ import Link from 'next/link'
 import classNames from '@/utils/classNames'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
+import { Avatar } from 'flowbite-react'
 
 const social = [
   {
@@ -138,15 +139,12 @@ export default function Layout(props: LayoutProps) {
                   {session && (
                     <>
                       <div className='flex items-center px-5'>
-                        <div className='flex-shrink-0'>
-                          <Image
-                            className='h-10 w-10 rounded-full object-cover'
-                            src={session.user.image ? session.user.image : '/assets/kudzh.jpeg'}
-                            alt=''
-                            width={100}
-                            height={100}
-                          />
-                        </div>
+                        <Avatar
+                          size='sm'
+                          placeholderInitials={session.user.nickname.slice(0, 2).toUpperCase()}
+                          img={session.user.image ?? ''}
+                          rounded
+                        />
                         <div className='ml-3'>
                           <div className='text-base font-medium text-white'>
                             {session.user.name}

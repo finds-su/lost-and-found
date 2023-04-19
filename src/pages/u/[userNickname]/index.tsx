@@ -10,7 +10,7 @@ import dynamic from 'next/dynamic'
 import { type GetServerSideProps } from 'next'
 
 const ProfileBody = dynamic(() => import('@/components/profile/ProfileBody'), {
-  ssr: false,
+  ssr: true,
 })
 
 export default function Profile(props: { isOwner: boolean }) {

@@ -1,12 +1,19 @@
 import Image from 'next/image'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import successToast from '@/components/toasts/SuccessToast'
-import { ClipboardDocumentCheckIcon } from '@heroicons/react/24/outline'
+import {
+  ArrowLeftIcon,
+  ClipboardDocumentCheckIcon,
+  PencilSquareIcon,
+} from '@heroicons/react/24/outline'
 import ProfileWindow from '@/components/profile/ProfileWindow'
-import { PencilIcon } from '@heroicons/react/24/solid'
 import { type Role } from '@prisma/client'
-import { Avatar, Button } from 'flowbite-react'
+import { Avatar, Button, Label, Spinner, Textarea, TextInput } from 'flowbite-react'
 import { formatDate } from '@/utils/formatDate'
+import { useEffect, useState } from 'react'
+import { api } from '@/utils/api'
+import { useRouter } from 'next/router'
+import errorToast from '@/components/toasts/ErrorToast'
 
 export interface User {
   nickname: string
@@ -14,23 +21,84 @@ export interface User {
   email?: string
   role: Role
   image?: string
-  userInfo?: string
+  userInfo: string
   telegramLink?: string
   isBlockedUntil?: string
 }
 
 export default function ProfileBody(props: { user: User; isOwner: boolean }) {
-  const profileInfo = [
-    { name: 'Имя', value: props.user.name ?? '-' },
-    { name: 'Никнейм', value: props.user.nickname ?? '-' },
-    { name: 'Почта', value: props.user.email ?? '-' },
-    { name: 'Telegram', value: props.user.telegramLink ?? '-' },
-    { name: 'Роль', value: props.user.role ?? '-' },
+  const router = useRouter()
+  const [editProfile, setEditProfile] = useState(false)
+
+  const [name, setName] = useState(props.user.name ?? '')
+  const [nickname, setNickname] = useState(props.user.nickname)
+  const [email, setEmail] = useState(props.user.email ?? '')
+  const [telegramLink, setTelegramLink] = useState(props.user.telegramLink ?? '')
+  const [userInfo, setUserInfo] = useState(props.user.userInfo)
+  const invalidNicknameReason = api.users.isValidNewNickname.useQuery(
+    { nickname },
+    { enabled: nickname !== props.user.nickname },
+  )
+  const invalidEmailReason = api.users.isValidNewEmail.useQuery(
+    { email: email ?? '' },
+    { enabled: email !== props.user.email },
+  )
+  const editUser = api.users.editUser.useMutation({
+    onSuccess: () => setEditProfile(false),
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    onError: (error) => errorToast(JSON.parse(error.message)[0].message as string),
+  })
+
+  const editableFields = [
     {
-      name: 'Заблокирован до',
-      value: props.user.isBlockedUntil ? formatDate(props.user.isBlockedUntil) : '-',
+      label: 'Ваше имя',
+      oldValue: props.user.name,
+      value: name,
+      setValue: setName,
+      isRequired: true,
+    },
+    {
+      label: 'Ваш никнейм',
+      oldValue: props.user.nickname,
+      value: nickname,
+      setValue: setNickname,
+      isRequired: true,
+      result: invalidNicknameReason,
+    },
+    {
+      label: 'Ваша почта',
+      oldValue: props.user.email,
+      value: email,
+      setValue: setEmail,
+      isRequired: false,
+      result: invalidEmailReason,
+    },
+    {
+      label: 'Ваш Telegram',
+      oldValue: props.user.telegramLink,
+      value: telegramLink,
+      setValue: setTelegramLink,
+      isRequired: false,
     },
   ]
+
+  const profileInfo = [
+    { name: 'Имя', value: name },
+    { name: 'Никнейм', value: nickname },
+    { name: 'Почта', value: email || (props.isOwner && '-') },
+    { name: 'Telegram', value: telegramLink || (props.isOwner && '-') },
+    { name: 'Роль', value: props.user.role },
+    {
+      name: 'Заблокирован до',
+      value: props.user.isBlockedUntil && formatDate(props.user.isBlockedUntil),
+    },
+  ]
+
+  // useEffect(() => {
+  //   if (editUser.status === 'success') {
+  //     router.reload()
+  //   }
+  // }, [editUser.status, router])
 
   return (
     <div className='loopple-min-height-78vh mx-auto w-full text-slate-500'>
@@ -46,14 +114,14 @@ export default function ProfileBody(props: { user: User; isOwner: boolean }) {
           </div>
           <div className='my-auto w-auto max-w-full flex-none px-3'>
             <div className='h-full'>
-              {props.user.name && <h5 className='mb-1 font-semibold'>{props.user.name}</h5>}
+              {name && <h5 className='mb-1 font-semibold'>{name}</h5>}
               <div className='flex flex-row'>
                 <CopyToClipboard
-                  text={props.user.nickname}
+                  text={nickname}
                   onCopy={() => successToast('Никнейм скопирован.', <ClipboardDocumentCheckIcon />)}
                 >
                   <button className='text-size-sm mb-0 font-mono font-thin leading-normal'>
-                    @{props.user.nickname}
+                    @{nickname}
                   </button>
                 </CopyToClipboard>
               </div>
@@ -70,31 +138,130 @@ export default function ProfileBody(props: { user: User; isOwner: boolean }) {
                 <div className='flex w-full max-w-full shrink-0 items-center justify-between px-3 md:flex-none'>
                   <h6 className='mb-0 md:w-8/12'>Профиль</h6>
                   {props.isOwner && (
-                    <Button href={`/u/${props.user.nickname}/edit`} color='light'>
-                      <PencilIcon className='mr-2 h-5 w-5' />
-                      Редактировать
-                    </Button>
+                    <div className='flex flex-row space-x-2'>
+                      {!editProfile && (
+                        <Button onClick={() => setEditProfile(!editProfile)} color='light'>
+                          <PencilSquareIcon className='mr-2 h-5 w-5' />
+                          Редактировать
+                        </Button>
+                      )}
+                    </div>
                   )}
                 </div>
               </div>
             </div>
             <div className='flex-auto p-4'>
-              {props.user.userInfo && (
+              {editProfile ? (
                 <>
-                  <p className='text-size-sm leading-normal'>{props.user.userInfo}</p>
-                  <hr className='bg-gradient-horizontal-light my-6 h-px bg-transparent' />
+                  <div>
+                    <div className='mb-2 block'>
+                      <Label value='Описание профиля' />
+                    </div>
+                    <Textarea
+                      className='min-h-16 max-h-24'
+                      rows={3}
+                      maxLength={280}
+                      value={userInfo}
+                      onChange={(e) =>
+                        e.currentTarget.value.split('\n').length <= 4 &&
+                        setUserInfo(e.currentTarget.value.replaceAll('\n\n', '\n'))
+                      }
+                    />
+                  </div>
+                  <div className='mt-2 grid gap-2 md:grid-cols-2'>
+                    {editableFields.map((item, index) => (
+                      <div key={index}>
+                        <div className='mb-2 block'>
+                          <Label value={item.label} />
+                        </div>
+                        <TextInput
+                          color={item.result && item.result.status === 'error' ? 'failure' : 'gray'}
+                          value={item.value}
+                          onChange={(e) => item.setValue(e.currentTarget.value)}
+                          required={item.isRequired}
+                        />
+                        {item.result &&
+                          item.result.status === 'error' &&
+                          item.oldValue !== item.value && (
+                            <div className='text-sm text-red-500'>
+                              {item.result.error &&
+                                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                                (JSON.parse(item.result.error?.message)[0].message as string)}
+                            </div>
+                          )}
+                        {item.result &&
+                          item.result.status === 'loading' &&
+                          item.oldValue !== item.value && (
+                            <div className='h-5'>
+                              <Spinner size='xs' />
+                            </div>
+                          )}
+                        {(!item.result || item.result.status === 'success') && (
+                          <div className='h-5' />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                  <div className='mt-2 flex flex-row space-x-2'>
+                    <Button onClick={() => setEditProfile(false)} color='light'>
+                      <ArrowLeftIcon className='mr-2 h-5 w-5' />
+                      Отменить
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        if (
+                          name !== props.user.name ||
+                          nickname !== props.user.nickname ||
+                          email !== props.user.email ||
+                          telegramLink !== props.user.telegramLink ||
+                          userInfo !== props.user.userInfo
+                        ) {
+                          editUser.mutate({
+                            name: name,
+                            nickname: nickname,
+                            email: email.length !== 0 ? email : null,
+                            telegramLink: telegramLink.length !== 0 ? telegramLink : null,
+                            userInfo: userInfo,
+                          })
+                        }
+                      }}
+                      color='light'
+                    >
+                      {editUser.isLoading ? (
+                        <div className='mr-2 h-5 w-5'>
+                          <Spinner />
+                        </div>
+                      ) : (
+                        <PencilSquareIcon className='mr-2 h-5 w-5' />
+                      )}
+                      Сохранить
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {userInfo && (
+                    <>
+                      <p className='text-size-sm leading-normal'>{userInfo}</p>
+                      <hr className='bg-gradient-horizontal-light my-6 h-px bg-transparent' />
+                    </>
+                  )}
+                  <ul className='flex flex-col rounded-lg'>
+                    {profileInfo.map(
+                      (item) =>
+                        item.value && (
+                          <li
+                            key={item.name}
+                            className='text-size-sm relative block rounded-t-lg border-0 bg-white px-4 py-2 pl-0 pt-0 leading-normal text-inherit'
+                          >
+                            <strong className='text-slate-700'>{item.name}:</strong> &nbsp;{' '}
+                            {item.value}
+                          </li>
+                        ),
+                    )}
+                  </ul>
                 </>
               )}
-              <ul className='flex flex-col rounded-lg'>
-                {profileInfo.map((item) => (
-                  <li
-                    key={item.name}
-                    className='text-size-sm relative block rounded-t-lg border-0 bg-white px-4 py-2 pl-0 pt-0 leading-normal text-inherit'
-                  >
-                    <strong className='text-slate-700'>{item.name}:</strong> &nbsp; {item.value}
-                  </li>
-                ))}
-              </ul>
             </div>
           </ProfileWindow>
           <ProfileWindow>

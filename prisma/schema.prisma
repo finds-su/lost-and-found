@@ -40,10 +40,11 @@ model User {
   telegramLink   String?
   email          String?   @unique
   emailVerified  DateTime?
-  userInfo       String?   @db.VarChar(280)
+  userInfo       String    @default("") @db.VarChar(280)
   role           Role      @default(USER)
   image          String?
   isBlockedUntil DateTime?
+  blockReason    String?
   accounts       Account[]
   sessions       Session[]
 
