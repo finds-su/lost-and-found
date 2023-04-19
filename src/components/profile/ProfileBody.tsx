@@ -5,15 +5,15 @@ import {
   ArrowLeftIcon,
   ClipboardDocumentCheckIcon,
   PencilSquareIcon,
+  ShieldCheckIcon,
 } from '@heroicons/react/24/outline'
 import ProfileWindow from '@/components/profile/ProfileWindow'
-import { type Role } from '@prisma/client'
 import { Avatar, Button, Label, Spinner, Textarea, TextInput } from 'flowbite-react'
 import { formatDate } from '@/utils/formatDate'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { api } from '@/utils/api'
-import { useRouter } from 'next/router'
 import errorToast from '@/components/toasts/ErrorToast'
+import { type Role } from '@prisma/client'
 
 export interface User {
   nickname: string
@@ -27,7 +27,6 @@ export interface User {
 }
 
 export default function ProfileBody(props: { user: User; isOwner: boolean }) {
-  const router = useRouter()
   const [editProfile, setEditProfile] = useState(false)
 
   const [name, setName] = useState(props.user.name ?? '')
@@ -45,14 +44,14 @@ export default function ProfileBody(props: { user: User; isOwner: boolean }) {
   )
   const editUser = api.users.editUser.useMutation({
     onSuccess: () => setEditProfile(false),
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    onError: (error) => errorToast(JSON.parse(error.message)[0].message as string),
+    onError: (error) => errorToast(error.message),
   })
 
   const editableFields = [
     {
       label: 'Ваше имя',
       oldValue: props.user.name,
+      placeholder: 'Валера Верхотуров',
       value: name,
       setValue: setName,
       isRequired: true,
@@ -60,6 +59,7 @@ export default function ProfileBody(props: { user: User; isOwner: boolean }) {
     {
       label: 'Ваш никнейм',
       oldValue: props.user.nickname,
+      placeholder: 'my-username',
       value: nickname,
       setValue: setNickname,
       isRequired: true,
@@ -68,6 +68,7 @@ export default function ProfileBody(props: { user: User; isOwner: boolean }) {
     {
       label: 'Ваша почта',
       oldValue: props.user.email,
+      placeholder: 'mail@bk.ru',
       value: email,
       setValue: setEmail,
       isRequired: false,
@@ -76,6 +77,7 @@ export default function ProfileBody(props: { user: User; isOwner: boolean }) {
     {
       label: 'Ваш Telegram',
       oldValue: props.user.telegramLink,
+      placeholder: 'tg-username',
       value: telegramLink,
       setValue: setTelegramLink,
       isRequired: false,
@@ -85,8 +87,8 @@ export default function ProfileBody(props: { user: User; isOwner: boolean }) {
   const profileInfo = [
     { name: 'Имя', value: name },
     { name: 'Никнейм', value: nickname },
-    { name: 'Почта', value: email || (props.isOwner && '-') },
-    { name: 'Telegram', value: telegramLink || (props.isOwner && '-') },
+    { name: 'Почта', value: email },
+    { name: 'Telegram', value: telegramLink },
     { name: 'Роль', value: props.user.role },
     {
       name: 'Заблокирован до',
@@ -94,23 +96,24 @@ export default function ProfileBody(props: { user: User; isOwner: boolean }) {
     },
   ]
 
-  // useEffect(() => {
-  //   if (editUser.status === 'success') {
-  //     router.reload()
-  //   }
-  // }, [editUser.status, router])
-
   return (
     <div className='loopple-min-height-78vh mx-auto w-full text-slate-500'>
       <div className='shadow-blur relative mb-4 flex min-w-0 flex-auto flex-col overflow-hidden break-words rounded-2xl border-0 bg-white/80 bg-clip-border p-4'>
         <div className='-mx-3 flex flex-wrap'>
           <div className='w-auto max-w-full flex-none px-3'>
-            <Avatar
-              size='lg'
-              placeholderInitials={props.user.nickname.slice(0, 2).toUpperCase()}
-              img={props.user.image ?? ''}
-              rounded
-            />
+            <div className='relative'>
+              <Avatar
+                size='lg'
+                placeholderInitials={props.user.nickname.slice(0, 2).toUpperCase()}
+                img={props.user.image ?? ''}
+                rounded
+              />
+              {['ADMIN', 'MODERATOR'].includes(props.user.role) && (
+                <span className='absolute bottom-0 right-3  h-5 w-5 rounded-full border-2 border-blue-200 bg-blue-200'>
+                  <ShieldCheckIcon />
+                </span>
+              )}
+            </div>
           </div>
           <div className='my-auto w-auto max-w-full flex-none px-3'>
             <div className='h-full'>
@@ -161,6 +164,7 @@ export default function ProfileBody(props: { user: User; isOwner: boolean }) {
                       className='min-h-16 max-h-24'
                       rows={3}
                       maxLength={280}
+                      placeholder='Расскажите о себе'
                       value={userInfo}
                       onChange={(e) =>
                         e.currentTarget.value.split('\n').length <= 4 &&
@@ -177,6 +181,7 @@ export default function ProfileBody(props: { user: User; isOwner: boolean }) {
                         <TextInput
                           color={item.result && item.result.status === 'error' ? 'failure' : 'gray'}
                           value={item.value}
+                          placeholder={item.placeholder}
                           onChange={(e) => item.setValue(e.currentTarget.value)}
                           required={item.isRequired}
                         />
@@ -242,7 +247,7 @@ export default function ProfileBody(props: { user: User; isOwner: boolean }) {
                 <>
                   {userInfo && (
                     <>
-                      <p className='text-size-sm leading-normal'>{userInfo}</p>
+                      <p className='text-size-sm whitespace-pre-line leading-normal'>{userInfo}</p>
                       <hr className='bg-gradient-horizontal-light my-6 h-px bg-transparent' />
                     </>
                   )}

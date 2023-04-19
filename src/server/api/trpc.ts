@@ -110,6 +110,9 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
   if (!ctx.session || !ctx.session.user) {
     throw new TRPCError({ code: 'UNAUTHORIZED' })
   }
+  if (ctx.session.user.isBlockedUntil && ctx.session.user.isBlockedUntil > new Date()) {
+    throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Профиль временно заблакирован' })
+  }
   return next({
     ctx: {
       // infers the `session` as non-nullable

@@ -12,6 +12,53 @@ export interface PublicUser {
   image?: string
 }
 
+const zodNickname = z
+  .string({
+    required_error: 'Никнейм обязателен',
+    invalid_type_error: 'Никнейм должен быть строкой',
+  })
+  .min(5, { message: 'Слишком короткий никнейм' })
+  .max(50, { message: 'Слишком длинный никнейм' })
+  .refine((nickname) => nickname === slugify(nickname), { message: 'Невалидный никнейм' })
+
+const zodEmail = z
+  .string({
+    required_error: 'Почта обязательна',
+    invalid_type_error: 'Почта должен быть строкой',
+  })
+  .email({ message: 'Недействительная почта' })
+  .min(5, { message: 'Слишком короткая почта' })
+  .max(100, { message: 'Слишком длинная почта' })
+  .trim()
+
+const zodName = z
+  .string({
+    required_error: 'Имя обязательно',
+    invalid_type_error: 'Имя должно быть строкой',
+  })
+  .trim()
+  .min(3, { message: 'Слишком короткое имя' })
+  .max(50, { message: 'Слишком длинное имя' })
+  .refine((name) => name === name.replaceAll('\n', ''), { message: 'Невалидное имя' })
+
+const zodTelegramLink = z
+  .string({
+    required_error: 'Телеграм ссылка обязательна',
+    invalid_type_error: 'Телеграм ссылка должен быть строкой',
+  })
+  .trim()
+  .min(3, { message: 'Слишком короткая ссылка' })
+  .max(50, { message: 'Слишком длинная ссылка' })
+  .url({ message: 'Ссылка должна быть в виде URL' })
+
+const zodUserInfo = z
+  .string({
+    required_error: 'Описание профиля обязательно',
+    invalid_type_error: 'Описание профиля быть строкой',
+  })
+  .max(280, { message: 'Слишком длинное описание профиля' })
+  .trim()
+
 export const usersRouter = createTRPCRouter({
   getOne: publicProcedure
     .input(z.object({ nickname: z.string() }))
@@ -37,14 +84,7 @@ export const usersRouter = createTRPCRouter({
   isValidNewNickname: protectedProcedure
     .input(
       z.object({
-        nickname: z
-          .string({
-            required_error: 'Никнейм обязателен',
-            invalid_type_error: 'Никнейм должен быть строкой',
-          })
-          .min(5, { message: 'Слишком короткий никнейм' })
-          .max(50, { message: 'Слишком длинный никнейм' })
-          .refine((nickname) => nickname === slugify(nickname), { message: 'Невалидный никнейм' }),
+        nickname: zodNickname,
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -61,15 +101,7 @@ export const usersRouter = createTRPCRouter({
   isValidNewEmail: protectedProcedure
     .input(
       z.object({
-        email: z
-          .string({
-            required_error: 'Почта обязательна',
-            invalid_type_error: 'Почта должен быть строкой',
-          })
-          .email({ message: 'Недействительная почта' })
-          .min(5, { message: 'Слишком короткая почта' })
-          .max(100, { message: 'Слишком длинная почта' })
-          .trim(),
+        email: zodEmail,
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -86,50 +118,11 @@ export const usersRouter = createTRPCRouter({
   editUser: protectedProcedure
     .input(
       z.object({
-        name: z
-          .string({
-            required_error: 'Имя обязательно',
-            invalid_type_error: 'Имя должно быть строкой',
-          })
-          .trim()
-          .min(3, { message: 'Слишком короткое имя' })
-          .max(50, { message: 'Слишком длинное имя' })
-          .refine((name) => name === name.replaceAll('\n', ''), { message: 'Невалидное имя' }),
-        nickname: z
-          .string({
-            required_error: 'Никнейм обязателен',
-            invalid_type_error: 'Никнейм должен быть строкой',
-          })
-          .min(5, { message: 'Слишком короткий никнейм' })
-          .max(50, { message: 'Слишком длинный никнейм' })
-          .refine((nickname) => nickname === slugify(nickname), { message: 'Невалидный никнейм' }),
-        email: z
-          .string({
-            required_error: 'Почта обязательна',
-            invalid_type_error: 'Почта должен быть строкой',
-          })
-          .email({ message: 'Недействительная почта' })
-          .min(5, { message: 'Слишком короткая почта' })
-          .max(100, { message: 'Слишком длинная почта' })
-          .trim()
-          .nullable(),
-        telegramLink: z
-          .string({
-            required_error: 'Телеграм ссылка обязательна',
-            invalid_type_error: 'Телеграм ссылка должен быть строкой',
-          })
-          .trim()
-          .min(3, { message: 'Слишком короткая ссылка' })
-          .max(50, { message: 'Слишком длинная ссылка' })
-          .url({ message: 'Ссылка должна быть в виде URL' })
-          .nullable(),
-        userInfo: z
-          .string({
-            required_error: 'Описание профиля обязательно',
-            invalid_type_error: 'Описание профиля быть строкой',
-          })
-          .max(280, { message: 'Слишком длинное описание профиля' })
-          .trim(),
+        name: zodName,
+        nickname: zodNickname,
+        email: zodEmail.nullable(),
+        telegramLink: zodTelegramLink.nullable(),
+        userInfo: zodUserInfo,
       }),
     )
     .mutation(async ({ ctx, input }) => {

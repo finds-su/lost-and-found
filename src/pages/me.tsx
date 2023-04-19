@@ -1,14 +1,9 @@
-import Layout from '@/components/layout/Layout'
 import { authOptions } from '@/server/auth'
 import { getServerSession } from 'next-auth'
 import { type GetServerSideProps } from 'next'
 
 export default function Me() {
   return
-}
-
-Me.getLayout = function getLayout(page: any) {
-  return <Layout pageName='Профиль'>{page}</Layout>
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {

@@ -48,7 +48,7 @@ declare module 'next-auth' {
   }
 }
 
-enum Role {
+export enum Role {
   USER = 'USER',
   MODERATOR = 'MODERATOR',
   ADMIN = 'ADMIN',
