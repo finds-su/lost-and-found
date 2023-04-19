@@ -109,7 +109,7 @@ export default function ProfileBody(props: { user: User; isOwner: boolean }) {
                 rounded
               />
               {['ADMIN', 'MODERATOR'].includes(props.user.role) && (
-                <span className='absolute bottom-0 right-3  h-5 w-5 rounded-full border-2 border-blue-200 bg-blue-200'>
+                <span className='absolute bottom-0 right-3  h-5 w-5 rounded-full border-2 border-blue-500 bg-blue-500 text-black'>
                   <ShieldCheckIcon />
                 </span>
               )}

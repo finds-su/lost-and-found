@@ -32,11 +32,11 @@ define(['./workbox-588899ac'], function (e) {
     e.precacheAndRoute(
       [
         {
-          url: '/_next/static/LUJyKxUoGUbzoWg39TXGg/_buildManifest.js',
+          url: '/_next/static/ZtilnqQu8Wmtjvxqs9JWh/_buildManifest.js',
           revision: 'a1a239e516699aab88922bd85a1ea21d',
         },
         {
-          url: '/_next/static/LUJyKxUoGUbzoWg39TXGg/_ssgManifest.js',
+          url: '/_next/static/ZtilnqQu8Wmtjvxqs9JWh/_ssgManifest.js',
           revision: 'b6652df95db52feb4daf4eca35380933',
         },
         { url: '/_next/static/chunks/189-0f5a0606dc6d95c7.js', revision: '0f5a0606dc6d95c7' },
@@ -49,8 +49,8 @@ define(['./workbox-588899ac'], function (e) {
         { url: '/_next/static/chunks/main-f69f9df4c9a03e15.js', revision: 'f69f9df4c9a03e15' },
         { url: '/_next/static/chunks/pages/404-37f6118379eaaa45.js', revision: '37f6118379eaaa45' },
         {
-          url: '/_next/static/chunks/pages/_app-8d9ac6dab2912e59.js',
-          revision: '8d9ac6dab2912e59',
+          url: '/_next/static/chunks/pages/_app-48ba8fdb4f3913d1.js',
+          revision: '48ba8fdb4f3913d1',
         },
         {
           url: '/_next/static/chunks/pages/_error-54de1933a164a1ff.js',
@@ -165,9 +165,9 @@ define(['./workbox-588899ac'], function (e) {
         { url: '/icons/favicon.ico', revision: 'f0258229870c787ab10d642352a50ecc' },
         { url: '/icons/mstile-150x150.png', revision: '2a01c8b13c087ecd37c48a5c0d4ebf2c' },
         { url: '/icons/safari-pinned-tab.svg', revision: '0ff8290d7690e1b59a4266a1cf14f4cc' },
-        { url: '/manifest.json', revision: 'ef4b4cf6c8b12a8cc0f96b019bd504f2' },
+        { url: '/manifest.json', revision: '0834b3ce07397553e7b4835fa97608c8' },
         { url: '/robots.txt', revision: 'cb837b71656329f816b3572f1f8e0c16' },
-        { url: '/sw.js', revision: '2271ff4f39ddc0cd1cf939b0f07e1e38' },
+        { url: '/sw.js', revision: 'b7ac41536393772efd8c32e86a9c4617' },
         { url: '/sw.js.map', revision: '485ce5c728b47e0a21f2925bca75fd51' },
       ],
       { ignoreURLParametersMatching: [] },
