@@ -1,4 +1,4 @@
-import { type AppType } from 'next/app'
+import { type AppProps, type AppType } from 'next/app'
 import { type Session } from 'next-auth'
 import { SessionProvider } from 'next-auth/react'
 
@@ -15,13 +15,18 @@ export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode
 }
 
+type AppPropsWithLayout = AppProps<{ session: Session | null }> & {
+  Component: NextPageWithLayout
+}
+
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
-}) => {
-  const getLayout = (Component as NextPageWithLayout).getLayout ?? ((page) => page)
+}: AppPropsWithLayout) => {
+  const getLayout = Component.getLayout ?? ((page) => page)
+  console.log(getLayout)
   return (
-    <>
+    <SessionProvider session={session}>
       <Head>
         <meta charSet='utf-8' />
         <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
@@ -47,9 +52,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <meta name='msapplication-TileImage' content='/icons/mstile-150x150.png' />
         <meta name='theme-color' content='#0f172a' />
       </Head>
-      <SessionProvider session={session}>{getLayout(<Component {...pageProps} />)}</SessionProvider>
+      {getLayout(<Component {...pageProps} />)}
       <Toaster position='top-center' reverseOrder={false} />
-    </>
+    </SessionProvider>
   )
 }
 
