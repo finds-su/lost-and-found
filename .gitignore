@@ -46,3 +46,9 @@ yarn-error.log*
 
 # @next/bundle-analyzer
 /analyze
+
+# PWA
+/public/service-worker.js
+/public/service-worker.js.map
+/public/workbox-*.js
+/public/workbox-*.js.map

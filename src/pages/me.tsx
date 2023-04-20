@@ -8,7 +8,6 @@ export default function Me() {
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   res.setHeader('Cache-Control', 'public, s-maxage=10, stale-while-revalidate=59')
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
   const session = await getServerSession(req, res, authOptions)
   if (session) {
     return {

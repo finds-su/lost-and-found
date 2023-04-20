@@ -43,7 +43,7 @@ export default function Profile(props: { isOwner: boolean }) {
     (props.isOwner && session.status === 'loading')
   ) {
     return (
-      <div className='flex h-[40vh] items-center justify-center'>
+      <div className='flex h-[90vh] items-center justify-center'>
         <Spinner size='xl' />
       </div>
     )
@@ -57,10 +57,8 @@ Profile.getLayout = function getLayout(page: any) {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
   const session = await getServerAuthSession(context)
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  const userNickname = context.params?.userNickname as string
+  const userNickname = context.params?.userNickname
   if (session?.user.nickname === userNickname) {
     return {
       props: { isOwner: true },

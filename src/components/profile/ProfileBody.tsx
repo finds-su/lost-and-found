@@ -17,7 +17,7 @@ import { type Role } from '@prisma/client'
 
 export interface User {
   nickname: string
-  name?: string
+  name: string
   email?: string
   role: Role
   image?: string
@@ -29,7 +29,7 @@ export interface User {
 export default function ProfileBody(props: { user: User; isOwner: boolean }) {
   const [editProfile, setEditProfile] = useState(false)
 
-  const [name, setName] = useState(props.user.name ?? '')
+  const [name, setName] = useState(props.user.name)
   const [nickname, setNickname] = useState(props.user.nickname)
   const [email, setEmail] = useState(props.user.email ?? '')
   const [telegramLink, setTelegramLink] = useState(props.user.telegramLink ?? '')
@@ -189,9 +189,7 @@ export default function ProfileBody(props: { user: User; isOwner: boolean }) {
                           item.result.status === 'error' &&
                           item.oldValue !== item.value && (
                             <div className='text-sm text-red-500'>
-                              {item.result.error &&
-                                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                                (JSON.parse(item.result.error?.message)[0].message as string)}
+                              {item.result.error && item.result.error.message}
                             </div>
                           )}
                         {item.result &&

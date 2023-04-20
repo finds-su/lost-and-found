@@ -6,6 +6,7 @@ import { type Role } from '@prisma/client'
 import { slugify } from 'transliteration'
 
 export interface PublicUser {
+  name: string
   nickname: string
   role: Role
   userInfo: string
@@ -61,13 +62,14 @@ const zodUserInfo = z
 
 export const usersRouter = createTRPCRouter({
   getOne: publicProcedure
-    .input(z.object({ nickname: z.string() }))
+    .input(z.object({ nickname: zodNickname }))
     .query(async ({ ctx, input }) => {
       const publicUser = (await ctx.prisma.user.findUnique({
         where: {
           nickname: input.nickname,
         },
         select: {
+          name: true,
           nickname: true,
           role: true,
           userInfo: true,

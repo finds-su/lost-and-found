@@ -1,5 +1,5 @@
 {
-  "name": "Бюро находок РТУ МИРЭА",
+  "name": "Бюро находок Mirea Ninja",
   "short_name": "Бюро находок",
   "icons": [
     {
@@ -21,7 +21,8 @@
   ],
   "theme_color": "#1f2937",
   "background_color": "#FFFFFF",
-  "start_url": "/finds",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "orientation": "portrait"
 }
