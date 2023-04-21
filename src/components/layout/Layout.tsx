@@ -37,7 +37,7 @@ interface LayoutProps {
 
 export type UserNavigation = { name: string; href?: string; func?: () => void }[]
 
-const LayoutProfile = dynamic(() => import('@/components/layout/LayoutProfile'), { ssr: false })
+const LayoutProfile = dynamic(() => import('@/components/layout/LayoutProfile'), { ssr: true })
 
 export default function Layout(props: LayoutProps) {
   const { data: session, status } = useSession()

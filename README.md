@@ -1,6 +1,6 @@
 # lost-and-found-service
 
-Бюро находок РТУ МИРЭА.
+Бюро находок Mirea Ninja.
 
 ## Сборка проекта
 

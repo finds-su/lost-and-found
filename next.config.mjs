@@ -17,11 +17,9 @@ const config = {
     ],
     remotePatterns: [{ hostname: '*.googleusercontent.com' }],
   },
-  compiler: {
-    removeConsole: {
-      exclude: ['error'],
-    },
-  },
+  // compiler: {
+  //   removeConsole: process.env.NODE_ENV === 'production',
+  // },
   async redirects() {
     return [
       {
@@ -52,7 +50,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 const withPWA = require('next-pwa')({
   dest: 'public',
-  disable: process.env.NODE_ENV === 'development',
+  disable: process.env.DISABLE_PWA === 'true',
   register: true,
   scope: '/',
   sw: 'service-worker.js',

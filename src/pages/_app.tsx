@@ -24,7 +24,6 @@ const MyApp: AppType<{ session: Session | null }> = ({
   pageProps: { session, ...pageProps },
 }: AppPropsWithLayout) => {
   const getLayout = Component.getLayout ?? ((page) => page)
-  console.log(getLayout)
   return (
     <SessionProvider session={session}>
       <Head>

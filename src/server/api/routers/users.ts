@@ -1,17 +1,8 @@
 import { z } from 'zod'
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from '@/server/api/trpc'
+import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
 import { TRPCError } from '@trpc/server'
-import { type Role } from '@prisma/client'
 import { slugify } from 'transliteration'
-
-export interface PublicUser {
-  name: string
-  nickname: string
-  role: Role
-  userInfo: string
-  image?: string
-}
 
 const zodNickname = z
   .string({
@@ -61,28 +52,6 @@ const zodUserInfo = z
   .trim()
 
 export const usersRouter = createTRPCRouter({
-  getOne: publicProcedure
-    .input(z.object({ nickname: zodNickname }))
-    .query(async ({ ctx, input }) => {
-      const publicUser = (await ctx.prisma.user.findUnique({
-        where: {
-          nickname: input.nickname,
-        },
-        select: {
-          name: true,
-          nickname: true,
-          role: true,
-          userInfo: true,
-          image: true,
-        },
-      })) as PublicUser
-      if (publicUser) {
-        return publicUser
-      } else {
-        throw new TRPCError({ code: 'NOT_FOUND', message: 'Пользователь не найден.' })
-      }
-    }),
-
   isValidNewNickname: protectedProcedure
     .input(
       z.object({

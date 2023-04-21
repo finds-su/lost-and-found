@@ -1,70 +1,58 @@
 import Layout from '@/components/layout/Layout'
 import { getServerAuthSession } from '@/server/auth'
-import { useRouter } from 'next/router'
-import { api } from '@/utils/api'
-import { useEffect, useState } from 'react'
-import { Spinner } from 'flowbite-react'
-import { useSession } from 'next-auth/react'
-import { type User } from '@/components/profile/ProfileBody'
-import dynamic from 'next/dynamic'
 import { type GetServerSideProps } from 'next'
+import { prisma } from '@/server/db'
+import { type Role } from '@prisma/client'
+import ProfileBody, { type ProfileProps } from '@/components/profile/ProfileBody'
 
-const ProfileBody = dynamic(() => import('@/components/profile/ProfileBody'), {
-  ssr: true,
-})
+import { type ReactElement } from 'react'
 
-export default function Profile(props: { isOwner: boolean }) {
-  const router = useRouter()
-  const userNickname = router.query.userNickname as string
-  const getUser = api.users.getOne.useQuery(
-    { nickname: userNickname },
-    {
-      enabled: !props.isOwner,
-      onSuccess: (user) => setUser(user),
-      onError: () => void router.push(`/u/${userNickname}/error`),
-    },
-  )
-  const session = useSession()
-  const [user, setUser] = useState<User>()
-
-  useEffect(() => {
-    if (session.data && session.data.user.nickname === userNickname) {
-      const sessionUser = session.data.user
-      setUser(sessionUser as User)
-    }
-  }, [session.data, userNickname])
-
-  if (user) {
-    return <ProfileBody user={user} isOwner={props.isOwner} />
-  }
-
-  if (
-    (!props.isOwner && getUser.status === 'loading') ||
-    (props.isOwner && session.status === 'loading')
-  ) {
-    return (
-      <div className='flex h-[90vh] items-center justify-center'>
-        <Spinner size='xl' />
-      </div>
-    )
-  }
-
-  return <div className='flex h-[40vh] items-center justify-center' />
+export interface PublicUser {
+  name: string
+  nickname: string
+  role: Role
+  userInfo: string
+  image?: string
 }
 
-Profile.getLayout = function getLayout(page: any) {
+export default function Profile(props: ProfileProps) {
+  return <ProfileBody {...props} />
+}
+
+Profile.getLayout = function getLayout(page: ReactElement) {
   return <Layout pageName='Профиль'>{page}</Layout>
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)
-  const userNickname = context.params?.userNickname
-  if (session?.user.nickname === userNickname) {
+  const nickname = context.params?.userNickname as string
+  if (session && session?.user.nickname === nickname) {
     return {
-      props: { isOwner: true },
+      props: { isOwner: true, user: session.user, nickname } as ProfileProps,
+    }
+  }
+
+  const user = (await prisma.user.findUnique({
+    where: {
+      nickname,
+    },
+    select: {
+      name: true,
+      nickname: true,
+      role: true,
+      userInfo: true,
+      image: true,
+    },
+  })) as PublicUser | null
+  if (user === null) {
+    return {
+      redirect: {
+        destination: `/u/${nickname}/error`,
+        permanent: false,
+      },
     }
   }
   return {
-    props: { isOwner: false },
+    props: { isOwner: false, user, nickname } as ProfileProps,
   }
 }
