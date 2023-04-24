@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import Image from 'next/image'
 import { type PublicUser } from '@/pages/u/[userNickname]'
@@ -19,17 +19,20 @@ export default function InfiniteScrollGrid(props: { reason: PostItemReason }) {
     { limit: 10, reason: props.reason },
     { getNextPageParam: (lastPage) => lastPage.nextCursor },
   )
-  const [items, setItems] = useState<Item[]>(
-    itemsQuery.data?.pages.map((query) => query.items).flat() ?? [],
-  )
+  const [items, setItems] = useState<Item[]>([])
   const [hasMore, setHasMore] = useState(true)
-  const fetchMoreData = async () => {
+
+  useEffect(() => {
+    if (itemsQuery.data) {
+      setItems(itemsQuery.data.pages.map((query) => query.items).flat())
+    }
+  }, [itemsQuery.data])
+  const fetchMoreData = () => {
     if (itemsQuery.data && itemsQuery.data.pages.length * 10 >= 500) {
       setHasMore(false)
       return
     }
-    await itemsQuery.fetchNextPage()
-    setItems(itemsQuery.data?.pages.map((query) => query.items).flat() ?? [])
+    void itemsQuery.fetchNextPage()
   }
   return (
     <InfiniteScroll

@@ -4,7 +4,7 @@ import InfiniteScrollGrid from '@/components/InfiniteScrollGrid'
 export default function Finds() {
   return (
     <div className='px-4 py-4 sm:px-0'>
-      <InfiniteScrollGrid reason={'FOUND'} />
+      <InfiniteScrollGrid reason='FOUND' />
     </div>
   )
 }

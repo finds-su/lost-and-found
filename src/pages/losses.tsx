@@ -1,9 +1,10 @@
 import Layout from '@/components/layout/Layout'
+import InfiniteScrollGrid from '@/components/InfiniteScrollGrid'
 
 export default function Losses() {
   return (
     <div className='px-4 py-4 sm:px-0'>
-      <div className='h-96 rounded-lg border-4 border-dashed border-gray-200' />
+      <InfiniteScrollGrid reason='LOST' />
     </div>
   )
 }
