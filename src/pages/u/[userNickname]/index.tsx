@@ -12,7 +12,7 @@ export interface PublicUser {
   nickname: string
   role: Role
   userInfo: string
-  image?: string
+  image?: string | null
 }
 
 export default function Profile(props: ProfileProps) {
@@ -20,7 +20,11 @@ export default function Profile(props: ProfileProps) {
 }
 
 Profile.getLayout = function getLayout(page: ReactElement) {
-  return <Layout pageName='Профиль'>{page}</Layout>
+  return (
+    <Layout pageName='Профиль' hideTitle>
+      {page}
+    </Layout>
+  )
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

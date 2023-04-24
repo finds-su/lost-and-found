@@ -34,19 +34,20 @@ model Session {
 }
 
 model User {
-  id             String    @id @default(cuid())
-  name           String
-  nickname       String    @unique
-  telegramLink   String?
-  email          String?   @unique
-  emailVerified  DateTime?
-  userInfo       String    @default("") @db.VarChar(280)
-  role           Role      @default(USER)
-  image          String?
-  isBlockedUntil DateTime?
-  blockReason    String?
-  accounts       Account[]
-  sessions       Session[]
+  id                String             @id @default(cuid())
+  name              String
+  nickname          String             @unique
+  telegramLink      String?
+  email             String?            @unique
+  emailVerified     DateTime?
+  userInfo          String             @default("") @db.VarChar(280)
+  role              Role               @default(USER)
+  image             String?
+  isBlockedUntil    DateTime?
+  blockReason       String?
+  accounts          Account[]
+  sessions          Session[]
+  lostAndFoundItems LostAndFoundItem[]
 
   @@index([nickname], type: Hash)
 }
@@ -63,4 +64,34 @@ enum Role {
   USER
   MODERATOR
   ADMIN
+}
+
+model LostAndFoundItem {
+  id          String         @id @default(cuid())
+  name        String         @db.VarChar(100)
+  description String         @default("") @db.VarChar(512)
+  campus      Campus
+  reason      PostItemReason
+  images      String[]
+  userId      String
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  created     DateTime       @default(now())
+  expires     DateTime       @default(dbgenerated("NOW() + interval '1 week'"))
+
+  @@index([id], type: Hash)
+}
+
+enum PostItemReason {
+  LOST
+  FOUND
+}
+
+enum Campus {
+  V78
+  V86
+  S20
+  MP1
+  SG22
+  SHP23
+  U7
 }

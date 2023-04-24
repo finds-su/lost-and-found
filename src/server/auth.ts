@@ -5,6 +5,7 @@ import { prisma } from '@/server/db'
 import GoogleProvider, { type GoogleProfile } from 'next-auth/providers/google'
 import { getUniqueNickname } from '@/utils/getUniqueNickname'
 import GithubProvider, { type GithubProfile } from 'next-auth/providers/github'
+import { type Role } from '@prisma/client'
 
 interface ArUser {
   ID: string
@@ -46,12 +47,6 @@ declare module 'next-auth' {
     telegramLink?: string
     isBlockedUntil?: Date
   }
-}
-
-export enum Role {
-  USER = 'USER',
-  MODERATOR = 'MODERATOR',
-  ADMIN = 'ADMIN',
 }
 
 /**

@@ -17,9 +17,13 @@ const config = {
     ],
     remotePatterns: [{ hostname: '*.googleusercontent.com' }],
   },
-  // compiler: {
-  //   removeConsole: process.env.NODE_ENV === 'production',
-  // },
+  ...(process.env.NODE_ENV === 'production' && {
+    compiler: {
+      removeConsole: {
+        exclude: ['error'],
+      },
+    },
+  }),
   async redirects() {
     return [
       {

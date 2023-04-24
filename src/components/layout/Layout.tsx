@@ -32,6 +32,7 @@ export const navigation = [
 
 interface LayoutProps {
   pageName: string
+  hideTitle?: boolean
   children: React.ReactNode
 }
 
@@ -50,9 +51,7 @@ export default function Layout(props: LayoutProps) {
 
   return (
     <>
-      <Head>
-        <title>{props.pageName}</title>
-      </Head>
+      <Head>{!props.hideTitle && <title>{props.pageName}</title>}</Head>
       <div className='min-h-full'>
         <Disclosure as='nav' className='bg-gray-800'>
           {({ open }) => (

@@ -50,7 +50,9 @@ export default function ProfileBody(props: ProfileProps) {
   )
   const invalidEmailReason = api.users.isValidNewEmail.useQuery(
     { email: email ?? '' },
-    { enabled: email !== props.user.email },
+    {
+      enabled: email !== props.user.email,
+    },
   )
   const editUser = api.users.editUser.useMutation({
     onSuccess: () => {
