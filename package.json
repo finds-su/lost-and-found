@@ -22,6 +22,7 @@
     "@trpc/react-query": "^10.18.0",
     "@trpc/server": "^10.18.0",
     "@types/react-copy-to-clipboard": "^5.0.4",
+    "date-fns": "^2.29.3",
     "flowbite": "^1.6.5",
     "flowbite-react": "^0.4.3",
     "next": "^13.3.0",

@@ -196,7 +196,7 @@ export default function Layout(props: LayoutProps) {
           </div>
         </header>
         <main>
-          <div className='mx-auto max-w-7xl py-6 sm:px-6 lg:px-8'>{props.children}</div>
+          <div className='mx-4 max-w-7xl py-6 sm:px-6 md:mx-auto lg:px-8'>{props.children}</div>
         </main>
         <footer className='pt-4'>
           <div className='mx-auto w-full px-6'>

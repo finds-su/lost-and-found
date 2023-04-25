@@ -2,11 +2,7 @@ import Layout from '@/components/layout/Layout'
 import InfiniteScrollGrid from '@/components/InfiniteScrollGrid'
 
 export default function Finds() {
-  return (
-    <div className='px-4 py-4 sm:px-0'>
-      <InfiniteScrollGrid reason='FOUND' />
-    </div>
-  )
+  return <InfiniteScrollGrid reason='FOUND' endMessage='Вещей больше не найдено.' />
 }
 
 Finds.getLayout = function getLayout(page: any) {

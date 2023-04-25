@@ -4,7 +4,7 @@ import InfiniteScrollGrid from '@/components/InfiniteScrollGrid'
 export default function Losses() {
   return (
     <div className='px-4 py-4 sm:px-0'>
-      <InfiniteScrollGrid reason='LOST' />
+      <InfiniteScrollGrid reason='LOST' endMessage='Пропаж больше нет.' />
     </div>
   )
 }

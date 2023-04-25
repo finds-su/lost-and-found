@@ -21,6 +21,7 @@ export const itemsRouter = createTRPCRouter({
           campus: true,
           reason: true,
           images: true,
+          created: true,
           user: {
             select: {
               name: true,
@@ -37,7 +38,7 @@ export const itemsRouter = createTRPCRouter({
         },
         cursor: cursor ? { id: cursor } : undefined,
         orderBy: {
-          created: 'desc',
+          created: 'asc',
         },
       })
       let nextCursor: typeof cursor | undefined = undefined
