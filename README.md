@@ -13,5 +13,5 @@ npm run dev
 ### На проде
 
 ```shell
-docker build -t lost-and-found . && docker-compose up
+docker build -t lost-and-found . && docker compose up
 ```

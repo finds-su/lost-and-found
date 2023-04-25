@@ -18,7 +18,7 @@ interface Item {
 }
 export default function InfiniteScrollGrid(props: { reason: PostItemReason; endMessage: string }) {
   const itemsQuery = api.items.infiniteItems.useInfiniteQuery(
-    { limit: 10, reason: props.reason },
+    { limit: 12, reason: props.reason },
     { getNextPageParam: (lastPage) => lastPage.nextCursor },
   )
   const [items, setItems] = useState<Item[]>([])

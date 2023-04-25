@@ -7,24 +7,23 @@ export function humanReadableDate(comparisonDate: Date) {
   const twoWeeksAgo = subDays(today, 14)
   const threeWeeksAgo = subDays(today, 21)
 
-  // Get the date in English locale to match English day of week keys
-  const compare = comparisonDate
-
-  let result = comparisonDate.toLocaleString('ru', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-  if (isSameDay(compare, today)) {
+  let result
+  if (isSameDay(comparisonDate, today)) {
     result = 'сегодня'
-  } else if (isSameDay(compare, yesterday)) {
+  } else if (isSameDay(comparisonDate, yesterday)) {
     result = 'вчера'
-  } else if (isAfter(compare, aWeekAgo)) {
+  } else if (isAfter(comparisonDate, aWeekAgo)) {
     result = 'неделю назад'
-  } else if (isAfter(compare, twoWeeksAgo)) {
+  } else if (isAfter(comparisonDate, twoWeeksAgo)) {
     result = '2 недели назад'
-  } else if (isAfter(compare, threeWeeksAgo)) {
+  } else if (isAfter(comparisonDate, threeWeeksAgo)) {
     result = '3 недели назад'
+  } else {
+    result = comparisonDate.toLocaleString('ru', {
+      ...(comparisonDate.getFullYear() !== today.getFullYear() && { year: 'numeric' }),
+      month: 'long',
+      day: 'numeric',
+    })
   }
 
   return result

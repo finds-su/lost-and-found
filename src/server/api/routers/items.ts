@@ -38,7 +38,7 @@ export const itemsRouter = createTRPCRouter({
         },
         cursor: cursor ? { id: cursor } : undefined,
         orderBy: {
-          created: 'asc',
+          created: 'desc',
         },
       })
       let nextCursor: typeof cursor | undefined = undefined
