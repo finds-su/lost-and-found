@@ -1,4 +1,4 @@
-import { isAfter, isBefore, isSameDay, subDays } from 'date-fns'
+import { isAfter, isSameDay, subDays } from 'date-fns'
 
 export function humanReadableDate(comparisonDate: Date) {
   const today = new Date()
