@@ -6,10 +6,10 @@ export default function Document() {
     <Html className='h-full bg-gray-100'>
       <Head>
         <Script type='module' src='https://cdn.jsdelivr.net/npm/@headlessui/react@1.7.14/+esm' />
-        <Script crossOrigin='anonymous' src='https://unpkg.com/react@18/umd/react.development.js' />
+        <Script crossOrigin='anonymous' src='https://unpkg.com/react@18/umd/react.production.js' />
         <Script
           crossOrigin='anonymous'
-          src='https://unpkg.com/react-dom@18/umd/react-dom.development.js'
+          src='https://unpkg.com/react-dom@18/umd/react-dom.production.js'
         />
         <Script src='https://cdn.tailwindcss.com?plugins=forms' />
         <link

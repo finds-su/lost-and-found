@@ -2,7 +2,8 @@
  * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
  * This is especially useful for Docker builds.
  */
-!process.env.SKIP_ENV_VALIDATION && (await import('./src/env.mjs'))
+
+import { env } from './src/env.mjs'
 
 /** @type {import("next").NextConfig} */
 const config = {
@@ -17,7 +18,7 @@ const config = {
     ],
     remotePatterns: [{ hostname: '*.googleusercontent.com' }],
   },
-  ...(process.env.NODE_ENV === 'production' && {
+  ...(env.NODE_ENV === 'production' && {
     compiler: {
       removeConsole: {
         exclude: ['error'],
@@ -49,12 +50,12 @@ import { createRequire } from 'module'
 const require = createRequire(import.meta.url)
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
+  enabled: env.ANALYZE === 'true',
 })
 
 const withPWA = require('next-pwa')({
   dest: 'public',
-  disable: process.env.DISABLE_PWA === 'true',
+  disable: env.DISABLE_PWA === 'true',
   register: true,
   scope: '/',
   sw: 'service-worker.js',
