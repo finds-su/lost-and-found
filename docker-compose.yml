@@ -1,18 +1,45 @@
 version: '3.9'
+
 services:
-  app:
-    image: lost-and-found
-    ports:
-      - '3000:3000'
+  db:
+    image: postgres:15
+    volumes:
+      - app-db-data:/var/lib/postgresql/data
     environment:
-      DATABASE_URL: ${DATABASE_URL}
-      ANALYZE: ${ANALYZE}
-      DISABLE_PWA: ${DISABLE_PWA}
-      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
-      NEXTAUTH_URL: ${NEXTAUTH_URL}
-      MIREA_CLIENT_ID: ${MIREA_CLIENT_ID}
-      MIREA_CLIENT_SECRET: ${MIREA_CLIENT_SECRET}
-      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
-      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
-      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
-      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - '5432:5432'
+    networks:
+      - default
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+#  app:
+#    image: lost-and-found
+#    depends_on:
+#      db:
+#        condition: service_healthy
+#    networks:
+#      - default
+#    ports:
+#      - '3000:3000'
+#    environment:
+#      DATABASE_URL: ${DATABASE_URL}
+#      ANALYZE: ${ANALYZE}
+#      DISABLE_PWA: ${DISABLE_PWA}
+#      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+#      NEXTAUTH_URL: ${NEXTAUTH_URL}
+#      MIREA_CLIENT_ID: ${MIREA_CLIENT_ID}
+#      MIREA_CLIENT_SECRET: ${MIREA_CLIENT_SECRET}
+#      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+#      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+#      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
+#      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
+
+volumes:
+  app-db-data:
