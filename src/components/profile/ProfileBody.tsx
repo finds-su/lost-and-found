@@ -10,12 +10,13 @@ import {
 import ProfileWindow from '@/components/profile/ProfileWindow'
 import { Avatar, Button, Label, Spinner, Textarea, TextInput } from 'flowbite-react'
 import { formatDate } from '@/utils/formatDate'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { api } from '@/utils/api'
 import errorToast from '@/components/toasts/ErrorToast'
 import { type Role } from '@prisma/client'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import { removeEmptyFields } from '@/utils/removeEmptyFields'
 
 interface User {
   nickname: string
@@ -28,36 +29,47 @@ interface User {
   isBlockedUntil?: string
 }
 
+export type EditableUser = Omit<User, 'role'>
+
 export interface ProfileProps {
   isOwner: boolean
   user: User
-  nickname: string
 }
 
 export default function ProfileBody(props: ProfileProps) {
   const router = useRouter()
   const [editProfile, setEditProfile] = useState(false)
 
-  const [name, setName] = useState(props.user.name)
-  const [nickname, setNickname] = useState(props.user.nickname)
+  const initialEditableUser: EditableUser = {
+    name: props.user.name,
+    nickname: props.user.nickname,
+    email: props.user.email ?? '',
+    telegramLink: props.user.telegramLink ?? '',
+    userInfo: props.user.userInfo,
+  }
+  const [editableUser, setEditableUser] = useState<EditableUser>(initialEditableUser)
+  useEffect(() => {
+    if (editProfile) {
+      setEditableUser(initialEditableUser)
+    }
+  }, [editProfile])
+
   const oldNickname = props.user.nickname
-  const [email, setEmail] = useState(props.user.email ?? '')
-  const [telegramLink, setTelegramLink] = useState(props.user.telegramLink ?? '')
-  const [userInfo, setUserInfo] = useState(props.user.userInfo)
+  const oldName = props.user.name
   const invalidNicknameReason = api.users.isValidNewNickname.useQuery(
-    { nickname },
-    { enabled: nickname !== props.user.nickname },
+    { nickname: editableUser.nickname },
+    { enabled: editableUser.nickname !== props.user.nickname },
   )
   const invalidEmailReason = api.users.isValidNewEmail.useQuery(
-    { email: email ?? '' },
+    { email: editableUser.email ?? '' },
     {
-      enabled: email !== props.user.email,
+      enabled: editableUser.email !== props.user.email,
     },
   )
   const editUser = api.users.editUser.useMutation({
     onSuccess: () => {
-      if (oldNickname !== nickname) {
-        void router.push(`/u/${nickname}/`)
+      if (oldNickname !== editableUser.nickname || oldName !== editableUser.name) {
+        void router.push(`/u/${editableUser.nickname}/`)
       }
       setEditProfile(false)
     },
@@ -69,16 +81,16 @@ export default function ProfileBody(props: ProfileProps) {
       label: 'Ваше имя',
       oldValue: props.user.name,
       placeholder: 'Валера Верхотуров',
-      value: name,
-      setValue: setName,
+      value: editableUser.name,
+      setValue: (userName: string) => setEditableUser({ ...editableUser, name: userName }),
       isRequired: true,
     },
     {
       label: 'Ваш никнейм',
       oldValue: props.user.nickname,
       placeholder: 'my-username',
-      value: nickname,
-      setValue: setNickname,
+      value: editableUser.nickname,
+      setValue: (nickname: string) => setEditableUser({ ...editableUser, nickname }),
       isRequired: true,
       result: invalidNicknameReason,
     },
@@ -86,8 +98,8 @@ export default function ProfileBody(props: ProfileProps) {
       label: 'Ваша почта',
       oldValue: props.user.email,
       placeholder: 'mail@bk.ru',
-      value: email,
-      setValue: setEmail,
+      value: editableUser.email,
+      setValue: (email: string) => setEditableUser({ ...editableUser, email }),
       isRequired: false,
       result: invalidEmailReason,
     },
@@ -95,17 +107,17 @@ export default function ProfileBody(props: ProfileProps) {
       label: 'Ваш Telegram',
       oldValue: props.user.telegramLink,
       placeholder: 'tg-username',
-      value: telegramLink,
-      setValue: setTelegramLink,
+      value: editableUser.telegramLink,
+      setValue: (telegramLink: string) => setEditableUser({ ...editableUser, telegramLink }),
       isRequired: false,
     },
   ]
 
   const profileInfo = [
-    { name: 'Имя', value: name },
-    { name: 'Никнейм', value: nickname },
-    { name: 'Почта', value: email },
-    { name: 'Telegram', value: telegramLink },
+    { name: 'Имя', value: editableUser.name },
+    { name: 'Никнейм', value: editableUser.nickname },
+    { name: 'Почта', value: editableUser.email },
+    { name: 'Telegram', value: editableUser.telegramLink },
     { name: 'Роль', value: props.user.role },
     {
       name: 'Заблокирован до',
@@ -138,16 +150,16 @@ export default function ProfileBody(props: ProfileProps) {
             </div>
             <div className='my-auto w-auto max-w-full flex-none px-3'>
               <div className='h-full'>
-                {name && <h5 className='mb-1 font-semibold'>{name}</h5>}
+                {oldName && <h5 className='mb-1 font-semibold'>{oldName}</h5>}
                 <div className='flex flex-row'>
                   <CopyToClipboard
-                    text={nickname}
+                    text={oldNickname}
                     onCopy={() =>
                       successToast('Никнейм скопирован.', <ClipboardDocumentCheckIcon />)
                     }
                   >
                     <button className='text-size-sm mb-0 font-mono font-thin leading-normal'>
-                      @{nickname}
+                      @{oldNickname}
                     </button>
                   </CopyToClipboard>
                 </div>
@@ -188,10 +200,13 @@ export default function ProfileBody(props: ProfileProps) {
                         rows={3}
                         maxLength={280}
                         placeholder='Расскажите о себе'
-                        value={userInfo}
+                        value={editableUser.userInfo}
                         onChange={(e) =>
                           e.currentTarget.value.split('\n').length <= 4 &&
-                          setUserInfo(e.currentTarget.value.replaceAll('\n\n', '\n'))
+                          setEditableUser({
+                            ...editableUser,
+                            userInfo: e.currentTarget.value.replaceAll('\n\n', '\n'),
+                          })
                         }
                       />
                     </div>
@@ -238,19 +253,13 @@ export default function ProfileBody(props: ProfileProps) {
                       <Button
                         onClick={() => {
                           if (
-                            name !== props.user.name ||
-                            nickname !== props.user.nickname ||
-                            email !== props.user.email ||
-                            telegramLink !== props.user.telegramLink ||
-                            userInfo !== props.user.userInfo
+                            editableUser.name !== props.user.name ||
+                            editableUser.nickname !== props.user.nickname ||
+                            editableUser.email !== props.user.email ||
+                            editableUser.telegramLink !== props.user.telegramLink ||
+                            editableUser.userInfo !== props.user.userInfo
                           ) {
-                            editUser.mutate({
-                              name: name,
-                              nickname: nickname,
-                              email: email.length !== 0 ? email : null,
-                              telegramLink: telegramLink.length !== 0 ? telegramLink : null,
-                              userInfo: userInfo,
-                            })
+                            editUser.mutate(removeEmptyFields(editableUser) as User)
                           }
                         }}
                         color='light'
@@ -268,10 +277,10 @@ export default function ProfileBody(props: ProfileProps) {
                   </>
                 ) : (
                   <>
-                    {userInfo && (
+                    {editableUser.userInfo && (
                       <>
                         <p className='text-size-sm whitespace-pre-line leading-normal'>
-                          {userInfo}
+                          {editableUser.userInfo}
                         </p>
                         <hr className='bg-gradient-horizontal-light my-6 h-px bg-transparent' />
                       </>

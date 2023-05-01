@@ -32,7 +32,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const nickname = context.params?.userNickname as string
   if (session && session?.user.nickname === nickname) {
     return {
-      props: { isOwner: true, user: session.user, nickname } as ProfileProps,
+      props: { isOwner: true, user: session.user } as ProfileProps,
     }
   }
 
@@ -57,6 +57,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
   return {
-    props: { isOwner: false, user, nickname } as ProfileProps,
+    props: { isOwner: false, user } as ProfileProps,
   }
 }

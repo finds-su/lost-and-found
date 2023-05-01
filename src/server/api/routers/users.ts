@@ -89,23 +89,32 @@ export const usersRouter = createTRPCRouter({
   editUser: protectedProcedure
     .input(
       z.object({
-        name: zodName,
-        nickname: zodNickname,
-        email: zodEmail.nullable(),
-        telegramLink: zodTelegramLink.nullable(),
-        userInfo: zodUserInfo,
+        name: zodName.optional(),
+        nickname: zodNickname.optional(),
+        email: zodEmail.nullable().optional(),
+        telegramLink: zodTelegramLink.optional(),
+        userInfo: zodUserInfo.optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      await ctx.prisma.user.update({
-        where: { id: ctx.session.user.id },
-        data: {
-          name: input.name,
-          nickname: input.nickname,
-          email: input.email,
-          telegramLink: input.telegramLink,
-          userInfo: input.userInfo,
-        },
+      await ctx.prisma.$transaction(async (tx) => {
+        const userToUpdate = await tx.user.findFirst({ where: { id: ctx.session.user.id } })
+        if (userToUpdate === null) {
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'Несуществующий пользователь',
+          })
+        }
+        await tx.user.update({
+          where: { id: ctx.session.user.id },
+          data: {
+            name: input.name ?? userToUpdate.name,
+            nickname: input.nickname ?? userToUpdate.nickname,
+            email: input.email ?? userToUpdate.email,
+            telegramLink: input.telegramLink ?? userToUpdate.telegramLink,
+            userInfo: input.userInfo ?? userToUpdate.userInfo,
+          },
+        })
       })
     }),
 })
