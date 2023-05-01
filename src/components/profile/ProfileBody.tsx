@@ -8,7 +8,7 @@ import {
   ShieldCheckIcon,
 } from '@heroicons/react/24/outline'
 import ProfileWindow from '@/components/profile/ProfileWindow'
-import { Avatar, Button, Label, Spinner, Textarea, TextInput } from 'flowbite-react'
+import { Button, Label, Spinner, Textarea, TextInput } from 'flowbite-react'
 import { formatDate } from '@/utils/formatDate'
 import { useEffect, useState } from 'react'
 import { api } from '@/utils/api'
@@ -17,6 +17,7 @@ import { type Role } from '@prisma/client'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { removeEmptyFields } from '@/utils/removeEmptyFields'
+import Avatar from '@/components/profile/Avatar'
 
 interface User {
   nickname: string
@@ -138,7 +139,7 @@ export default function ProfileBody(props: ProfileProps) {
                 <Avatar
                   size='lg'
                   placeholderInitials={props.user.nickname.slice(0, 2).toUpperCase()}
-                  img={props.user.image ?? ''}
+                  src={props.user.image ?? ''}
                   rounded
                 />
                 {['ADMIN', 'MODERATOR'].includes(props.user.role) && (

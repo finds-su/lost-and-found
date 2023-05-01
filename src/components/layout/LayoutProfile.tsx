@@ -1,10 +1,11 @@
 import { type Session } from 'next-auth'
 import { BellIcon } from '@heroicons/react/24/outline'
 import { Menu, Transition } from '@headlessui/react'
-import { Avatar } from 'flowbite-react'
+import Avatar from '@/components/profile/Avatar'
 import React, { Fragment } from 'react'
 import { type UserNavigation } from '@/components/layout/Layout'
 import classNames from '@/utils/classNames'
+import Image from 'next/image'
 
 export default function LayoutProfile(props: { session: Session; userNavigation: UserNavigation }) {
   return (
@@ -26,7 +27,7 @@ export default function LayoutProfile(props: { session: Session; userNavigation:
               <Avatar
                 size='sm'
                 placeholderInitials={props.session.user.nickname.slice(0, 2).toUpperCase()}
-                img={props.session.user.image ?? ''}
+                src={props.session.user.image}
                 rounded
               />
             </Menu.Button>

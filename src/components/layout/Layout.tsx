@@ -8,7 +8,7 @@ import Link from 'next/link'
 import classNames from '@/utils/classNames'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
-import { Avatar } from 'flowbite-react'
+import Avatar from '@/components/profile/Avatar'
 
 const social = [
   {
@@ -139,7 +139,7 @@ export default function Layout(props: LayoutProps) {
                         <Avatar
                           size='sm'
                           placeholderInitials={session.user.nickname.slice(0, 2).toUpperCase()}
-                          img={session.user.image ?? ''}
+                          src={session.user.image}
                           rounded
                         />
                         <div className='ml-3'>
