@@ -40,7 +40,7 @@ export interface LayoutProps {
 
 export type UserNavigation = { name: string; href?: string; func?: () => void }[]
 
-const LayoutProfile = dynamic(() => import('@/components/layout/LayoutProfile'), { ssr: false })
+const LayoutProfile = dynamic(() => import('@/components/layout/LayoutProfile'), { ssr: true })
 
 export default function Layout(props: LayoutProps) {
   const router = useRouter()
@@ -63,6 +63,7 @@ export default function Layout(props: LayoutProps) {
                   <div className='flex items-center'>
                     <Link className='flex-shrink-0' href='/'>
                       <Image
+                        priority
                         className='h-8 w-8'
                         src='/assets/ninja-logo-white.svg'
                         alt='Mirea Ninja'
