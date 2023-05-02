@@ -31,6 +31,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], type: Hash)
 }
 
 model User {
@@ -49,6 +51,7 @@ model User {
   sessions          Session[]
   lostAndFoundItems LostAndFoundItem[]
 
+  @@index([id], type: Hash)
   @@index([nickname], type: Hash)
 }
 

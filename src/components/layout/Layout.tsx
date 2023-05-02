@@ -2,13 +2,14 @@ import { Disclosure } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import React from 'react'
 import Image from 'next/image'
-import { signIn, signOut, useSession } from 'next-auth/react'
+import { signIn, signOut } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import classNames from '@/utils/classNames'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import Avatar from '@/components/profile/Avatar'
+import { Session } from 'next-auth'
 
 const social = [
   {
@@ -30,7 +31,8 @@ export const navigation = [
   { name: 'Потерянные вещи', href: '/losses' },
 ]
 
-interface LayoutProps {
+export interface LayoutProps {
+  session: Session | null
   pageName: string
   hideTitle?: boolean
   children: React.ReactNode
@@ -38,11 +40,11 @@ interface LayoutProps {
 
 export type UserNavigation = { name: string; href?: string; func?: () => void }[]
 
-const LayoutProfile = dynamic(() => import('@/components/layout/LayoutProfile'), { ssr: true })
+const LayoutProfile = dynamic(() => import('@/components/layout/LayoutProfile'), { ssr: false })
 
 export default function Layout(props: LayoutProps) {
-  const { data: session, status } = useSession()
   const router = useRouter()
+  const session = props.session
 
   const userNavigation: UserNavigation = [
     { name: 'Ваш профиль', href: session ? `/u/${session.user.nickname}/` : '/' },
@@ -88,8 +90,9 @@ export default function Layout(props: LayoutProps) {
                       </div>
                     </div>
                   </div>
-                  {session && <LayoutProfile session={session} userNavigation={userNavigation} />}
-                  {status === 'unauthenticated' && (
+                  {props.session ? (
+                    <LayoutProfile session={props.session} userNavigation={userNavigation} />
+                  ) : (
                     <button
                       onClick={() => {
                         void signIn()

@@ -6,6 +6,7 @@ import { type Role } from '@prisma/client'
 import ProfileBody, { type ProfileProps } from '@/components/profile/ProfileBody'
 
 import { type ReactElement } from 'react'
+import { Session } from 'next-auth'
 
 export interface PublicUser {
   name: string
@@ -15,13 +16,13 @@ export interface PublicUser {
   image?: string | null
 }
 
-export default function Profile(props: ProfileProps) {
+function Profile(props: ProfileProps) {
   return <ProfileBody {...props} />
 }
 
-Profile.getLayout = function getLayout(page: ReactElement) {
+Profile.getLayout = function getLayout(page: ReactElement, session: Session) {
   return (
-    <Layout pageName='Профиль' hideTitle>
+    <Layout pageName='Профиль' hideTitle session={session}>
       {page}
     </Layout>
   )
@@ -32,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const nickname = context.params?.userNickname as string
   if (session && session?.user.nickname === nickname) {
     return {
-      props: { isOwner: true, user: session.user } as ProfileProps,
+      props: { isOwner: true, user: session.user, session } as ProfileProps,
     }
   }
 
@@ -57,6 +58,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
   return {
-    props: { isOwner: false, user } as ProfileProps,
+    props: { isOwner: false, user, session } as ProfileProps,
   }
 }
+
+export default Profile
