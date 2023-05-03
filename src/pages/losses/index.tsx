@@ -17,8 +17,8 @@ const Losses: NextPageWithLayout = () => {
         reason='LOST'
         endMessage={
           <div>
-            <Image src='/assets/illustrations/bulb.png' alt='' width={250} height={250} />
-            Пропаж больше нет.
+            <Image src='/assets/illustrations/gift.png' alt='' width={250} height={250} />
+            Пропаж нет
           </div>
         }
       />

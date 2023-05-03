@@ -18,7 +18,7 @@ const Finds: NextPageWithLayout = () => {
         endMessage={
           <div>
             <Image src='/assets/illustrations/box.png' alt='' width={250} height={250} />
-            Вещей больше не найдено.
+            Вещей больше не найдено
           </div>
         }
       />

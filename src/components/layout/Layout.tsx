@@ -131,27 +131,30 @@ export default function Layout(props: LayoutProps) {
                   {session && (
                     <>
                       <div className='flex items-center px-5'>
-                        <Avatar
-                          size='sm'
-                          placeholderInitials={session.user.nickname.slice(0, 2).toUpperCase()}
-                          src={session.user.image}
-                          rounded
-                        />
-                        <div className='ml-3'>
-                          <div className='text-base font-medium text-white'>
-                            {session.user.name}
+                        <Link className='flex items-center' href='/me'>
+                          <Avatar
+                            size='sm'
+                            placeholderInitials={session.user.nickname.slice(0, 2).toUpperCase()}
+                            src={session.user.image}
+                            rounded
+                          />
+                          <div className='ml-3'>
+                            <div className='text-base font-medium text-white'>
+                              {session.user.name}
+                            </div>
+                            <div className='text-sm font-medium text-gray-400'>
+                              {session.user.email}
+                            </div>
                           </div>
-                          <div className='text-sm font-medium text-gray-400'>
-                            {session.user.email}
-                          </div>
-                        </div>
-                        <button
+                        </Link>
+                        <Link
+                          href='/notifications'
                           type='button'
                           className='ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'
                         >
                           <span className='sr-only'>Просмотреть уведомления</span>
                           <BellIcon className='h-6 w-6' aria-hidden='true' />
-                        </button>
+                        </Link>
                       </div>
                       <div className='mt-3 space-y-1 px-2'>
                         {userNavigation.map((item) => (
