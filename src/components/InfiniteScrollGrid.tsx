@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import Image from 'next/image'
-import { type PublicUser } from 'src/pages/u/[nickname]'
+import { type PublicUser } from '@/pages/u/[nickname]'
 import { type Campus as DBCampus, type PostItemReason } from '@prisma/client'
 import { Campus } from '@/utils/campus'
 import { api } from '@/utils/api'
