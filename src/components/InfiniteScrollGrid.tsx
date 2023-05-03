@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { type ReactNode, useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import Image from 'next/image'
 import { type PublicUser } from '@/pages/u/[nickname]'
@@ -16,7 +16,11 @@ interface Item {
   created: Date
   user: PublicUser
 }
-export default function InfiniteScrollGrid(props: { reason: PostItemReason; endMessage: string }) {
+
+export default function InfiniteScrollGrid(props: {
+  reason: PostItemReason
+  endMessage: ReactNode
+}) {
   const itemsQuery = api.items.infiniteItems.useInfiniteQuery(
     { limit: 12, reason: props.reason },
     { getNextPageParam: (lastPage) => lastPage.nextCursor },
@@ -44,8 +48,14 @@ export default function InfiniteScrollGrid(props: { reason: PostItemReason; endM
       dataLength={items.length}
       next={fetchMoreData}
       hasMore={hasMore}
-      loader={<p className='col-span-2 text-center md:col-span-4'>Загрузка...</p>}
-      endMessage={<p className='col-span-2 text-center md:col-span-4'>{props.endMessage}</p>}
+      loader={
+        <p className='col-span-2 flex justify-center text-center md:col-span-4'>Загрузка...</p>
+      }
+      endMessage={
+        <div className='col-span-2 flex justify-center text-center font-medium md:col-span-4'>
+          {props.endMessage}
+        </div>
+      }
       className='grid min-h-screen grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 md:gap-y-1 lg:gap-x-8'
     >
       {items.map((post) => (
@@ -61,7 +71,7 @@ export default function InfiniteScrollGrid(props: { reason: PostItemReason; endM
             />
           </div>
           <h3 className='mt-4 text-sm text-gray-900'>
-            <a href={'#'}>
+            <a href={`${post.reason === 'LOST' ? 'losses' : 'finds'}/${post.id}`}>
               <span className='absolute inset-0' />
               {post.name}
             </a>

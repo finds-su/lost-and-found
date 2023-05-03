@@ -3,6 +3,7 @@ import InfiniteScrollGrid from '@/components/InfiniteScrollGrid'
 import { getServerAuthSession } from '@/server/auth'
 import { type GetServerSideProps } from 'next'
 import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
+import Image from 'next/image'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)
@@ -12,7 +13,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const Losses: NextPageWithLayout = () => {
   return (
     <div className='px-4 py-4 sm:px-0'>
-      <InfiniteScrollGrid reason='LOST' endMessage='Пропаж больше нет.' />
+      <InfiniteScrollGrid
+        reason='LOST'
+        endMessage={
+          <div>
+            <Image src='/assets/illustrations/bulb.png' alt='' width={250} height={250} />
+            Пропаж больше нет.
+          </div>
+        }
+      />
     </div>
   )
 }
