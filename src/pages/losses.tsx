@@ -1,10 +1,15 @@
 import Layout from '@/components/layout/Layout'
 import InfiniteScrollGrid from '@/components/InfiniteScrollGrid'
-import { type Session } from 'next-auth'
 import { getServerAuthSession } from '@/server/auth'
 import { type GetServerSideProps } from 'next'
+import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
 
-function Losses() {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getServerAuthSession(context)
+  return { props: { session } }
+}
+
+const Losses: NextPageWithLayout = () => {
   return (
     <div className='px-4 py-4 sm:px-0'>
       <InfiniteScrollGrid reason='LOST' endMessage='Пропаж больше нет.' />
@@ -12,17 +17,12 @@ function Losses() {
   )
 }
 
-Losses.getLayout = function getLayout(page: JSX.Element, session: Session) {
+Losses.getLayout = function getLayout(page: JSX.Element, options: NextPageOptions) {
   return (
-    <Layout pageName='Объявления о потерянных вещах' session={session}>
+    <Layout pageName='Объявления о потерянных вещах' session={options.session}>
       {page}
     </Layout>
   )
-}
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getServerAuthSession(context)
-  return { props: { session } }
 }
 
 export default Losses

@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import Head from 'next/head'
 
-interface ErrorProps {
+export interface ErrorProps {
   code?: number
   name: string
   description: string

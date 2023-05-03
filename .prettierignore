@@ -1,6 +1,11 @@
 .next
 /node_modules
 
+# Lock files
+yarn.lock
+package-lock.json
+pnpm-lock.yaml
+
 # PWA
 /public/service-worker.js
 /public/service-worker.js.map

@@ -5,7 +5,6 @@ import {
   ArrowLeftIcon,
   ClipboardDocumentCheckIcon,
   PencilSquareIcon,
-  ShieldCheckIcon,
 } from '@heroicons/react/24/outline'
 import ProfileWindow from '@/components/profile/ProfileWindow'
 import { Button, Label, Spinner, Textarea, TextInput } from 'flowbite-react'
@@ -17,7 +16,7 @@ import { type Role } from '@prisma/client'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { removeEmptyFields } from '@/utils/removeEmptyFields'
-import Avatar from '@/components/profile/Avatar'
+import ProfileAvatar from '@/components/profile/ProfileAvatar'
 
 interface User {
   nickname: string
@@ -59,12 +58,12 @@ export default function ProfileBody(props: ProfileProps) {
   const oldName = props.user.name
   const invalidNicknameReason = api.users.isValidNewNickname.useQuery(
     { nickname: editableUser.nickname },
-    { enabled: editableUser.nickname !== props.user.nickname },
+    { enabled: editableUser.nickname !== props.user.nickname && props.isOwner },
   )
   const invalidEmailReason = api.users.isValidNewEmail.useQuery(
     { email: editableUser.email ?? '' },
     {
-      enabled: editableUser.email !== props.user.email,
+      enabled: editableUser.email !== props.user.email && props.isOwner,
     },
   )
   const editUser = api.users.editUser.useMutation({
@@ -79,7 +78,7 @@ export default function ProfileBody(props: ProfileProps) {
 
   const editableFields = [
     {
-      label: 'Ваше имя',
+      label: 'Имя',
       oldValue: props.user.name,
       placeholder: 'Валера Верхотуров',
       value: editableUser.name,
@@ -87,7 +86,7 @@ export default function ProfileBody(props: ProfileProps) {
       isRequired: true,
     },
     {
-      label: 'Ваш никнейм',
+      label: 'Никнейм',
       oldValue: props.user.nickname,
       placeholder: 'my-username',
       value: editableUser.nickname,
@@ -96,7 +95,7 @@ export default function ProfileBody(props: ProfileProps) {
       result: invalidNicknameReason,
     },
     {
-      label: 'Ваша почта',
+      label: 'Почта',
       oldValue: props.user.email,
       placeholder: 'mail@bk.ru',
       value: editableUser.email,
@@ -105,7 +104,7 @@ export default function ProfileBody(props: ProfileProps) {
       result: invalidEmailReason,
     },
     {
-      label: 'Ваш Telegram',
+      label: 'Telegram аккаунт',
       oldValue: props.user.telegramLink,
       placeholder: 'tg-username',
       value: editableUser.telegramLink,
@@ -135,23 +134,16 @@ export default function ProfileBody(props: ProfileProps) {
         <div className='shadow-blur relative mb-4 flex min-w-0 flex-auto flex-col overflow-hidden break-words rounded-2xl border-0 bg-white/80 bg-clip-border p-4'>
           <div className='-mx-3 flex flex-wrap'>
             <div className='w-auto max-w-full flex-none px-3'>
-              <div className='relative'>
-                <Avatar
-                  size='lg'
-                  placeholderInitials={props.user.nickname.slice(0, 2).toUpperCase()}
-                  src={props.user.image ?? ''}
-                  rounded
-                />
-                {['ADMIN', 'MODERATOR'].includes(props.user.role) && (
-                  <span className='absolute bottom-0 right-3  h-5 w-5 rounded-full border-2 border-blue-500 bg-blue-500 text-black'>
-                    <ShieldCheckIcon />
-                  </span>
-                )}
-              </div>
+              <ProfileAvatar
+                isOwner={props.isOwner}
+                imgSrc={props.user.image}
+                role={props.user.role}
+                placeholderInitials={props.user.nickname.slice(0, 2).toUpperCase()}
+              />
             </div>
             <div className='my-auto w-auto max-w-full flex-none px-3'>
               <div className='h-full'>
-                {oldName && <h5 className='mb-1 font-semibold'>{oldName}</h5>}
+                {oldName && <h5 className='mb-1 font-semibold text-slate-700'>{oldName}</h5>}
                 <div className='flex flex-row'>
                   <CopyToClipboard
                     text={oldNickname}

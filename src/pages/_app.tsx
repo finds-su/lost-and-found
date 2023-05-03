@@ -9,19 +9,24 @@ import React, { type ReactElement, type ReactNode } from 'react'
 import { type NextPage } from 'next'
 import { Toaster } from 'react-hot-toast'
 import Head from 'next/head'
+import { type ErrorProps } from '@/components/Error'
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
-  getLayout?: (page: ReactElement, session?: Session | null) => ReactNode
+export interface NextPageOptions {
+  session: Session | null
+  error?: ErrorProps
 }
 
-type AppPropsWithLayout = AppProps<{ session: Session | null }> & {
+export type NextPageWithLayout<P = any, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement, options: NextPageOptions) => ReactNode
+}
+
+type AppPropsWithLayout = AppProps<{ session: Session | null; error?: ErrorProps }> & {
   Component: NextPageWithLayout
 }
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
-  pageProps: { session, ...pageProps },
+  pageProps: { session, error, ...pageProps },
 }: AppPropsWithLayout) => {
   const getLayout = Component.getLayout
   return (
@@ -51,7 +56,11 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <meta name='msapplication-TileImage' content='/icons/mstile-150x150.png' />
         <meta name='theme-color' content='#0f172a' />
       </Head>
-      {getLayout ? getLayout(<Component {...pageProps} />, session) : <Component {...pageProps} />}
+      {getLayout ? (
+        getLayout(<Component {...pageProps} />, { session, error })
+      ) : (
+        <Component {...pageProps} />
+      )}
       <Toaster position='top-center' reverseOrder={false} />
     </SessionProvider>
   )

@@ -35,12 +35,12 @@ import { createRequire } from 'module'
 const require = createRequire(import.meta.url)
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: env.ANALYZE === 'true',
+  enabled: env.ANALYZE,
 })
 
 const withPWA = require('next-pwa')({
   dest: 'public',
-  disable: env.DISABLE_PWA === 'true',
+  disable: env.DISABLE_PWA,
   register: true,
   scope: '/',
   sw: 'service-worker.js',

@@ -9,7 +9,7 @@
     "lint": "next lint",
     "start": "next start",
     "prepare": "husky install",
-    "format": "prettier --write \"**/*.{js,ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{js,mjs,cjs,ts,tsx,md}\""
   },
   "dependencies": {
     "@headlessui/react": "^1.7.14",

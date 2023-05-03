@@ -9,6 +9,7 @@ export default function Avatar(props: Omit<AvatarProps, 'img'> & { src?: string 
       <FlowBiteAvatar
         img={({ className, ...imgProps }) => (
           <Image
+            priority
             src={props.src as string}
             className={classNames('object-cover', className)}
             alt=''

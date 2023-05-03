@@ -2,10 +2,6 @@ import { authOptions } from '@/server/auth'
 import { getServerSession } from 'next-auth'
 import { type GetServerSideProps } from 'next'
 
-export default function Me() {
-  return
-}
-
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const session = await getServerSession(req, res, authOptions)
   if (session) {
@@ -22,4 +18,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       permanent: false,
     },
   }
+}
+
+export default function Me() {
+  return
 }

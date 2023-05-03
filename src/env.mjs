@@ -9,8 +9,12 @@ export const env = createEnv({
   server: {
     DATABASE_URL: z.string().url(),
     NODE_ENV: z.enum(['development', 'test', 'production']),
-    ANALYZE: z.enum(['true', 'false']),
-    DISABLE_PWA: z.enum(['true', 'false']),
+    ANALYZE: z
+      .enum(['true', '1', 'false', '0'])
+      .transform((value) => value === 'true' || value === '1'),
+    DISABLE_PWA: z
+      .enum(['true', '1', 'false', '0'])
+      .transform((value) => value === 'true' || value === '1'),
     NEXTAUTH_SECRET:
       process.env.NODE_ENV === 'production' ? z.string().min(1) : z.string().min(1).optional(),
     NEXTAUTH_URL: z.string().url(),

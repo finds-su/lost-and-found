@@ -6,31 +6,12 @@ import { type Role } from '@prisma/client'
 import ProfileBody, { type ProfileProps } from '@/components/profile/ProfileBody'
 
 import { type ReactElement } from 'react'
-import { Session } from 'next-auth'
-
-export interface PublicUser {
-  name: string
-  nickname: string
-  role: Role
-  userInfo: string
-  image?: string | null
-}
-
-function Profile(props: ProfileProps) {
-  return <ProfileBody {...props} />
-}
-
-Profile.getLayout = function getLayout(page: ReactElement, session: Session) {
-  return (
-    <Layout pageName='Профиль' hideTitle session={session}>
-      {page}
-    </Layout>
-  )
-}
+import Error, { type ErrorProps } from '@/components/Error'
+import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)
-  const nickname = context.params?.userNickname as string
+  const nickname = context.params?.nickname as string
   if (session && session?.user.nickname === nickname) {
     return {
       props: { isOwner: true, user: session.user, session } as ProfileProps,
@@ -51,15 +32,41 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   })) as PublicUser | null
   if (user === null) {
     return {
-      redirect: {
-        destination: `/u/${nickname}/error`,
-        permanent: false,
+      props: {
+        error: {
+          code: 404,
+          name: 'Пользователь не найден.',
+          description: `Пользователя с ником ${nickname} не существует.`,
+        } as ErrorProps,
       },
     }
   }
   return {
     props: { isOwner: false, user, session } as ProfileProps,
   }
+}
+
+export interface PublicUser {
+  name: string
+  nickname: string
+  role: Role
+  userInfo: string
+  image?: string | null
+}
+
+const Profile: NextPageWithLayout = (props: ProfileProps) => {
+  return <ProfileBody {...props} />
+}
+
+Profile.getLayout = function getLayout(page: ReactElement, options: NextPageOptions) {
+  if (options.error) {
+    return <Error {...options.error} />
+  }
+  return (
+    <Layout pageName='Профиль' hideTitle session={options.session}>
+      {page}
+    </Layout>
+  )
 }
 
 export default Profile

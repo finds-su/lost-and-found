@@ -9,7 +9,7 @@ import classNames from '@/utils/classNames'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import Avatar from '@/components/profile/Avatar'
-import { Session } from 'next-auth'
+import { type Session } from 'next-auth'
 
 const social = [
   {

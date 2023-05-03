@@ -5,7 +5,6 @@ import Avatar from '@/components/profile/Avatar'
 import React, { Fragment } from 'react'
 import { type UserNavigation } from '@/components/layout/Layout'
 import classNames from '@/utils/classNames'
-import Image from 'next/image'
 
 export default function LayoutProfile(props: { session: Session; userNavigation: UserNavigation }) {
   return (
