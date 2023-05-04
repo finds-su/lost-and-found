@@ -42,7 +42,7 @@ export default function LayoutFooter() {
                   <a
                     rel='noreferrer'
                     href={item.href}
-                    className='ease-soft-in-out text-size-sm block px-4 pb-1 pt-0 font-normal text-slate-500 transition-colors'
+                    className='ease-soft-in-out text-size-sm block px-4 pb-1 pt-0 font-normal text-slate-700 transition-colors hover:text-slate-900'
                     target='_blank'
                   >
                     {item.name}

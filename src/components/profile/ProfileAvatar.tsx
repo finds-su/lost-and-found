@@ -25,11 +25,12 @@ export default function ProfileAvatar(props: ProfileAvatarProps) {
         </span>
       )}
       {props.isOwner && (
-        <div className='absolute bottom-0 right-1'>
+        <div className='absolute -right-4 bottom-0'>
           <Dropdown
             label={
-              <p className='-mx-3 -my-1'>
-                <PencilIcon className='h-5 w-5' />
+              <p className='-mx-3 -my-1 flex flex-row'>
+                <PencilIcon className='mr-2 h-5 w-5' />
+                Изм.
               </p>
             }
             arrowIcon={false}

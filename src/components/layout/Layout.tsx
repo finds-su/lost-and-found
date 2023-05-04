@@ -5,12 +5,12 @@ import Image from 'next/image'
 import { signIn, signOut } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import classNames from '@/utils/classNames'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import Avatar from '@/components/profile/Avatar'
 import { type Session } from 'next-auth'
 import LayoutFooter from '@/components/layout/LayoutFooter'
+import classNames from 'classnames/dedupe'
 
 export const navigation = [
   { name: 'Найденные вещи', href: '/finds' },

@@ -3,9 +3,9 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import Image from 'next/image'
 import { type PublicUser } from '@/pages/u/[nickname]'
 import { type Campus as DBCampus, type PostItemReason } from '@prisma/client'
-import { Campus } from '@/utils/campus'
-import { api } from '@/utils/api'
-import { humanReadableDate } from '@/utils/humanReadableDate'
+import { Campus } from '@/lib/campus'
+import { api } from '@/lib/api'
+import { humanReadableDate } from '@/lib/humanReadableDate'
 import { Spinner } from 'flowbite-react'
 
 interface Item {
@@ -55,7 +55,7 @@ export default function InfiniteScrollGrid(props: {
         </p>
       }
       endMessage={
-        <div className='col-span-2 flex justify-center text-center text-lg font-medium md:col-span-4'>
+        <div className='col-span-2 row-auto flex justify-center text-center text-lg font-medium md:col-span-4'>
           {props.endMessage}
         </div>
       }

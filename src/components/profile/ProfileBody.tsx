@@ -8,14 +8,14 @@ import {
 } from '@heroicons/react/24/outline'
 import ProfileWindow from '@/components/profile/ProfileWindow'
 import { Button, Label, Spinner, Textarea, TextInput } from 'flowbite-react'
-import { formatDate } from '@/utils/formatDate'
+import { formatDate } from '@/lib/formatDate'
 import { useEffect, useState } from 'react'
-import { api } from '@/utils/api'
+import { api } from '@/lib/api'
 import errorToast from '@/components/toasts/ErrorToast'
 import { type Role } from '@prisma/client'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { removeEmptyFields } from '@/utils/removeEmptyFields'
+import { removeEmptyFields } from '@/lib/removeEmptyFields'
 import ProfileAvatar from '@/components/profile/ProfileAvatar'
 
 interface User {
@@ -52,6 +52,7 @@ export default function ProfileBody(props: ProfileProps) {
     if (editProfile) {
       setEditableUser(initialEditableUser)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editProfile])
 
   const oldNickname = props.user.nickname

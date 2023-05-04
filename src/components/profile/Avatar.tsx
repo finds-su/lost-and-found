@@ -1,6 +1,6 @@
 import { type AvatarProps } from 'flowbite-react'
 import Image from 'next/image'
-import classNames from '@/utils/classNames'
+import classNames from 'classnames/dedupe'
 import { Avatar as FlowBiteAvatar } from 'flowbite-react'
 
 export default function Avatar(props: Omit<AvatarProps, 'img'> & { src?: string | null }) {

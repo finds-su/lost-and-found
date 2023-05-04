@@ -3,7 +3,7 @@ import { getServerSession, type NextAuthOptions, type DefaultSession } from 'nex
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '@/server/db'
 import GoogleProvider, { type GoogleProfile } from 'next-auth/providers/google'
-import { getUniqueNickname } from '@/utils/getUniqueNickname'
+import { getUniqueNickname } from '@/lib/getUniqueNickname'
 import GithubProvider, { type GithubProfile } from 'next-auth/providers/github'
 import { type Role } from '@prisma/client'
 

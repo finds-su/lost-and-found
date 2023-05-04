@@ -2,7 +2,7 @@ import { type AppProps, type AppType } from 'next/app'
 import { type Session } from 'next-auth'
 import { SessionProvider } from 'next-auth/react'
 
-import { api } from '@/utils/api'
+import { api } from '@/lib/api'
 
 import '@/styles/globals.css'
 import React, { type ReactElement, type ReactNode } from 'react'
@@ -10,7 +10,7 @@ import { type NextPage } from 'next'
 import { Toaster } from 'react-hot-toast'
 import Head from 'next/head'
 import { type ErrorProps } from '@/components/Error'
-import NextProgress from 'next-progress'
+import NextNProgress from 'nextjs-progressbar'
 
 export interface NextPageOptions {
   session: Session | null
@@ -57,7 +57,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <meta name='msapplication-TileImage' content='/icons/mstile-150x150.png' />
         <meta name='theme-color' content='#0f172a' />
       </Head>
-      <NextProgress height={3} delay={300} color='#7dd3fc' options={{ showSpinner: false }} />
+      <NextNProgress height={3} color='#7dd3fc' options={{ showSpinner: false }} />
       {getLayout ? (
         getLayout(<Component {...pageProps} />, { session, error })
       ) : (
