@@ -24,7 +24,7 @@ export interface LayoutProps {
   children: React.ReactNode
 }
 
-export type UserNavigation = { name: string; func?: () => void }[]
+export type UserNavigation = { name: string; func?: () => void; href?: string }[]
 
 const LayoutProfile = dynamic(() => import('@/components/layout/LayoutProfile'), { ssr: true })
 
@@ -36,9 +36,18 @@ export default function Layout(props: LayoutProps) {
     {
       name: 'Ваш профиль',
       func: () => void router.push(session ? `/u/${session.user.nickname}/` : '/'),
+      href: '/u/[nickname]',
     },
-    { name: 'Ваши пропажи', func: () => void router.push(session ? '/losses/my' : '/losses') },
-    { name: 'Ваши находки', func: () => void router.push(session ? '/finds/my' : '/finds') },
+    {
+      name: 'Ваши пропажи',
+      func: () => void router.push(session ? '/losses/my' : '/losses'),
+      href: '/losses/my',
+    },
+    {
+      name: 'Ваши находки',
+      func: () => void router.push(session ? '/finds/my' : '/finds'),
+      href: '/finds/my',
+    },
     { name: 'Выйти', func: () => void signOut() },
   ]
 
@@ -162,7 +171,12 @@ export default function Layout(props: LayoutProps) {
                             key={item.name}
                             as='a'
                             onClick={item.func}
-                            className='block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white'
+                            className={classNames(
+                              router.pathname === item.href
+                                ? 'bg-gray-900 text-white'
+                                : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                              'block rounded-md px-3 py-2 text-sm font-medium',
+                            )}
                           >
                             {item.name}
                           </Disclosure.Button>

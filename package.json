@@ -1,5 +1,5 @@
 {
-  "name": "lost-and-found-service",
+  "name": "lost-and-found",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -23,8 +23,6 @@
     "@trpc/next": "^10.18.0",
     "@trpc/react-query": "^10.18.0",
     "@trpc/server": "^10.18.0",
-    "@types/classnames": "^2.3.1",
-    "@types/react-copy-to-clipboard": "^5.0.4",
     "classnames": "^2.3.2",
     "date-fns": "^2.29.3",
     "flowbite": "^1.6.5",
@@ -46,10 +44,12 @@
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.3",
+    "@types/classnames": "^2.3.1",
     "@types/eslint": "^8.21.3",
     "@types/node": "^18.15.5",
     "@types/prettier": "^2.7.2",
     "@types/react": "^18.0.28",
+    "@types/react-copy-to-clipboard": "^5.0.4",
     "@types/react-dom": "^18.0.11",
     "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.56.0",

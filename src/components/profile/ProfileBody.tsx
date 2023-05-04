@@ -131,7 +131,7 @@ export default function ProfileBody(props: ProfileProps) {
       <Head>
         <title>{props.user.name}</title>
       </Head>
-      <div className='loopple-min-height-78vh mx-auto w-full text-slate-500'>
+      <div className='min-h-78vh mx-auto w-full text-slate-500'>
         <div className='shadow-blur relative mb-4 flex min-w-0 flex-auto flex-col overflow-hidden break-words rounded-2xl border-0 bg-white/80 bg-clip-border p-4'>
           <div className='-mx-3 flex flex-wrap'>
             <div className='w-auto max-w-full flex-none px-3'>

@@ -18,7 +18,7 @@ const Losses: NextPageWithLayout = () => {
         endMessage={
           <div>
             <Image src='/assets/illustrations/gift.png' alt='' width={250} height={250} />
-            Пропаж нет
+            Пропаж больше нет
           </div>
         }
       />

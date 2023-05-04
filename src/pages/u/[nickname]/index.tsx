@@ -35,7 +35,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       props: {
         error: {
           code: 404,
-          name: 'Пользователь не найден.',
+          name: 'Пользователь не найден',
           description: `Пользователя с ником ${nickname} не существует.`,
         } as ErrorProps,
       },

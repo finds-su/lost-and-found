@@ -55,7 +55,7 @@ export default function InfiniteScrollGrid(props: {
         </p>
       }
       endMessage={
-        <div className='col-span-2 row-auto flex justify-center text-center text-lg font-medium md:col-span-4'>
+        <div className='col-span-2 flex justify-center text-center text-lg font-medium md:col-span-4'>
           {props.endMessage}
         </div>
       }

@@ -1,4 +1,4 @@
-# lost-and-found-service
+# lost-and-found
 
 Бюро находок Mirea Ninja.
 
