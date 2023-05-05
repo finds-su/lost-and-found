@@ -6,6 +6,8 @@ import { usePresignedUpload } from 'next-s3-upload'
 import { api } from '@/lib/api'
 import { useRouter } from 'next/router'
 import errorToast from '@/components/toasts/ErrorToast'
+import toast from 'react-hot-toast'
+import promiseToast from '@/components/toasts/PromiseToast'
 
 interface ProfileAvatarProps {
   imgSrc?: string | null
@@ -55,7 +57,15 @@ export default function ProfileAvatar(props: ProfileAvatarProps) {
             color='light'
             placement='right-end'
           >
-            <FileInput onChange={handlePhotoChange} />
+            <FileInput
+              onChange={(file: File) =>
+                void promiseToast(handlePhotoChange(file), {
+                  loading: 'Загрузка...',
+                  success: 'Успешно загружено',
+                  error: 'Ошибка загрузки',
+                })
+              }
+            />
             <Dropdown.Item onClick={openFileDialog}>Загрузить&nbsp;фото</Dropdown.Item>
             <Dropdown.Item onClick={() => void updateProfileImage.mutate({ src: null })}>
               Удалить&nbsp;фото

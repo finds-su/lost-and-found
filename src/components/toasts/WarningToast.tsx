@@ -18,8 +18,17 @@ function WarningToast(props: { toastOptions: Toast; message: string; icon?: Reac
   )
 }
 
-export default function warningToast(message: string, icon?: ReactNode, duration?: number) {
-  toast.custom((t) => <WarningToast toastOptions={t} message={message} icon={icon} />, {
-    duration: duration ?? 1000,
-  })
+const warningToast = (
+  message: string,
+  options?: { icon?: ReactNode; duration?: number; id?: string },
+) => {
+  return toast.custom(
+    (t) => <WarningToast toastOptions={t} message={message} icon={options?.icon} />,
+    {
+      duration: options && options.duration ? options.duration : 1000,
+      id: options?.id,
+    },
+  )
 }
+
+export default warningToast
