@@ -15,6 +15,11 @@ export const env = createEnv({
     DISABLE_PWA: z
       .enum(['true', '1', 'false', '0'])
       .transform((value) => value === 'true' || value === '1'),
+    S3_UPLOAD_KEY: z.string().min(1),
+    S3_UPLOAD_SECRET: z.string().min(1),
+    S3_UPLOAD_BUCKET: z.string().min(1),
+    S3_UPLOAD_HOSTNAME: z.string().min(1),
+    S3_UPLOAD_ENDPOINT_URL: z.string().min(1),
     NEXTAUTH_SECRET:
       process.env.NODE_ENV === 'production' ? z.string().min(1) : z.string().min(1).optional(),
     NEXTAUTH_URL: z.string().url(),
@@ -38,7 +43,7 @@ export const env = createEnv({
    * 💡 You'll get typeerrors if not all variables from `server` & `client` are included here.
    */
   runtimeEnv: {
-    DATABASE_URL: process.env.DATABASE_URL,
+    DATABASE_URL: `postgres://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}:5432/${process.env.POSTGRES_DB}`,
     NODE_ENV: process.env.NODE_ENV,
 
     ANALYZE: process.env.NODE_ENV === 'production' ? 'false' : process.env.ANALYZE,
@@ -46,6 +51,12 @@ export const env = createEnv({
 
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+
+    S3_UPLOAD_KEY: process.env.S3_UPLOAD_KEY,
+    S3_UPLOAD_SECRET: process.env.S3_UPLOAD_SECRET,
+    S3_UPLOAD_BUCKET: process.env.S3_UPLOAD_BUCKET,
+    S3_UPLOAD_HOSTNAME: process.env.S3_UPLOAD_HOSTNAME,
+    S3_UPLOAD_ENDPOINT_URL: process.env.S3_UPLOAD_ENDPOINT_URL,
 
     MIREA_CLIENT_ID: process.env.MIREA_CLIENT_ID,
     MIREA_CLIENT_SECRET: process.env.MIREA_CLIENT_SECRET,

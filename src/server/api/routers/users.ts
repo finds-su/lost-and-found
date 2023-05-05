@@ -118,7 +118,12 @@ export const usersRouter = createTRPCRouter({
       })
     }),
 
-  deletePhoto: protectedProcedure.mutation(async ({ ctx }) => {
-    await ctx.prisma.user.update({ where: { id: ctx.session.user.id }, data: { image: null } })
-  }),
+  updateProfileImage: protectedProcedure
+    .input(z.object({ src: z.string().url().nullable() }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.user.update({
+        where: { id: ctx.session.user.id },
+        data: { image: input.src },
+      })
+    }),
 })

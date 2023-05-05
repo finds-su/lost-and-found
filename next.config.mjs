@@ -10,7 +10,15 @@ const config = {
       'lk.mirea.ru',
       'avatars.githubusercontent.com',
     ],
-    remotePatterns: [{ hostname: '*.googleusercontent.com' }],
+    remotePatterns: [
+      { hostname: '*.googleusercontent.com' },
+      {
+        protocol: 'https',
+        hostname: env.S3_UPLOAD_HOSTNAME,
+        port: '',
+        pathname: `/${env.S3_UPLOAD_BUCKET}/next-s3-uploads/**`,
+      },
+    ],
   },
   ...(env.NODE_ENV === 'production' && {
     output: 'standalone',

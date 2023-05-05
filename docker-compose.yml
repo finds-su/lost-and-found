@@ -3,6 +3,7 @@ version: '3.9'
 services:
   db:
     image: postgres:15
+    container_name: db
     volumes:
       - app-db-data:/var/lib/postgresql/data
     environment:
@@ -12,7 +13,7 @@ services:
     ports:
       - '5432:5432'
     networks:
-      - default
+      - app-network
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U postgres']
       interval: 5s
@@ -25,11 +26,11 @@ services:
 #      db:
 #        condition: service_healthy
 #    networks:
-#      - default
+#      - app-network
 #    ports:
 #      - '3000:3000'
 #    environment:
-#      DATABASE_URL: ${DATABASE_URL}
+#      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
 #      ANALYZE: ${ANALYZE}
 #      DISABLE_PWA: ${DISABLE_PWA}
 #      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
@@ -40,6 +41,10 @@ services:
 #      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
 #      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
 #      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
+
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   app-db-data:
