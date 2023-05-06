@@ -20,15 +20,14 @@ export const env = createEnv({
     S3_UPLOAD_BUCKET: z.string().min(1),
     S3_UPLOAD_HOSTNAME: z.string().min(1),
     S3_UPLOAD_ENDPOINT_URL: z.string().min(1),
-    NEXTAUTH_SECRET:
-      process.env.NODE_ENV === 'production' ? z.string().min(1) : z.string().min(1).optional(),
+    NEXTAUTH_SECRET: z.string().min(1),
     NEXTAUTH_URL: z.string().url(),
-    MIREA_CLIENT_ID: z.string().min(1).optional(),
-    MIREA_CLIENT_SECRET: z.string().min(1).optional(),
-    GOOGLE_CLIENT_ID: z.string().min(1).optional(),
-    GOOGLE_CLIENT_SECRET: z.string().min(1).optional(),
-    GITHUB_CLIENT_ID: z.string().min(1).optional(),
-    GITHUB_CLIENT_SECRET: z.string().min(1).optional(),
+    MIREA_CLIENT_ID: z.string().min(1),
+    MIREA_CLIENT_SECRET: z.string().min(1),
+    GOOGLE_CLIENT_ID: z.string().min(1),
+    GOOGLE_CLIENT_SECRET: z.string().min(1),
+    GITHUB_CLIENT_ID: z.string().min(1),
+    GITHUB_CLIENT_SECRET: z.string().min(1),
   },
   /*
    * Environment variables available on the client (and server).

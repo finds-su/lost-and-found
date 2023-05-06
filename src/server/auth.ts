@@ -6,6 +6,7 @@ import GoogleProvider, { type GoogleProfile } from 'next-auth/providers/google'
 import { getUniqueNickname } from '@/lib/getUniqueNickname'
 import GithubProvider, { type GithubProfile } from 'next-auth/providers/github'
 import { type Role } from '@prisma/client'
+import { env } from '@/env.mjs'
 
 interface ArUser {
   ID: string
@@ -74,16 +75,12 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     GithubProvider({
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      clientId: process.env.GITHUB_CLIENT_ID!,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+      clientId: env.GITHUB_CLIENT_ID,
+      clientSecret: env.GITHUB_CLIENT_SECRET,
       async profile(profile: GithubProfile) {
         return {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           id: profile.id.toString(),
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          nickname: await getUniqueNickname(profile.login),
+          nickname: await getUniqueNickname(),
           name: profile.name ?? profile.login,
           email: profile.email,
           image: profile.avatar_url,
@@ -91,10 +88,8 @@ export const authOptions: NextAuthOptions = {
       },
     }),
     GoogleProvider({
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
       authorization: {
         params: {
           prompt: 'consent',
@@ -104,10 +99,8 @@ export const authOptions: NextAuthOptions = {
       },
       async profile(profile: GoogleProfile) {
         return {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           id: profile.sub,
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          nickname: await getUniqueNickname(profile.email.split('@')[0]!),
+          nickname: await getUniqueNickname(),
           name: profile.name,
           email: profile.email,
           image: profile.picture,
@@ -133,23 +126,17 @@ export const authOptions: NextAuthOptions = {
       },
       checks: ['state'],
       async profile(profile: MireaProfile) {
-        let name =
-          profile.arUser.NAME + ' ' + profile.arUser.SECOND_NAME + ' ' + profile.arUser.LAST_NAME
-        if (profile.arUser.SECOND_NAME == '') {
-          name = profile.arUser.NAME + ' ' + profile.arUser.LAST_NAME
-        }
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const nickname = await getUniqueNickname(profile.arUser.LOGIN.split('@')[0]!)
+        const name = [profile.arUser.NAME, profile.arUser.LAST_NAME].join(' ')
         return {
           id: profile.arUser.ID,
           name,
-          nickname,
+          nickname: await getUniqueNickname(),
           email: profile.arUser.LOGIN,
           image: 'https://lk.mirea.ru' + profile.arUser.PHOTO,
         }
       },
-      clientId: process.env.MIREA_CLIENT_ID,
-      clientSecret: process.env.MIREA_CLIENT_SECRET,
+      clientId: env.MIREA_CLIENT_ID,
+      clientSecret: env.MIREA_CLIENT_SECRET,
     },
     /**
      * ...add more providers here.

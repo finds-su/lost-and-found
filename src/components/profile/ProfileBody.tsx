@@ -70,7 +70,7 @@ export default function ProfileBody(props: ProfileProps) {
   const editUser = api.users.editUser.useMutation({
     onSuccess: () => {
       if (oldNickname !== editableUser.nickname || oldName !== editableUser.name) {
-        void router.push(window.location.pathname)
+        void router.push('/me')
       }
       setEditProfile(false)
     },

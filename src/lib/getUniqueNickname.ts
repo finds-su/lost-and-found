@@ -1,11 +1,26 @@
 import { prisma } from '@/server/db'
-import { v4 as uuid4 } from 'uuid'
-import { slugify } from 'transliteration'
+import {
+  uniqueNamesGenerator,
+  NumberDictionary,
+  type Config as UniqueNamesGeneratorConfig,
+  adjectives,
+} from 'unique-names-generator'
 
-export async function getUniqueNickname(nickname: string) {
-  nickname = slugify(nickname)
-  if ((await prisma.user.findUnique({ where: { nickname } })) !== null) {
-    nickname = `${nickname}-${uuid4()}`
+const numberDictionary = NumberDictionary.generate({ min: 0, max: 999 })
+const uniqueNamesGeneratorConfig: UniqueNamesGeneratorConfig = {
+  dictionaries: [adjectives, numberDictionary],
+  length: 2,
+  separator: '-',
+}
+
+export async function getUniqueNickname() {
+  let nickname = uniqueNamesGenerator(uniqueNamesGeneratorConfig)
+  for (let i = 0; i < 10; i++) {
+    if ((await prisma.user.findUnique({ where: { nickname } })) !== null) {
+      nickname = uniqueNamesGenerator(uniqueNamesGeneratorConfig)
+    } else {
+      return nickname
+    }
   }
-  return nickname
+  throw new Error('Нет уникальных никнеймов')
 }
