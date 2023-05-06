@@ -2,6 +2,7 @@ import { Toast as FlowbiteToast } from 'flowbite-react'
 import { type ReactNode } from 'react'
 import { CheckIcon } from '@heroicons/react/24/outline'
 import toast, { type Toast } from 'react-hot-toast'
+import type { AppToast, AppToastOptions } from '@/components/toasts/Toast'
 
 function SuccessToast(props: { toastOptions: Toast; message: string; icon?: ReactNode }) {
   return (
@@ -18,14 +19,11 @@ function SuccessToast(props: { toastOptions: Toast; message: string; icon?: Reac
   )
 }
 
-const successToast = (
-  message: string,
-  options?: { icon?: ReactNode; duration?: number; id?: string },
-) => {
+const successToast: AppToast = (message: string, options?: AppToastOptions) => {
   return toast.custom(
     (t) => <SuccessToast toastOptions={t} message={message} icon={options?.icon} />,
     {
-      duration: options && options.duration ? options.duration : 1000,
+      duration: options && options.duration ? options.duration : 3000,
       id: options?.id,
     },
   )

@@ -6,8 +6,8 @@ import { usePresignedUpload } from 'next-s3-upload'
 import { api } from '@/lib/api'
 import { useRouter } from 'next/router'
 import errorToast from '@/components/toasts/ErrorToast'
-import toast from 'react-hot-toast'
 import promiseToast from '@/components/toasts/PromiseToast'
+import { env } from '@/env.mjs'
 
 interface ProfileAvatarProps {
   imgSrc?: string | null
@@ -25,7 +25,7 @@ export default function ProfileAvatar(props: ProfileAvatarProps) {
   const { FileInput, openFileDialog, uploadToS3 } = usePresignedUpload()
 
   async function handlePhotoChange(file: File) {
-    const { url } = await uploadToS3(file)
+    const { url } = await uploadToS3(file, { endpoint: { request: { url: '/api/upload/avatar' } } })
     updateProfileImage.mutate({ src: url })
   }
 
@@ -58,13 +58,25 @@ export default function ProfileAvatar(props: ProfileAvatarProps) {
             placement='right-end'
           >
             <FileInput
-              onChange={(file: File) =>
-                void promiseToast(handlePhotoChange(file), {
-                  loading: 'Загрузка...',
-                  success: 'Успешно загружено',
-                  error: 'Ошибка загрузки',
-                })
-              }
+              onChange={(file: File) => {
+                if (
+                  env.NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS.some((suffix) =>
+                    file.name.endsWith(suffix),
+                  )
+                ) {
+                  void promiseToast(handlePhotoChange(file), {
+                    loading: 'Загрузка...',
+                    success: 'Успешно загружено',
+                    error: 'Ошибка загрузки',
+                  })
+                } else {
+                  errorToast(
+                    `Поддерживаются только форматы ${env.NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS.join(
+                      ', ',
+                    )}`,
+                  )
+                }
+              }}
             />
             <Dropdown.Item onClick={openFileDialog}>Загрузить&nbsp;фото</Dropdown.Item>
             <Dropdown.Item onClick={() => void updateProfileImage.mutate({ src: null })}>

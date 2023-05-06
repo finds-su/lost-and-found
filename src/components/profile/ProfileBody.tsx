@@ -149,7 +149,7 @@ export default function ProfileBody(props: ProfileProps) {
                   <CopyToClipboard
                     text={oldNickname}
                     onCopy={() =>
-                      successToast('Никнейм скопирован.', <ClipboardDocumentCheckIcon />)
+                      successToast('Никнейм скопирован.', { icon: <ClipboardDocumentCheckIcon /> })
                     }
                   >
                     <button className='text-size-sm mb-0 font-mono font-thin leading-normal'>

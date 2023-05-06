@@ -1,8 +1,5 @@
 import { type ReactNode } from 'react'
 
-type AppToast = (
-  message: string,
-  options?: { icon?: ReactNode; duration?: number; id?: string },
-) => string
+export type AppToastOptions = { icon?: ReactNode; duration?: number; id?: string }
 
-export default AppToast
+export type AppToast = (message: string, options?: AppToastOptions) => string

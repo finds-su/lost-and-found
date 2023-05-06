@@ -2,7 +2,7 @@ import { Toast as FlowbiteToast } from 'flowbite-react'
 import { type ReactNode } from 'react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import toast, { type Toast } from 'react-hot-toast'
-import type AppToast from '@/components/toasts/Toast'
+import type { AppToast, AppToastOptions } from '@/components/toasts/Toast'
 
 function ErrorToast(props: { toastOptions: Toast; message: string; icon?: ReactNode }) {
   return (
@@ -19,14 +19,11 @@ function ErrorToast(props: { toastOptions: Toast; message: string; icon?: ReactN
   )
 }
 
-const errorToast: AppToast = (
-  message: string,
-  options?: { icon?: ReactNode; duration?: number; id?: string },
-) => {
+const errorToast: AppToast = (message: string, options?: AppToastOptions) => {
   return toast.custom(
     (t) => <ErrorToast toastOptions={t} message={message} icon={options?.icon} />,
     {
-      duration: options && options.duration ? options.duration : 1000,
+      duration: options && options.duration ? options.duration : 5000,
       id: options?.id,
     },
   )

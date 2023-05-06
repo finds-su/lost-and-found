@@ -2,6 +2,7 @@ import { Toast as FlowbiteToast } from 'flowbite-react'
 import { type ReactNode } from 'react'
 import toast, { type Toast } from 'react-hot-toast'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/solid'
+import type { AppToast, AppToastOptions } from '@/components/toasts/Toast'
 
 function WarningToast(props: { toastOptions: Toast; message: string; icon?: ReactNode }) {
   return (
@@ -18,14 +19,11 @@ function WarningToast(props: { toastOptions: Toast; message: string; icon?: Reac
   )
 }
 
-const warningToast = (
-  message: string,
-  options?: { icon?: ReactNode; duration?: number; id?: string },
-) => {
+const warningToast: AppToast = (message: string, options?: AppToastOptions) => {
   return toast.custom(
     (t) => <WarningToast toastOptions={t} message={message} icon={options?.icon} />,
     {
-      duration: options && options.duration ? options.duration : 1000,
+      duration: options && options.duration ? options.duration : 5000,
       id: options?.id,
     },
   )

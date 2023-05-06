@@ -1,7 +1,7 @@
 import { Spinner, Toast as FlowbiteToast } from 'flowbite-react'
 import { type ReactNode } from 'react'
 import toast, { type Toast } from 'react-hot-toast'
-import type AppToast from '@/components/toasts/Toast'
+import type { AppToast, AppToastOptions } from '@/components/toasts/Toast'
 
 function LoadingToast(props: { toastOptions: Toast; message: string; icon?: ReactNode }) {
   return (
@@ -17,14 +17,11 @@ function LoadingToast(props: { toastOptions: Toast; message: string; icon?: Reac
   )
 }
 
-const loadingToast: AppToast = (
-  message: string,
-  options?: { icon?: ReactNode; duration?: number; id?: string },
-) => {
+const loadingToast: AppToast = (message: string, options?: AppToastOptions) => {
   return toast.custom(
     (t) => <LoadingToast toastOptions={t} message={message} icon={options?.icon} />,
     {
-      duration: options && options.duration ? options.duration : 1000,
+      duration: options && options.duration ? options.duration : Infinity,
       id: options?.id,
     },
   )

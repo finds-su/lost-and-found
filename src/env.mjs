@@ -35,7 +35,9 @@ export const env = createEnv({
    *
    * 💡 You'll get typeerrors if these are not prefixed with NEXT_PUBLIC_.
    */
-  client: {},
+  client: {
+    NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS: z.string().transform((value) => value.split(',')),
+  },
   /*
    * Due to how Next.js bundles environment variables on Edge and Client,
    * we need to manually destructure them to make sure all are included in bundle.
@@ -57,6 +59,7 @@ export const env = createEnv({
     S3_UPLOAD_BUCKET: process.env.S3_UPLOAD_BUCKET,
     S3_UPLOAD_HOSTNAME: process.env.S3_UPLOAD_HOSTNAME,
     S3_UPLOAD_ENDPOINT_URL: process.env.S3_UPLOAD_ENDPOINT_URL,
+    NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS: process.env.NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS,
 
     MIREA_CLIENT_ID: process.env.MIREA_CLIENT_ID,
     MIREA_CLIENT_SECRET: process.env.MIREA_CLIENT_SECRET,

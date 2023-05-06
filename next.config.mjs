@@ -16,7 +16,7 @@ const config = {
         protocol: 'https',
         hostname: env.S3_UPLOAD_HOSTNAME,
         port: '',
-        pathname: `/${env.S3_UPLOAD_BUCKET}/next-s3-uploads/**`,
+        pathname: `/${env.S3_UPLOAD_BUCKET}/**`,
       },
     ],
   },
