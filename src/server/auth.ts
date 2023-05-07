@@ -3,7 +3,7 @@ import { getServerSession, type NextAuthOptions, type DefaultSession } from 'nex
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '@/server/db'
 import GoogleProvider, { type GoogleProfile } from 'next-auth/providers/google'
-import { getUniqueNickname } from '@/lib/getUniqueNickname'
+import { nicknameValidation } from '@/lib/nicknameValidation'
 import GithubProvider, { type GithubProfile } from 'next-auth/providers/github'
 import { type Role } from '@prisma/client'
 import { env } from '@/env.mjs'
@@ -80,7 +80,7 @@ export const authOptions: NextAuthOptions = {
       async profile(profile: GithubProfile) {
         return {
           id: profile.id.toString(),
-          nickname: await getUniqueNickname(),
+          nickname: await nicknameValidation(profile.login),
           name: profile.name ?? profile.login,
           email: profile.email,
           image: profile.avatar_url,
@@ -100,7 +100,7 @@ export const authOptions: NextAuthOptions = {
       async profile(profile: GoogleProfile) {
         return {
           id: profile.sub,
-          nickname: await getUniqueNickname(),
+          nickname: await nicknameValidation(profile.email.split('@')[0] ?? ''),
           name: profile.name,
           email: profile.email,
           image: profile.picture,
@@ -130,7 +130,7 @@ export const authOptions: NextAuthOptions = {
         return {
           id: profile.arUser.ID,
           name,
-          nickname: await getUniqueNickname(),
+          nickname: await nicknameValidation(name),
           email: profile.arUser.LOGIN,
           image: 'https://lk.mirea.ru' + profile.arUser.PHOTO,
         }

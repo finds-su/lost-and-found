@@ -2,16 +2,18 @@ import { z } from 'zod'
 
 import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
 import { TRPCError } from '@trpc/server'
-import { slugify } from 'transliteration'
+import { minNicknameLength, telegramUsernameRegex } from '@/constants.mjs'
 
 const zodNickname = z
   .string({
     required_error: 'Никнейм обязателен',
     invalid_type_error: 'Никнейм должен быть строкой',
   })
-  .min(5, { message: 'Слишком короткий никнейм' })
+  .min(minNicknameLength, { message: 'Слишком короткий никнейм' })
   .max(50, { message: 'Слишком длинный никнейм' })
-  .refine((nickname) => nickname === slugify(nickname), { message: 'Невалидный никнейм' })
+  .refine((nickname) => telegramUsernameRegex.test(nickname), {
+    message: 'Невалидный никнейм',
+  })
 
 const zodEmail = z
   .string({
@@ -35,13 +37,15 @@ const zodName = z
 
 const zodTelegramLink = z
   .string({
-    required_error: 'Телеграм ссылка обязательна',
-    invalid_type_error: 'Телеграм ссылка должен быть строкой',
+    required_error: 'Telegram username обязателен',
+    invalid_type_error: 'Telegram username должен быть строкой',
   })
   .trim()
-  .min(3, { message: 'Слишком короткая ссылка' })
-  .max(50, { message: 'Слишком длинная ссылка' })
-  .url({ message: 'Ссылка должна быть в виде URL' })
+  .min(3, { message: 'Слишком короткий Telegram username' })
+  .max(50, { message: 'Слишком длинный Telegram username' })
+  .regex(telegramUsernameRegex, {
+    message: 'Неподходящий Telegram username',
+  })
 
 const zodUserInfo = z
   .string({

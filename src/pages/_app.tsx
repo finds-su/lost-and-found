@@ -1,6 +1,7 @@
 import { type AppProps, type AppType } from 'next/app'
 import { type Session } from 'next-auth'
 import { SessionProvider } from 'next-auth/react'
+import { Inter } from 'next/font/google'
 
 import { api } from '@/lib/api'
 
@@ -11,6 +12,11 @@ import { Toaster } from 'react-hot-toast'
 import Head from 'next/head'
 import { type ErrorProps } from '@/components/Error'
 import NextNProgress from 'nextjs-progressbar'
+
+const inter = Inter({
+  subsets: ['latin', 'cyrillic', 'cyrillic-ext'],
+  variable: '--font-inter',
+})
 
 export interface NextPageOptions {
   session: Session | null
@@ -34,7 +40,6 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <SessionProvider session={session}>
       <Head>
         <title>Бюро находок Mirea Ninja</title>
-
         <meta charSet='utf-8' />
         <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
         <meta
@@ -57,13 +62,21 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <meta name='msapplication-TileImage' content='/icons/mstile-150x150.png' />
         <meta name='theme-color' content='#0f172a' />
       </Head>
-      <NextNProgress height={3} color='#7dd3fc' options={{ showSpinner: false }} />
-      {getLayout ? (
-        getLayout(<Component {...pageProps} />, { session, error })
-      ) : (
-        <Component {...pageProps} />
-      )}
-      <Toaster position='top-center' reverseOrder={false} />
+      {/* eslint-disable-next-line react/no-unknown-property */}
+      <style jsx global>{`
+        html {
+          font-family: ${inter.style.fontFamily};
+        }
+      `}</style>
+      <main className={`${inter.variable} font-sans`}>
+        <NextNProgress height={3} color='#7dd3fc' options={{ showSpinner: false }} />
+        {getLayout ? (
+          getLayout(<Component {...pageProps} />, { session, error })
+        ) : (
+          <Component {...pageProps} />
+        )}
+        <Toaster position='top-center' reverseOrder={false} />
+      </main>
     </SessionProvider>
   )
 }

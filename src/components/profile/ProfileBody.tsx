@@ -70,7 +70,7 @@ export default function ProfileBody(props: ProfileProps) {
   const editUser = api.users.editUser.useMutation({
     onSuccess: () => {
       if (oldNickname !== editableUser.nickname || oldName !== editableUser.name) {
-        void router.push('/me')
+        void router.push(`/u/${editableUser.nickname}`)
       }
       setEditProfile(false)
     },
@@ -111,6 +111,7 @@ export default function ProfileBody(props: ProfileProps) {
       value: editableUser.telegramLink,
       setValue: (telegramLink: string) => setEditableUser({ ...editableUser, telegramLink }),
       isRequired: false,
+      addon: '@',
     },
   ]
 
@@ -211,6 +212,7 @@ export default function ProfileBody(props: ProfileProps) {
                             <Label value={item.label} />
                           </div>
                           <TextInput
+                            addon={item.addon}
                             color={
                               item.result && item.result.status === 'error' ? 'failure' : 'gray'
                             }
