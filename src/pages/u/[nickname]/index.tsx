@@ -3,11 +3,13 @@ import { getServerAuthSession } from '@/server/auth'
 import { type GetServerSideProps } from 'next'
 import { prisma } from '@/server/db'
 import { type Role } from '@prisma/client'
-import ProfileBody, { type ProfileProps } from '@/components/profile/ProfileBody'
+import { type ProfileProps } from '@/components/profile/ProfileBody'
 
 import { type ReactElement } from 'react'
 import Error, { type ErrorProps } from '@/components/Error'
 import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
+import dynamic from 'next/dynamic'
+import DefaultSkeleton from '@/components/DefaultSkeleton'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)
@@ -54,8 +56,13 @@ export interface PublicUser {
   image?: string | null
 }
 
+const DynamicProfileBody = dynamic(() => import('@/components/profile/ProfileBody'), {
+  loading: () => <DefaultSkeleton />,
+  ssr: false,
+})
+
 const Profile: NextPageWithLayout = (props: ProfileProps) => {
-  return <ProfileBody {...props} />
+  return <DynamicProfileBody {...props} />
 }
 
 Profile.getLayout = function getLayout(page: ReactElement, options: NextPageOptions) {

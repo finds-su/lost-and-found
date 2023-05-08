@@ -1,9 +1,9 @@
 import Layout from '@/components/layout/Layout'
-import InfiniteScrollGrid from '@/components/InfiniteScrollGrid'
 import { getServerAuthSession } from '@/server/auth'
 import { type GetServerSideProps } from 'next'
 import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
 import Image from 'next/image'
+import DynamicInfiniteScrollGrid from '@/components/itemsGrid/DynamicInfiniteScrollGrid'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)
@@ -13,7 +13,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const Finds: NextPageWithLayout = () => {
   return (
     <div className='px-4 py-4 sm:px-0'>
-      <InfiniteScrollGrid
+      <DynamicInfiniteScrollGrid
         reason='FOUND'
         endMessage={
           <div>

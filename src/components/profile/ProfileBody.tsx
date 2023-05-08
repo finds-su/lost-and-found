@@ -15,7 +15,6 @@ import errorToast from '@/components/toasts/ErrorToast'
 import { type Role } from '@prisma/client'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { removeEmptyFields } from '@/lib/removeEmptyFields'
 import ProfileAvatar from '@/components/profile/ProfileAvatar'
 
 interface User {
@@ -150,7 +149,7 @@ export default function ProfileBody(props: ProfileProps) {
                   <CopyToClipboard
                     text={oldNickname}
                     onCopy={() =>
-                      successToast('Никнейм скопирован.', { icon: <ClipboardDocumentCheckIcon /> })
+                      successToast('Никнейм скопирован', { icon: <ClipboardDocumentCheckIcon /> })
                     }
                   >
                     <button className='text-size-sm mb-0 font-mono font-thin leading-normal'>
@@ -255,7 +254,7 @@ export default function ProfileBody(props: ProfileProps) {
                             editableUser.telegramLink !== props.user.telegramLink ||
                             editableUser.userInfo !== props.user.userInfo
                           ) {
-                            editUser.mutate(removeEmptyFields(editableUser) as User)
+                            editUser.mutate(editableUser)
                           }
                         }}
                         color='light'
@@ -301,7 +300,7 @@ export default function ProfileBody(props: ProfileProps) {
             </ProfileWindow>
             <ProfileWindow>
               <div className='mb-0 rounded-t-2xl border-b-0 bg-white p-4 pb-0'>
-                <h6 className='mb-0'>Conversations</h6>
+                <h6 className='mb-0'>Последняя активность</h6>
               </div>
               <div className='flex-auto p-4'>
                 <ul className='mb-0 flex flex-col rounded-lg pl-0'>
@@ -317,92 +316,6 @@ export default function ProfileBody(props: ProfileProps) {
                     </div>
                     <div className='flex flex-col items-start justify-center'>
                       <h6 className='text-size-sm mb-0 leading-normal'>Sophie B.</h6>
-                      <p className='text-size-xs mb-0 leading-tight'>
-                        Hi! I need more information..
-                      </p>
-                    </div>
-                    <a
-                      className='leading-pro text-size-xs ease-soft-in hover:scale-102 hover:active:scale-102 active:opacity-85 mb-0 ml-auto inline-block cursor-pointer rounded-lg border-0 bg-transparent py-3 pl-0 pr-4 text-center align-middle font-bold uppercase text-fuchsia-500 shadow-none transition-all hover:text-fuchsia-800 hover:shadow-none active:scale-100'
-                      href='#'
-                    >
-                      Reply
-                    </a>
-                  </li>
-                  <li className='relative mb-2 flex items-center border-0 border-t-0 bg-white px-0 py-2 text-inherit'>
-                    <div className='text-size-base ease-soft-in-out mr-4 inline-flex h-12 w-12 items-center justify-center rounded-xl text-white transition-all duration-200'>
-                      <Image
-                        width={100}
-                        height={100}
-                        src='/assets/kudzh.jpeg'
-                        alt='kal'
-                        className='shadow-soft-2xl w-full rounded-xl'
-                      />
-                    </div>
-                    <div className='flex flex-col items-start justify-center'>
-                      <h6 className='text-size-sm mb-0 leading-normal'>Anne Marie</h6>
-                      <p className='text-size-xs mb-0 leading-tight'>Awesome work, can you..</p>
-                    </div>
-                    <a
-                      className='leading-pro text-size-xs ease-soft-in hover:scale-102 hover:active:scale-102 active:opacity-85 mb-0 ml-auto inline-block cursor-pointer rounded-lg border-0 bg-transparent py-3 pl-0 pr-4 text-center align-middle font-bold uppercase text-fuchsia-500 shadow-none transition-all hover:text-fuchsia-800 hover:shadow-none active:scale-100'
-                      href='#'
-                    >
-                      Reply
-                    </a>
-                  </li>
-                  <li className='relative mb-2 flex items-center border-0 border-t-0 bg-white px-0 py-2 text-inherit'>
-                    <div className='text-size-base ease-soft-in-out mr-4 inline-flex h-12 w-12 items-center justify-center rounded-xl text-white transition-all duration-200'>
-                      <Image
-                        width={100}
-                        height={100}
-                        src='/assets/kudzh.jpeg'
-                        alt='kal'
-                        className='shadow-soft-2xl w-full rounded-xl'
-                      />
-                    </div>
-                    <div className='flex flex-col items-start justify-center'>
-                      <h6 className='text-size-sm mb-0 leading-normal'>Ivanna</h6>
-                      <p className='text-size-xs mb-0 leading-tight'>About files I can..</p>
-                    </div>
-                    <a
-                      className='leading-pro text-size-xs ease-soft-in hover:scale-102 hover:active:scale-102 active:opacity-85 mb-0 ml-auto inline-block cursor-pointer rounded-lg border-0 bg-transparent py-3 pl-0 pr-4 text-center align-middle font-bold uppercase text-fuchsia-500 shadow-none transition-all hover:text-fuchsia-800 hover:shadow-none active:scale-100'
-                      href='#'
-                    >
-                      Reply
-                    </a>
-                  </li>
-                  <li className='relative mb-2 flex items-center border-0 border-t-0 bg-white px-0 py-2 text-inherit'>
-                    <div className='text-size-base ease-soft-in-out mr-4 inline-flex h-12 w-12 items-center justify-center rounded-xl text-white transition-all duration-200'>
-                      <Image
-                        width={100}
-                        height={100}
-                        src='/assets/kudzh.jpeg'
-                        alt='kal'
-                        className='shadow-soft-2xl w-full rounded-xl'
-                      />
-                    </div>
-                    <div className='flex flex-col items-start justify-center'>
-                      <h6 className='text-size-sm mb-0 leading-normal'>Peterson</h6>
-                      <p className='text-size-xs mb-0 leading-tight'>Have a great afternoon..</p>
-                    </div>
-                    <a
-                      className='leading-pro text-size-xs ease-soft-in hover:scale-102 hover:active:scale-102 active:opacity-85 mb-0 ml-auto inline-block cursor-pointer rounded-lg border-0 bg-transparent py-3 pl-0 pr-4 text-center align-middle font-bold uppercase text-fuchsia-500 shadow-none transition-all hover:text-fuchsia-800 hover:shadow-none active:scale-100'
-                      href='#'
-                    >
-                      Reply
-                    </a>
-                  </li>
-                  <li className='relative flex items-center rounded-b-lg border-0 border-t-0 bg-white px-0 py-2 text-inherit'>
-                    <div className='text-size-base ease-soft-in-out mr-4 inline-flex h-12 w-12 items-center justify-center rounded-xl text-white transition-all duration-200'>
-                      <Image
-                        width={100}
-                        height={100}
-                        src='/assets/kudzh.jpeg'
-                        alt='kal'
-                        className='shadow-soft-2xl w-full rounded-xl'
-                      />
-                    </div>
-                    <div className='flex flex-col items-start justify-center'>
-                      <h6 className='text-size-sm mb-0 leading-normal'>Nick Daniel</h6>
                       <p className='text-size-xs mb-0 leading-tight'>
                         Hi! I need more information..
                       </p>

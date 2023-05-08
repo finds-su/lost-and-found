@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { HeartIcon } from '@heroicons/react/24/solid'
 
 const social = [
   {
