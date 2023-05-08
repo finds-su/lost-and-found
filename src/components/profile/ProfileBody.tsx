@@ -16,6 +16,7 @@ import { type Role } from '@prisma/client'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import ProfileAvatar from '@/components/profile/ProfileAvatar'
+import { removeEmptyFields } from '@/lib/removeEmptyFields'
 
 interface User {
   nickname: string
@@ -254,7 +255,7 @@ export default function ProfileBody(props: ProfileProps) {
                             editableUser.telegramLink !== props.user.telegramLink ||
                             editableUser.userInfo !== props.user.userInfo
                           ) {
-                            editUser.mutate(editableUser)
+                            editUser.mutate(removeEmptyFields(editableUser) as User)
                           }
                         }}
                         color='light'

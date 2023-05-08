@@ -37,14 +37,14 @@ const zodName = z
 
 const zodTelegramLink = z
   .string({
-    required_error: 'Telegram username обязателен',
-    invalid_type_error: 'Telegram username должен быть строкой',
+    required_error: 'Telegram username обязательно',
+    invalid_type_error: 'Telegram username должно быть строкой',
   })
   .trim()
-  .min(3, { message: 'Слишком короткий Telegram username' })
-  .max(50, { message: 'Слишком длинный Telegram username' })
+  .min(3, { message: 'Слишком короткое Telegram username' })
+  .max(50, { message: 'Слишком длинное Telegram username' })
   .regex(telegramUsernameRegex, {
-    message: 'Неподходящий Telegram username',
+    message: 'Неподходящее Telegram username',
   })
 
 const zodUserInfo = z

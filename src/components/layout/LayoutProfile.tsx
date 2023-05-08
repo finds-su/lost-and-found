@@ -42,7 +42,7 @@ export default function LayoutProfile(props: { session: Session; userNavigation:
             <Dropdown.Header>
               <Link href='/me'>
                 <span className='block text-sm'>Вы вошли как</span>
-                <span className='block truncate text-sm font-medium'>
+                <span className='block w-28 truncate text-ellipsis text-sm font-medium'>
                   {props.session.user.nickname}
                 </span>
               </Link>
