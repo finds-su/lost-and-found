@@ -48,9 +48,13 @@ export default function MobileLayoutMenu(props: MobileLayoutMenuProps) {
                   src={session.user.image}
                   rounded
                 />
-                <div className='ml-3'>
-                  <div className='text-base font-medium text-white'>{session.user.name}</div>
-                  <div className='text-sm font-medium text-gray-400'>{session.user.email}</div>
+                <div className='ml-3 truncate'>
+                  <div className='w-56 truncate text-base font-medium text-white'>
+                    {session.user.name}
+                  </div>
+                  <div className='w-56 truncate text-sm font-medium text-gray-400'>
+                    {session.user.email}
+                  </div>
                 </div>
               </Link>
               <Link

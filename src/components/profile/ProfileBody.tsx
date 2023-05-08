@@ -16,7 +16,6 @@ import { type Role } from '@prisma/client'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import ProfileAvatar from '@/components/profile/ProfileAvatar'
-import { removeEmptyFields } from '@/lib/removeEmptyFields'
 
 interface User {
   nickname: string
@@ -29,7 +28,7 @@ interface User {
   isBlockedUntil?: string
 }
 
-export type EditableUser = Omit<User, 'role'>
+export type EditableUser = Required<Omit<User, 'role' | 'image' | 'isBlockedUntil'>>
 
 export interface ProfileProps {
   isOwner: boolean
@@ -62,16 +61,14 @@ export default function ProfileBody(props: ProfileProps) {
     { enabled: editableUser.nickname !== props.user.nickname && props.isOwner },
   )
   const invalidEmailReason = api.users.isValidNewEmail.useQuery(
-    { email: editableUser.email ?? '' },
+    { email: editableUser.email },
     {
       enabled: editableUser.email !== props.user.email && props.isOwner,
     },
   )
   const editUser = api.users.editUser.useMutation({
     onSuccess: () => {
-      if (oldNickname !== editableUser.nickname || oldName !== editableUser.name) {
-        void router.push(`/u/${editableUser.nickname}`)
-      }
+      void router.push(`/u/${editableUser.nickname}`)
       setEditProfile(false)
     },
     onError: (error) => errorToast(error.message),
@@ -255,7 +252,17 @@ export default function ProfileBody(props: ProfileProps) {
                             editableUser.telegramLink !== props.user.telegramLink ||
                             editableUser.userInfo !== props.user.userInfo
                           ) {
-                            editUser.mutate(removeEmptyFields(editableUser) as User)
+                            editUser.mutate({
+                              name: editableUser.name,
+                              nickname: editableUser.nickname,
+                              email: editableUser.email,
+                              ...(editableUser.telegramLink.length !== 0 && {
+                                telegramLink: editableUser.telegramLink,
+                              }),
+                              ...(editableUser.userInfo.length !== 0 && {
+                                userInfo: editableUser.userInfo,
+                              }),
+                            })
                           }
                         }}
                         color='light'

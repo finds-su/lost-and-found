@@ -67,6 +67,7 @@ export const authOptions: NextAuthOptions = {
         session.user.nickname = user.nickname
         session.user.userInfo = user.userInfo
         session.user.role = user.role
+        session.user.telegramLink = user.telegramLink
         session.user.isBlockedUntil = user.isBlockedUntil
       }
       return session

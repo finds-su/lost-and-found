@@ -93,9 +93,9 @@ export const usersRouter = createTRPCRouter({
   editUser: protectedProcedure
     .input(
       z.object({
-        name: zodName.optional(),
-        nickname: zodNickname.optional(),
-        email: zodEmail.nullable().optional(),
+        name: zodName,
+        nickname: zodNickname,
+        email: zodEmail,
         telegramLink: zodTelegramLink.optional(),
         userInfo: zodUserInfo.optional(),
       }),
@@ -112,11 +112,11 @@ export const usersRouter = createTRPCRouter({
         await tx.user.update({
           where: { id: ctx.session.user.id },
           data: {
-            name: input.name ?? userToUpdate.name,
-            nickname: input.nickname ?? userToUpdate.nickname,
-            email: input.email ?? userToUpdate.email,
-            telegramLink: input.telegramLink ?? userToUpdate.telegramLink,
-            userInfo: input.userInfo ?? userToUpdate.userInfo,
+            name: input.name,
+            nickname: input.nickname,
+            email: input.email,
+            telegramLink: input.telegramLink,
+            userInfo: input.userInfo,
           },
         })
       })
