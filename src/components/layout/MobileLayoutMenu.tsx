@@ -4,7 +4,7 @@ import classNames from 'classnames/dedupe'
 import { type Session } from 'next-auth'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import Avatar from '@/components/profile/Avatar'
+import Avatar from '@/components/avatar/Avatar'
 import { BellIcon } from '@heroicons/react/24/outline'
 
 interface MobileLayoutMenuProps {

@@ -37,7 +37,7 @@ declare module 'next-auth' {
       role?: Role
       userInfo?: string
       telegramLink?: string
-      isBlockedUntil?: Date
+      isBlocked: boolean
     } & DefaultSession['user']
   }
 
@@ -46,7 +46,7 @@ declare module 'next-auth' {
     role?: Role
     userInfo?: string
     telegramLink?: string
-    isBlockedUntil?: Date
+    isBlocked: boolean
   }
 }
 
@@ -68,7 +68,7 @@ export const authOptions: NextAuthOptions = {
         session.user.userInfo = user.userInfo
         session.user.role = user.role
         session.user.telegramLink = user.telegramLink
-        session.user.isBlockedUntil = user.isBlockedUntil
+        session.user.isBlocked = user.isBlocked
       }
       return session
     },
@@ -85,6 +85,7 @@ export const authOptions: NextAuthOptions = {
           name: profile.name ?? profile.login,
           email: profile.email,
           image: profile.avatar_url,
+          isBlocked: false,
         }
       },
     }),
@@ -105,6 +106,7 @@ export const authOptions: NextAuthOptions = {
           name: profile.name,
           email: profile.email,
           image: profile.picture,
+          isBlocked: false,
         }
       },
     }),
@@ -134,6 +136,7 @@ export const authOptions: NextAuthOptions = {
           nickname: await nicknameValidation(name),
           email: profile.arUser.LOGIN,
           image: 'https://lk.mirea.ru' + profile.arUser.PHOTO,
+          isBlocked: false,
         }
       },
       clientId: env.MIREA_CLIENT_ID,

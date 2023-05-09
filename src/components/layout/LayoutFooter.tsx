@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { HeartIcon } from '@heroicons/react/24/solid'
 
 const social = [
   {
@@ -33,7 +32,7 @@ export default function LayoutFooter() {
               >
                 Mirea Ninja
               </Link>
-              для РТУ МИРЭА.
+              для РТУ МИРЭА
             </div>
           </div>
           <div className='mt-0 w-full max-w-full shrink-0 px-3 lg:w-1/2 lg:flex-none'>

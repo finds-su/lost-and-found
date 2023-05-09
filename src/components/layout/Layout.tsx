@@ -5,11 +5,12 @@ import Image from 'next/image'
 import { signIn, signOut } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import { type Session } from 'next-auth'
 import LayoutFooter from '@/components/layout/LayoutFooter'
 import classNames from 'classnames/dedupe'
+import DynamicMobileLayoutMenu from '@/components/layout/DynamicMobileLayoutMenu'
+import DynamicLayoutProfile from '@/components/layout/DynamicLayoutProfile'
 
 export type Navigation = { name: string; href: string }[]
 export const navigation: Navigation = [
@@ -25,11 +26,6 @@ export interface LayoutProps {
 }
 
 export type UserNavigation = { name: string; func?: () => void; href?: string }[]
-
-const LayoutProfile = dynamic(() => import('@/components/layout/LayoutProfile'), { ssr: true })
-const DynamicMobileLayoutMenu = dynamic(() => import('@/components/layout/MobileLayoutMenu'), {
-  ssr: false,
-})
 
 export default function Layout(props: LayoutProps) {
   const router = useRouter()
@@ -95,12 +91,10 @@ export default function Layout(props: LayoutProps) {
                     </div>
                   </div>
                   {props.session ? (
-                    <LayoutProfile session={props.session} userNavigation={userNavigation} />
+                    <DynamicLayoutProfile session={props.session} userNavigation={userNavigation} />
                   ) : (
                     <button
-                      onClick={() => {
-                        void signIn()
-                      }}
+                      onClick={() => void signIn()}
                       className='rounded-md border px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white'
                     >
                       Войти

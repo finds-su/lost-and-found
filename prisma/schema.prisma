@@ -46,7 +46,7 @@ model User {
   userInfo          String             @default("") @db.VarChar(280)
   role              Role               @default(USER)
   image             String?
-  isBlockedUntil    DateTime?
+  isBlocked    Boolean @default(false)
   blockReason       String?
   accounts          Account[]
   sessions          Session[]

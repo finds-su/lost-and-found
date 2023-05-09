@@ -8,6 +8,8 @@
 
 ```shell
 npm run dev
+
+docker compose build && docker compose up
 ```
 
 ### На проде

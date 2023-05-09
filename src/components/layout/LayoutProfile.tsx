@@ -1,6 +1,6 @@
 import { type Session } from 'next-auth'
 import { BellIcon } from '@heroicons/react/24/outline'
-import Avatar from '@/components/profile/Avatar'
+import Avatar from '@/components/avatar/Avatar'
 import React from 'react'
 import { type UserNavigation } from '@/components/layout/Layout'
 import { Dropdown } from 'flowbite-react'

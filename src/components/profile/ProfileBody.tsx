@@ -8,7 +8,6 @@ import {
 } from '@heroicons/react/24/outline'
 import ProfileWindow from '@/components/profile/ProfileWindow'
 import { Button, Label, Spinner, Textarea, TextInput } from 'flowbite-react'
-import { formatDate } from '@/lib/formatDate'
 import { useEffect, useState } from 'react'
 import { api } from '@/lib/api'
 import errorToast from '@/components/toasts/ErrorToast'
@@ -16,6 +15,7 @@ import { type Role } from '@prisma/client'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import ProfileAvatar from '@/components/profile/ProfileAvatar'
+import Window from '@/components/form/Window'
 
 interface User {
   nickname: string
@@ -25,10 +25,10 @@ interface User {
   image?: string
   userInfo: string
   telegramLink?: string
-  isBlockedUntil?: string
+  isBlocked?: boolean
 }
 
-export type EditableUser = Required<Omit<User, 'role' | 'image' | 'isBlockedUntil'>>
+export type EditableUser = Required<Omit<User, 'role' | 'image' | 'isBlocked'>>
 
 export interface ProfileProps {
   isOwner: boolean
@@ -119,8 +119,8 @@ export default function ProfileBody(props: ProfileProps) {
     { name: 'Telegram', value: editableUser.telegramLink },
     { name: 'Роль', value: props.user.role },
     {
-      name: 'Заблокирован до',
-      value: props.user.isBlockedUntil && formatDate(props.user.isBlockedUntil),
+      name: 'Заблокирован',
+      value: props.user.isBlocked ? 'да' : 'нет',
     },
   ]
 
@@ -129,9 +129,9 @@ export default function ProfileBody(props: ProfileProps) {
       <Head>
         <title>{props.user.name}</title>
       </Head>
-      <div className='min-h-78vh mx-auto w-full text-slate-500'>
-        <div className='shadow-blur relative mb-4 flex min-w-0 flex-auto flex-col overflow-hidden break-words rounded-2xl border-0 bg-white/80 bg-clip-border p-4'>
-          <div className='-mx-3 flex flex-wrap'>
+      <div className='text-stale-500 space-y-6'>
+        <Window>
+          <div className='flex flex-wrap'>
             <div className='w-auto max-w-full flex-none px-3'>
               <ProfileAvatar
                 isOwner={props.isOwner}
@@ -140,26 +140,23 @@ export default function ProfileBody(props: ProfileProps) {
                 placeholderInitials={props.user.nickname.slice(0, 2).toUpperCase()}
               />
             </div>
-            <div className='my-auto w-auto max-w-full flex-none px-3'>
-              <div className='h-full'>
-                {oldName && <h5 className='mb-1 font-semibold text-slate-700'>{oldName}</h5>}
-                <div className='flex flex-row'>
-                  <CopyToClipboard
-                    text={oldNickname}
-                    onCopy={() =>
-                      successToast('Никнейм скопирован', { icon: <ClipboardDocumentCheckIcon /> })
-                    }
-                  >
-                    <button className='text-size-sm mb-0 font-mono font-thin leading-normal'>
-                      @{oldNickname}
-                    </button>
-                  </CopyToClipboard>
-                </div>
+            <div className='my-auto h-full w-auto max-w-full flex-none px-3'>
+              {oldName && <h5 className='mb-1 font-semibold text-slate-700'>{oldName}</h5>}
+              <div className='flex flex-row'>
+                <CopyToClipboard
+                  text={oldNickname}
+                  onCopy={() =>
+                    successToast('Никнейм скопирован', { icon: <ClipboardDocumentCheckIcon /> })
+                  }
+                >
+                  <button className='text-size-sm mb-0 font-mono font-thin leading-normal'>
+                    @{oldNickname}
+                  </button>
+                </CopyToClipboard>
               </div>
             </div>
-            <div className='mx-auto mt-4 w-full max-w-full px-3 sm:my-auto sm:mr-0 md:w-1/2 md:flex-none lg:w-4/12'></div>
           </div>
-        </div>
+        </Window>
         <div className='removable mx-auto mt-6 w-full p-3'>
           <div className='-mx-3 flex flex-wrap'>
             <ProfileWindow>

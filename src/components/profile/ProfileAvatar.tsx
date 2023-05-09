@@ -1,4 +1,4 @@
-import Avatar from '@/components/profile/Avatar'
+import Avatar from '@/components/avatar/Avatar'
 import { type Role } from '@prisma/client'
 import { Dropdown } from 'flowbite-react'
 import { PencilIcon, ShieldCheckIcon } from '@heroicons/react/24/outline'
@@ -8,6 +8,7 @@ import { useRouter } from 'next/router'
 import errorToast from '@/components/toasts/ErrorToast'
 import promiseToast from '@/components/toasts/PromiseToast'
 import { env } from '@/env.mjs'
+import { uploadAvatarToS3Options } from '@/server/s3'
 
 interface ProfileAvatarProps {
   imgSrc?: string | null
@@ -25,7 +26,7 @@ export default function ProfileAvatar(props: ProfileAvatarProps) {
   const { FileInput, openFileDialog, uploadToS3 } = usePresignedUpload()
 
   async function handlePhotoChange(file: File) {
-    const { url } = await uploadToS3(file, { endpoint: { request: { url: '/api/upload/avatar' } } })
+    const { url } = await uploadToS3(file, uploadAvatarToS3Options)
     updateProfileImage.mutate({ src: url })
   }
 

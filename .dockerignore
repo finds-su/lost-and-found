@@ -1,4 +1,5 @@
 .env
+.env.*
 Dockerfile
 .dockerignore
 node_modules
@@ -7,3 +8,10 @@ README.md
 .next
 .git
 .husky
+.github
+
+# PWA
+/public/service-worker.js
+/public/service-worker.js.map
+/public/workbox-*.js
+/public/workbox-*.js.map
