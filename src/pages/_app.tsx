@@ -6,12 +6,13 @@ import { Inter } from 'next/font/google'
 import { api } from '@/lib/api'
 
 import '@/styles/globals.css'
-import React, { type ReactElement, type ReactNode } from 'react'
+import React, { type ReactElement, type ReactNode, useEffect } from 'react'
 import { type NextPage } from 'next'
 import { Toaster } from 'react-hot-toast'
 import Head from 'next/head'
 import { type ErrorProps } from '@/components/Error'
 import NextNProgress from 'nextjs-progressbar'
+import useSessionStore from '@/hooks/store/sessionStore'
 
 const inter = Inter({
   subsets: ['latin', 'cyrillic', 'cyrillic-ext'],
@@ -35,6 +36,11 @@ const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, error, ...pageProps },
 }: AppPropsWithLayout) => {
+  const { setSession } = useSessionStore()
+  useEffect(() => {
+    setSession(session)
+  }, [session, setSession])
+
   const getLayout = Component.getLayout
   return (
     <SessionProvider session={session}>

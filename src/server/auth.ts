@@ -7,21 +7,7 @@ import { nicknameValidation } from '@/lib/nicknameValidation'
 import GithubProvider, { type GithubProfile } from 'next-auth/providers/github'
 import { type Role } from '@prisma/client'
 import { env } from '@/env.mjs'
-
-interface ArUser {
-  ID: string
-  NAME: string
-  LAST_NAME: string
-  SECOND_NAME: string
-  PHOTO: string
-  EMAIL: string
-  LOGIN: string
-}
-
-interface MireaProfile {
-  ID: number
-  arUser: ArUser
-}
+import MireaNinjaLKSProvider from '@/server/authProviders/MireaNinjaLKSProvider'
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -110,38 +96,7 @@ export const authOptions: NextAuthOptions = {
         }
       },
     }),
-    {
-      id: 'mirea',
-      name: 'Mirea',
-      type: 'oauth',
-      version: '2.0',
-      accessTokenUrl: 'https://lks.mirea.ninja/oauth/token',
-      requestTokenUrl: 'https://lks.mirea.ninja/oauth/token',
-      authorization: {
-        url: 'https://lks.mirea.ninja/oauth/authorize',
-        params: { scope: 'profile' },
-      },
-      token: {
-        url: 'https://lks.mirea.ninja/oauth/token',
-      },
-      userinfo: {
-        url: 'https://lks.mirea.ninja/api/?action=getData&url=https://lk.mirea.ru/profile/',
-      },
-      checks: ['state'],
-      async profile(profile: MireaProfile) {
-        const name = [profile.arUser.NAME, profile.arUser.LAST_NAME].join(' ')
-        return {
-          id: profile.arUser.ID,
-          name,
-          nickname: await nicknameValidation(name),
-          email: profile.arUser.LOGIN,
-          image: 'https://lk.mirea.ru' + profile.arUser.PHOTO,
-          isBlocked: false,
-        }
-      },
-      clientId: env.MIREA_CLIENT_ID,
-      clientSecret: env.MIREA_CLIENT_SECRET,
-    },
+    MireaNinjaLKSProvider({ clientId: env.MIREA_CLIENT_ID, clientSecret: env.MIREA_CLIENT_SECRET }),
     /**
      * ...add more providers here.
      *
