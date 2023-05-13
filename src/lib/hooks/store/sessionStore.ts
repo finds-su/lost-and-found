@@ -3,7 +3,7 @@ import { devtools, persist } from 'zustand/middleware'
 import { type Session } from 'next-auth'
 
 interface SessionState {
-  session: Session | null
+  session: Readonly<Session> | null
   setSession: (session: Session | null) => void
 }
 

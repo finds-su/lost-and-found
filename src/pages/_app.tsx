@@ -12,7 +12,7 @@ import { Toaster } from 'react-hot-toast'
 import Head from 'next/head'
 import { type ErrorProps } from '@/components/Error'
 import NextNProgress from 'nextjs-progressbar'
-import useSessionStore from '@/hooks/store/sessionStore'
+import useSessionStore from '@/lib/hooks/store/sessionStore'
 
 const inter = Inter({
   subsets: ['latin', 'cyrillic', 'cyrillic-ext'],
@@ -75,13 +75,13 @@ const MyApp: AppType<{ session: Session | null }> = ({
         }
       `}</style>
       <main className={`${inter.variable} font-sans`}>
-        <NextNProgress height={3} color='#7dd3fc' options={{ showSpinner: false }} />
+        <NextNProgress height={3} color='#0ea5e9' options={{ showSpinner: false }} />
         {getLayout ? (
           getLayout(<Component {...pageProps} />, { session, error })
         ) : (
           <Component {...pageProps} />
         )}
-        <Toaster position='top-center' reverseOrder={false} />
+        <Toaster position='bottom-left' reverseOrder={false} />
       </main>
     </SessionProvider>
   )

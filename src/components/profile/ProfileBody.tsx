@@ -3,7 +3,7 @@ import { type Role } from '@prisma/client'
 import Head from 'next/head'
 import Window from '@/components/form/Window'
 import Avatar from '@/components/avatar/Avatar'
-import useEditProfileStore from '@/hooks/store/editProfileStore'
+import useEditProfileStore from '@/lib/hooks/store/editProfileStore'
 import DynamicEditProfileSlideOver from '@/components/profile/DynamicEditProfileSlideOver'
 
 interface User {

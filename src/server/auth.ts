@@ -1,12 +1,13 @@
 import { type GetServerSidePropsContext } from 'next'
-import { getServerSession, type NextAuthOptions, type DefaultSession } from 'next-auth'
+import { getServerSession, type NextAuthOptions } from 'next-auth'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '@/server/db'
 import GoogleProvider, { type GoogleProfile } from 'next-auth/providers/google'
 import { nicknameValidation } from '@/lib/nicknameValidation'
 import GithubProvider, { type GithubProfile } from 'next-auth/providers/github'
-import { type Role } from '@prisma/client'
+import { Role } from '@prisma/client'
 import { env } from '@/env.mjs'
+import { type User as PrismaUser } from '@prisma/client'
 import MireaNinjaLKSProvider from '@/server/authProviders/MireaNinjaLKSProvider'
 
 /**
@@ -17,22 +18,12 @@ import MireaNinjaLKSProvider from '@/server/authProviders/MireaNinjaLKSProvider'
  */
 declare module 'next-auth' {
   interface Session {
-    user: {
-      id: string
-      nickname: string
-      role?: Role
-      userInfo?: string
-      telegramLink?: string
-      isBlocked: boolean
-    } & DefaultSession['user']
+    user: User
   }
 
-  interface User {
-    nickname: string
-    role?: Role
-    userInfo?: string
-    telegramLink?: string
-    isBlocked: boolean
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface User extends PrismaUser {
+    image: string | null
   }
 }
 
@@ -50,10 +41,13 @@ export const authOptions: NextAuthOptions = {
     session({ session, user }) {
       if (session.user) {
         session.user.id = user.id
+        session.user.name = user.name
         session.user.nickname = user.nickname
+        session.user.telegramLink = user.telegramLink
+        session.user.email = user.email
         session.user.userInfo = user.userInfo
         session.user.role = user.role
-        session.user.telegramLink = user.telegramLink
+        session.user.image = user.image
         session.user.isBlocked = user.isBlocked
       }
       return session
@@ -67,11 +61,16 @@ export const authOptions: NextAuthOptions = {
       async profile(profile: GithubProfile) {
         return {
           id: profile.id.toString(),
-          nickname: await nicknameValidation(profile.login),
           name: profile.name ?? profile.login,
+          nickname: await nicknameValidation(profile.login),
+          telegramLink: null,
           email: profile.email,
+          emailVerified: new Date(),
+          userInfo: null,
+          role: Role.USER,
           image: profile.avatar_url,
           isBlocked: false,
+          blockReason: null,
         }
       },
     }),
@@ -88,11 +87,16 @@ export const authOptions: NextAuthOptions = {
       async profile(profile: GoogleProfile) {
         return {
           id: profile.sub,
-          nickname: await nicknameValidation(profile.email.split('@')[0] ?? ''),
           name: profile.name,
+          nickname: await nicknameValidation(profile.email.split('@')[0] ?? ''),
+          telegramLink: null,
           email: profile.email,
+          emailVerified: new Date(),
+          userInfo: null,
+          role: Role.USER,
           image: profile.picture,
           isBlocked: false,
+          blockReason: null,
         }
       },
     }),

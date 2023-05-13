@@ -1,8 +1,8 @@
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { type FormEvent, Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import useEditProfileStore from '@/hooks/store/editProfileStore'
-import useSessionStore from '@/hooks/store/sessionStore'
+import useEditProfileStore from '@/lib/hooks/store/editProfileStore'
+import useSessionStore from '@/lib/hooks/store/sessionStore'
 import Avatar from '@/components/avatar/Avatar'
 import { usePresignedUpload } from 'next-s3-upload'
 import { uploadAvatarToS3Options } from '@/server/s3'
@@ -10,19 +10,19 @@ import { env } from '@/env.mjs'
 import promiseToast from '@/components/toasts/PromiseToast'
 import errorToast from '@/components/toasts/ErrorToast'
 import { api } from '@/lib/api'
-import { type User } from 'next-auth'
 import { useRouter } from 'next/router'
+import successToast from '@/components/toasts/SuccessToast'
+import { type EditedUser } from '@/lib/types/EditedUser'
 
 export default function EditProfileSlideOver() {
   const router = useRouter()
   const editProfile = useEditProfileStore()
   const { session } = useSessionStore()
-  const [editedUser, setEditedUser] = useState<Omit<User, 'role' | 'isBlocked'> | undefined>(
-    session?.user,
-  )
+  const [editedUser, setEditedUser] = useState<EditedUser | undefined>(session?.user)
   const mutateUser = api.users.editUser.useMutation({
     onSuccess: async () => {
       if (editedUser) {
+        successToast('Профиль изменен')
         editProfile.close()
         await router.push(`/u/${editedUser?.nickname}`)
       }
@@ -134,7 +134,7 @@ export default function EditProfileSlideOver() {
                         <div className='ml-3 flex h-7 items-center'>
                           <button
                             type='button'
-                            className='rounded-md bg-white text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-indigo-500'
+                            className='rounded-md bg-white text-gray-400 hover:text-gray-500 focus:ring-2 focus:ring-blue-500'
                             onClick={editProfile.close}
                           >
                             <span className='sr-only'>Закрыть панель</span>
@@ -146,14 +146,14 @@ export default function EditProfileSlideOver() {
                     {/* Main */}
                     <div className='divide-y divide-gray-200'>
                       <div className='pb-6'>
-                        <div className='h-24 bg-indigo-700 sm:h-20 lg:h-28' />
+                        <div className='h-24 bg-blue-700 sm:h-20 lg:h-28' />
                         <div className='lg:-mt-15 -mt-12 flow-root px-4 sm:-mt-8 sm:flex sm:items-end sm:px-6'>
                           <div>
                             <div className='-m-1 flex'>
                               <div className='inline-flex overflow-hidden rounded-lg border-4 border-white'>
                                 <Avatar
                                   size='xl'
-                                  className='h-24 w-24 flex-shrink-0 sm:h-36 sm:w-36'
+                                  className='h-32 w-32 flex-shrink-0 sm:h-36 sm:w-36'
                                   placeholderInitials={session?.user.nickname
                                     .slice(0, 2)
                                     .toUpperCase()}
@@ -194,7 +194,7 @@ export default function EditProfileSlideOver() {
                               <button
                                 onClick={openFileDialog}
                                 type='button'
-                                className='inline-flex w-full flex-shrink-0 items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:flex-1'
+                                className='inline-flex w-full flex-shrink-0 items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:flex-1'
                               >
                                 Изменить фото
                               </button>
@@ -205,7 +205,7 @@ export default function EditProfileSlideOver() {
                                   }
                                 }}
                                 type='button'
-                                className='inline-flex w-full flex-1 items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
+                                className='inline-flex w-full flex-1 items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
                               >
                                 Удалить фото
                               </button>
@@ -236,7 +236,7 @@ export default function EditProfileSlideOver() {
                                   id={attribute.name}
                                   value={attribute.value ?? ''}
                                   onChange={attribute.setInputValue}
-                                  className='block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+                                  className='block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
                                 />
                               )}
                               {attribute.type === 'textarea' && (
@@ -246,7 +246,7 @@ export default function EditProfileSlideOver() {
                                   value={attribute.value ?? ''}
                                   onInput={attribute.setTextAreaValue}
                                   rows={3}
-                                  className='block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+                                  className='block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
                                   defaultValue={''}
                                 />
                               )}
@@ -258,7 +258,7 @@ export default function EditProfileSlideOver() {
                         <div className='flex justify-end space-x-3'>
                           <button
                             type='button'
-                            className='rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
+                            className='rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
                             onClick={editProfile.close}
                           >
                             Отменить
@@ -270,7 +270,7 @@ export default function EditProfileSlideOver() {
                               }
                             }}
                             type='submit'
-                            className='inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
+                            className='inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
                           >
                             Сохранить
                           </button>

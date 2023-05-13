@@ -21,6 +21,7 @@ export default function LayoutProfile(props: { session: Session; userNavigation:
         {/* UserNickname dropdown */}
         <div className='ml-3'>
           <Dropdown
+            dismissOnClick
             inline
             arrowIcon={false}
             placement='bottom-end'
@@ -40,7 +41,7 @@ export default function LayoutProfile(props: { session: Session; userNavigation:
             }
           >
             <Dropdown.Header>
-              <Link href='/me'>
+              <Link href={`/u/${props.session.user.nickname}`}>
                 <span className='block text-sm'>Вы вошли как</span>
                 <span className='block w-28 truncate text-ellipsis text-sm font-medium'>
                   {props.session.user.nickname}

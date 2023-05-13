@@ -10,8 +10,8 @@ const zodNickname = z
     invalid_type_error: 'Никнейм должен быть строкой',
   })
   .min(minNicknameLength, { message: 'Слишком короткий никнейм' })
-  .max(50, { message: 'Слишком длинный никнейм' })
-  .refine((nickname) => telegramUsernameRegex.test(nickname), {
+  .max(40, { message: 'Слишком длинный никнейм' })
+  .refine((nickname) => nickname === nickname.match(telegramUsernameRegex)?.at(0), {
     message: 'Невалидный никнейм',
   })
 
@@ -21,7 +21,6 @@ const zodEmail = z
     invalid_type_error: 'Почта должен быть строкой',
   })
   .email({ message: 'Недействительная почта' })
-  .min(5, { message: 'Слишком короткая почта' })
   .max(100, { message: 'Слишком длинная почта' })
   .trim()
 
@@ -31,9 +30,7 @@ const zodName = z
     invalid_type_error: 'Имя должно быть строкой',
   })
   .trim()
-  .min(3, { message: 'Слишком короткое имя' })
-  .max(50, { message: 'Слишком длинное имя' })
-  .refine((name) => name === name.replaceAll('\n', ''), { message: 'Невалидное имя' })
+  .max(20, { message: 'Слишком длинное имя' })
 
 const zodTelegramLink = z
   .string({
@@ -41,10 +38,9 @@ const zodTelegramLink = z
     invalid_type_error: 'Telegram username должно быть строкой',
   })
   .trim()
-  .min(3, { message: 'Слишком короткое Telegram username' })
   .max(50, { message: 'Слишком длинное Telegram username' })
-  .regex(telegramUsernameRegex, {
-    message: 'Неподходящее Telegram username',
+  .refine((username) => username === username.match(telegramUsernameRegex)?.at(0), {
+    message: 'Невалидный Telegram username',
   })
 
 const zodUserInfo = z
@@ -93,12 +89,25 @@ export const usersRouter = createTRPCRouter({
   editUser: protectedProcedure
     .input(
       z.object({
-        name: zodName.optional().nullable(),
+        name: zodName
+          .nullable()
+          .optional()
+          .transform((value) => (value?.length === 0 ? null : value)),
         nickname: zodNickname,
-        email: zodEmail.optional().nullable(),
-        telegramLink: zodTelegramLink.optional(),
-        userInfo: zodUserInfo.optional(),
-        image: z.string().url().optional().nullable(),
+        email: zodEmail
+          .nullable()
+          .optional()
+          .transform((value) => (value?.length === 0 ? null : value)),
+        telegramLink: zodTelegramLink
+          .nullable()
+          .transform((value) => (value?.length === 0 ? null : value)),
+        userInfo: zodUserInfo.nullable().transform((value) => (value?.length === 0 ? null : value)),
+        image: z
+          .string()
+          .url()
+          .nullable()
+          .optional()
+          .transform((value) => (value?.length === 0 ? null : value)),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -113,7 +122,7 @@ export const usersRouter = createTRPCRouter({
         await tx.user.update({
           where: { id: ctx.session.user.id },
           data: {
-            ...(input.name && { name: input.name }),
+            name: input.name,
             nickname: input.nickname,
             image: input.image,
             email: input.email,

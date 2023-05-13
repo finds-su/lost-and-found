@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-1.1.x", "debian-openssl-3.0.x", "linux-musl", "linux-musl-openssl-3.0.x"]
 }
 
@@ -38,15 +38,15 @@ model Session {
 
 model User {
   id                String             @id @default(cuid())
-  name              String
+  name              String?
   nickname          String             @unique
   telegramLink      String?
   email             String?            @unique
   emailVerified     DateTime?
-  userInfo          String             @default("") @db.VarChar(280)
+  userInfo          String?            @db.VarChar(280)
   role              Role               @default(USER)
   image             String?
-  isBlocked    Boolean @default(false)
+  isBlocked         Boolean            @default(false)
   blockReason       String?
   accounts          Account[]
   sessions          Session[]

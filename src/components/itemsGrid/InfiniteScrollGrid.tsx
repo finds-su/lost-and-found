@@ -1,22 +1,12 @@
 import { type ReactNode, useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import Image from 'next/image'
-import { type PublicUser } from '@/pages/u/[nickname]'
-import { type Campus as DBCampus, type PostItemReason } from '@prisma/client'
+import { type PostItemReason } from '@prisma/client'
 import { Campus } from '@/lib/campus'
 import { api } from '@/lib/api'
 import { humanReadableDate } from '@/lib/humanReadableDate'
 import { Spinner } from 'flowbite-react'
-
-interface Item {
-  id: string
-  name: string
-  campus: DBCampus
-  reason: PostItemReason
-  images: string[]
-  created: Date
-  user: PublicUser
-}
+import { type LostAndFoundItemInGrid } from '@/lib/types/LostAndFoundItemInGrid'
 
 export default function InfiniteScrollGrid(props: {
   reason: PostItemReason
@@ -26,7 +16,7 @@ export default function InfiniteScrollGrid(props: {
     { limit: 12, reason: props.reason },
     { getNextPageParam: (lastPage) => lastPage.nextCursor },
   )
-  const [items, setItems] = useState<Item[]>([])
+  const [items, setItems] = useState<LostAndFoundItemInGrid[]>([])
   const [hasMore, setHasMore] = useState(true)
 
   useEffect(() => {

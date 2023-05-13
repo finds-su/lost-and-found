@@ -1,5 +1,6 @@
 import type { Provider } from 'next-auth/providers'
 import { nicknameValidation } from '@/lib/nicknameValidation'
+import { Role } from '@prisma/client'
 
 interface ArUser {
   ID: string
@@ -47,9 +48,14 @@ export default function MireaNinjaLKSProvider({
         id: profile.arUser.ID,
         name,
         nickname: await nicknameValidation(name),
+        telegramLink: null,
         email: profile.arUser.LOGIN,
+        emailVerified: new Date(),
+        userInfo: null,
+        role: Role.USER,
         image: 'https://lk.mirea.ru' + profile.arUser.PHOTO,
         isBlocked: false,
+        blockReason: null,
       }
     },
     clientId,

@@ -41,7 +41,7 @@ export default function MobileLayoutMenu(props: MobileLayoutMenuProps) {
         {session && (
           <>
             <div className='flex items-center px-5'>
-              <Link className='flex items-center' href='/me'>
+              <Link className='flex items-center' href={`/u/${session.user.nickname}`}>
                 <Avatar
                   size='sm'
                   placeholderInitials={session.user.nickname.slice(0, 2).toUpperCase()}
