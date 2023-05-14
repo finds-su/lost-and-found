@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { devtools, persist } from 'zustand/middleware'
+import { devtools } from 'zustand/middleware'
 import { type Session } from 'next-auth'
 
 interface SessionState {
@@ -9,15 +9,13 @@ interface SessionState {
 
 const useSessionStore = create<SessionState>()(
   devtools(
-    persist(
-      (set) => ({
-        session: null,
-        setSession: (session) => set(() => ({ session })),
-      }),
-      {
-        name: 'session-storage',
-      },
-    ),
+    (set) => ({
+      session: null,
+      setSession: (session) => set(() => ({ session })),
+    }),
+    {
+      name: 'session-storage',
+    },
   ),
 )
 

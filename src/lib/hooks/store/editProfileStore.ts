@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { devtools, persist } from 'zustand/middleware'
+import { devtools } from 'zustand/middleware'
 
 interface EditProfileState {
   edit: boolean
@@ -9,16 +9,14 @@ interface EditProfileState {
 
 const useEditProfileStore = create<EditProfileState>()(
   devtools(
-    persist(
-      (set) => ({
-        edit: false,
-        close: () => set(() => ({ edit: false })),
-        open: () => set(() => ({ edit: true })),
-      }),
-      {
-        name: 'edit-profile-storage',
-      },
-    ),
+    (set) => ({
+      edit: false,
+      close: () => set(() => ({ edit: false })),
+      open: () => set(() => ({ edit: true })),
+    }),
+    {
+      name: 'edit-profile-storage',
+    },
   ),
 )
 

@@ -60,12 +60,12 @@ const MyApp: AppType<{ session: Session | null }> = ({
           content='Стромынка, Проспект Вернадского, Бюро находок в МИРЭА, Находки на кампусе, Потерянные вещи в МИРЭА, Регистрация находок в МИРЭА, Объявления о находках в МИРЭА, База данных находок в МИРЭА, Находки в аудиториях, Поиск потерянных вещей в университете, Находки в библиотеке университета, Утерянные документы в университете, Находки в спортивном зале МИРЭА, Находки в столовой университета, Бесплатная регистрация находок в университете, Находки в учебных кабинетах, Поиск утерянных вещей на территории РТУ МИРЭА'
         />
         <link rel='manifest' href='/manifest.json' />
-        <link href='/icons/favicon-16x16.png' rel='icon' type='image/png' sizes='16x16' />
-        <link href='/icons/favicon-32x32.png' rel='icon' type='image/png' sizes='32x32' />
-        <link href='/icons/apple-touch-icon.png' rel='apple-touch-icon' />
-        <link href='/icons/safari-pinned-tab.svg' rel='mask-icon' color='#000000' />
+        <link href='/logo-icons/favicon-16x16.png' rel='icon' type='image/png' sizes='16x16' />
+        <link href='/logo-icons/favicon-32x32.png' rel='icon' type='image/png' sizes='32x32' />
+        <link href='/logo-icons/apple-touch-icon.png' rel='apple-touch-icon' />
+        <link href='/logo-icons/safari-pinned-tab.svg' rel='mask-icon' color='#000000' />
         <meta name='msapplication-TileColor' content='#1f2937' />
-        <meta name='msapplication-TileImage' content='/icons/mstile-150x150.png' />
+        <meta name='msapplication-TileImage' content='/logo-icons/mstile-150x150.png' />
         <meta name='theme-color' content='#0f172a' />
       </Head>
       {/* eslint-disable-next-line react/no-unknown-property */}

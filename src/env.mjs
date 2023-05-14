@@ -20,6 +20,8 @@ export const env = createEnv({
     S3_UPLOAD_BUCKET: z.string().min(1),
     S3_UPLOAD_HOSTNAME: z.string().min(1),
     S3_UPLOAD_ENDPOINT_URL: z.string().min(1),
+    OPENAI_API_KEY: z.string().startsWith('sk-'),
+    OPENAI_IMAGE_PATHNAME: z.string().min(1),
     NEXTAUTH_SECRET: z.string().min(1),
     NEXTAUTH_URL: z.string().url(),
     MIREA_CLIENT_ID: z.string().min(1),
@@ -59,6 +61,9 @@ export const env = createEnv({
     S3_UPLOAD_HOSTNAME: process.env.S3_UPLOAD_HOSTNAME,
     S3_UPLOAD_ENDPOINT_URL: process.env.S3_UPLOAD_ENDPOINT_URL,
     NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS: process.env.NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS,
+
+    OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+    OPENAI_IMAGE_PATHNAME: process.env.OPENAI_IMAGE_PATHNAME,
 
     MIREA_CLIENT_ID: process.env.MIREA_CLIENT_ID,
     MIREA_CLIENT_SECRET: process.env.MIREA_CLIENT_SECRET,

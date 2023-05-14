@@ -35,6 +35,7 @@
     "next-s3-upload": "^0.3.0",
     "nextjs-progressbar": "^0.0.16",
     "nodemailer": "^6.9.1",
+    "openai": "^3.2.1",
     "react": "^18.2.0",
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.2.0",
