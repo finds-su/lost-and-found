@@ -111,7 +111,7 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
     throw new TRPCError({ code: 'UNAUTHORIZED' })
   }
   if (ctx.session.user.isBlocked) {
-    throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Пользователь заблакирован' })
+    throw new TRPCError({ code: 'FORBIDDEN', message: 'Пользователь заблакирован' })
   }
   return next({
     ctx: {

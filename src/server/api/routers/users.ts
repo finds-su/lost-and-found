@@ -4,6 +4,10 @@ import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
 import { TRPCError } from '@trpc/server'
 import { minNicknameLength, telegramUsernameRegex } from '@/constants.mjs'
 import { generateAvatar } from '@/server/openai'
+import { s3 } from '@/server/s3'
+import { env } from '@/env.mjs'
+import axios from 'axios'
+import { PutObjectCommand } from '@aws-sdk/client-s3'
 
 const zodNickname = z
   .string({
@@ -137,10 +141,31 @@ export const usersRouter = createTRPCRouter({
   generateAIAvatar: protectedProcedure
     .input(
       z.object({
-        prompt: z.string(),
+        prompt: z.string().transform((value) => (value.length !== 0 ? value : 'придумай аватар')),
       }),
     )
-    .mutation(async ({ input }) => {
-      return await generateAvatar(input.prompt)
+    .mutation(async ({ ctx, input }) => {
+      const url = await generateAvatar(input.prompt)
+      if (url) {
+        const response = await axios.get(url, {
+          decompress: false,
+          responseType: 'arraybuffer',
+        })
+        const key = `${ctx.session.user.id}/generated/${input.prompt}.png`
+        const upload = await s3.send(
+          new PutObjectCommand({
+            Bucket: env.S3_UPLOAD_BUCKET,
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            Body: response.data,
+            Key: key,
+          }),
+        )
+        console.log(upload)
+        return `${env.S3_UPLOAD_ENDPOINT_URL}/${env.S3_UPLOAD_BUCKET}/${ctx.session.user.id}/generated/${input.prompt}.png`
+      }
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'Ошибка генерации аватара',
+      })
     }),
 })

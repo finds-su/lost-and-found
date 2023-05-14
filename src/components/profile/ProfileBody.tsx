@@ -1,25 +1,15 @@
-import { type ReactNode } from 'react'
-import { type Role } from '@prisma/client'
+import { Fragment, type ReactNode, useState } from 'react'
 import Head from 'next/head'
 import Window from '@/components/form/Window'
 import Avatar from '@/components/avatar/Avatar'
 import useEditProfileStore from '@/lib/hooks/store/editProfileStore'
+import { type User } from '@prisma/client'
+import { Dialog, Transition } from '@headlessui/react'
 import DynamicEditProfileSlideOver from '@/components/profile/DynamicEditProfileSlideOver'
-
-interface User {
-  nickname: string
-  name: string
-  email?: string
-  role: Role
-  image?: string
-  userInfo: string
-  telegramLink?: string
-  isBlocked?: boolean
-}
 
 export interface ProfileProps {
   isOwner: boolean
-  user: User
+  user: Partial<User> & { nickname: string }
 }
 
 export default function ProfileBody(props: ProfileProps) {

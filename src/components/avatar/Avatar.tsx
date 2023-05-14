@@ -15,6 +15,8 @@ export default function Avatar(props: Omit<AvatarProps, 'img'> & { src?: string 
             alt=''
             width={100}
             height={100}
+            placeholder='blur'
+            blurDataURL='/assets/avatar-blur.png'
             {...imgProps}
           />
         )}

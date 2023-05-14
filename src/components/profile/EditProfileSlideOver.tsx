@@ -1,11 +1,11 @@
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { type FormEvent, Fragment, useEffect, useState } from 'react'
+import { type FormEvent, Fragment, useEffect, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import useEditProfileStore from '@/lib/hooks/store/editProfileStore'
 import useSessionStore from '@/lib/hooks/store/sessionStore'
 import Avatar from '@/components/avatar/Avatar'
 import { usePresignedUpload } from 'next-s3-upload'
-import { uploadAvatarToS3Options } from '@/server/s3'
+import { uploadAvatarToS3Options } from '@/lib/uploadAvatarToS3Options'
 import { env } from '@/env.mjs'
 import promiseToast from '@/components/toasts/PromiseToast'
 import errorToast from '@/components/toasts/ErrorToast'
@@ -28,7 +28,7 @@ export default function EditProfileSlideOver() {
       if (editedUser) {
         successToast('Профиль изменен')
         editProfile.close()
-        await router.push(`/u/${editedUser?.nickname}`)
+        await router.push(`/u/${editedUser.nickname}`)
       }
     },
     onError: (error) => errorToast(error.message),
@@ -111,11 +111,17 @@ export default function EditProfileSlideOver() {
       type: 'textarea',
     },
   ]
+  const cancelButtonRef = useRef(null)
 
   return (
     <>
       <Transition.Root show={editProfile.edit} as={Fragment}>
-        <Dialog as='div' className='relative z-10' onClose={editProfile.close}>
+        <Dialog
+          as='div'
+          className='relative z-10'
+          onClose={editProfile.close}
+          initialFocus={cancelButtonRef}
+        >
           <Transition.Child
             as={Fragment}
             enter='ease-in-out duration-500'
@@ -296,6 +302,7 @@ export default function EditProfileSlideOver() {
                               type='button'
                               className='rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
                               onClick={editProfile.close}
+                              ref={cancelButtonRef}
                             >
                               Отменить
                             </button>

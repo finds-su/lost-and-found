@@ -49,7 +49,7 @@ export default function AvatarPromptModal() {
                       alt=''
                       width={10}
                       height={10}
-                      className='h-6 w-6 text-blue-600'
+                      className='h-6 w-6 fill-blue-600'
                     />
                   </div>
                   <div className='mt-3 text-center sm:mt-5'>
