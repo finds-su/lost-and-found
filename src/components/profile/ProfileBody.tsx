@@ -1,10 +1,9 @@
-import { Fragment, type ReactNode, useState } from 'react'
+import { type ReactNode } from 'react'
 import Head from 'next/head'
 import Window from '@/components/form/Window'
 import Avatar from '@/components/avatar/Avatar'
 import useEditProfileStore from '@/lib/hooks/store/editProfileStore'
 import { type User } from '@prisma/client'
-import { Dialog, Transition } from '@headlessui/react'
 import DynamicEditProfileSlideOver from '@/components/profile/DynamicEditProfileSlideOver'
 
 export interface ProfileProps {

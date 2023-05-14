@@ -18,10 +18,6 @@ const config = {
         port: '',
         pathname: `/${env.S3_UPLOAD_BUCKET}/**`,
       },
-      {
-        hostname: '*.blob.core.windows.net',
-        pathname: env.OPENAI_IMAGE_PATHNAME,
-      },
     ],
   },
   ...(env.NODE_ENV === 'production' && {
