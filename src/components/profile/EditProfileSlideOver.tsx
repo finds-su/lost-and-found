@@ -16,7 +16,9 @@ import { type EditedUser } from '@/lib/types/EditedUser'
 import Image from 'next/image'
 import useAvatarPromptStore from '@/lib/hooks/store/avatarPromptStore'
 import AvatarPromptModal from '@/components/profile/AvatarPromptModal'
-import { Spinner } from 'flowbite-react'
+import loadingToast from '@/components/toasts/LoadingToast'
+
+const generateAIAvatarToastID = 'generateAIAvatarToastID'
 
 export default function EditProfileSlideOver() {
   const router = useRouter()
@@ -34,12 +36,18 @@ export default function EditProfileSlideOver() {
     onError: (error) => errorToast(error.message),
   })
   const generateAvatar = api.users.generateAIAvatar.useMutation({
-    onSuccess: (data) => editedUser && data && setEditedUser({ ...editedUser, image: data }),
-    onError: (error) => errorToast(error.message),
+    onSuccess: (data) => {
+      if (editedUser && data) {
+        setEditedUser({ ...editedUser, image: data })
+        successToast('Аватар сгенерирован', { id: generateAIAvatarToastID })
+      }
+    },
+    onError: (error) => errorToast(error.message, { id: generateAIAvatarToastID }),
   })
   const { openAvatarPromptModal, avatarPrompt } = useAvatarPromptStore()
   useEffect(() => {
-    if (avatarPrompt.length > 0) {
+    if (avatarPrompt !== undefined) {
+      loadingToast('Генерация аватара', { id: generateAIAvatarToastID })
       generateAvatar.mutate({ prompt: avatarPrompt })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -238,18 +246,14 @@ export default function EditProfileSlideOver() {
                                     disabled={generateAvatar.isLoading}
                                   >
                                     <span className='sr-only'>Сгенерировать аватар</span>
-                                    {generateAvatar.isLoading ? (
-                                      <Spinner size='sm' className='h-5 w-5' />
-                                    ) : (
-                                      <Image
-                                        src='/icons/magic-icon.svg'
-                                        alt=''
-                                        width={10}
-                                        height={10}
-                                        className='h-5 w-5'
-                                        aria-hidden='true'
-                                      />
-                                    )}
+                                    <Image
+                                      src='/icons/magic-icon.svg'
+                                      alt=''
+                                      width={10}
+                                      height={10}
+                                      className='h-5 w-5'
+                                      aria-hidden='true'
+                                    />
                                   </button>
                                 </div>
                               </div>

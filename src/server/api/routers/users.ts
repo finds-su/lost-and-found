@@ -8,6 +8,8 @@ import { s3 } from '@/server/s3'
 import { env } from '@/env.mjs'
 import axios from 'axios'
 import { PutObjectCommand } from '@aws-sdk/client-s3'
+import { sanitizeKey } from 'next-s3-upload'
+import { CopyObjectCommand } from '@aws-sdk/client-s3'
 
 const zodNickname = z
   .string({
@@ -116,6 +118,20 @@ export const usersRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      if (input.image) {
+        // transfer preloaded image from bucket/tmp/user_id/file to bucket/user_id/file
+        const key = input.image.split('/tmp/')[1]
+        const format = key?.split('.').at(-1)
+        if (key && format) {
+          const copyCommand = new CopyObjectCommand({
+            CopySource: `${env.S3_UPLOAD_BUCKET}/tmp/${key}`,
+            Bucket: env.S3_UPLOAD_BUCKET,
+            Key: `${ctx.session.user.id}/avatar.${format}`,
+          })
+          await s3.send(copyCommand)
+          input.image = `${env.S3_UPLOAD_ENDPOINT_URL}/${env.S3_UPLOAD_BUCKET}/${ctx.session.user.id}/avatar.${format}`
+        }
+      }
       await ctx.prisma.$transaction(async (tx) => {
         const userToUpdate = await tx.user.findFirst({ where: { id: ctx.session.user.id } })
         if (userToUpdate === null) {
@@ -151,8 +167,8 @@ export const usersRouter = createTRPCRouter({
           decompress: false,
           responseType: 'arraybuffer',
         })
-        const key = `${ctx.session.user.id}/generated/${input.prompt}.png`
-        const upload = await s3.send(
+        const key = `tmp/${ctx.session.user.id}/${sanitizeKey(input.prompt)}.png`
+        await s3.send(
           new PutObjectCommand({
             Bucket: env.S3_UPLOAD_BUCKET,
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -160,8 +176,7 @@ export const usersRouter = createTRPCRouter({
             Key: key,
           }),
         )
-        console.log(upload)
-        return `${env.S3_UPLOAD_ENDPOINT_URL}/${env.S3_UPLOAD_BUCKET}/${ctx.session.user.id}/generated/${input.prompt}.png`
+        return `${env.S3_UPLOAD_ENDPOINT_URL}/${env.S3_UPLOAD_BUCKET}/${key}`
       }
       throw new TRPCError({
         code: 'BAD_REQUEST',

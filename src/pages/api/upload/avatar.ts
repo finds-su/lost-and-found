@@ -10,8 +10,8 @@ export default APIRoute.configure({
   async key(req, filename) {
     const session = await getSession({ req })
     if (session) {
-      return `${session.user.id}/${sanitizeKey(filename)}`
+      return `tmp/${session.user.id}/${sanitizeKey(filename)}`
     }
-    throw new Error('Неавторизован')
+    throw new Error('UNAUTHORIZED')
   },
 })

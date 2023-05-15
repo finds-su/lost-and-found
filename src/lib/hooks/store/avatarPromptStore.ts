@@ -5,7 +5,7 @@ interface AvatarPromptState {
   isAvatarPromptModalOpen: boolean
   closeAvatarPromptModal: () => void
   openAvatarPromptModal: () => void
-  avatarPrompt: string
+  avatarPrompt: string | undefined
   setAvatarPrompt: (prompt: string) => void
 }
 
@@ -15,7 +15,7 @@ const useAvatarPromptStore = create<AvatarPromptState>()(
       isAvatarPromptModalOpen: false,
       closeAvatarPromptModal: () => set((store) => ({ ...store, isAvatarPromptModalOpen: false })),
       openAvatarPromptModal: () => set((store) => ({ ...store, isAvatarPromptModalOpen: true })),
-      avatarPrompt: '',
+      avatarPrompt: undefined,
       setAvatarPrompt: (avatarPrompt) => set((store) => ({ ...store, avatarPrompt })),
     }),
     {
