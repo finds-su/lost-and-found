@@ -17,8 +17,13 @@ import Image from 'next/image'
 import useAvatarPromptStore from '@/lib/hooks/store/avatarPromptStore'
 import AvatarPromptModal from '@/components/profile/AvatarPromptModal'
 import loadingToast from '@/components/toasts/LoadingToast'
+import { type PromiseToastMessages } from '@/lib/types/Toast'
 
 const generateAIAvatarToastID = 'generateAIAvatarToastID'
+const generateAIAvatarToastMessages: Pick<PromiseToastMessages, 'success' | 'loading'> = {
+  success: 'Аватар сгенерирован',
+  loading: 'Генерация аватара',
+}
 
 export default function EditProfileSlideOver() {
   const router = useRouter()
@@ -35,23 +40,25 @@ export default function EditProfileSlideOver() {
     },
     onError: (error) => errorToast(error.message),
   })
-  const generateAvatar = api.users.generateAIAvatar.useMutation({
-    onSuccess: (data) => {
-      if (editedUser && data) {
-        setEditedUser({ ...editedUser, image: data })
-        successToast('Аватар сгенерирован', { id: generateAIAvatarToastID })
-      }
+  const { openAvatarPromptModal, avatarPrompt, setAvatarPrompt } = useAvatarPromptStore()
+  const generateAvatar = api.users.generateAIAvatar.useQuery(
+    { prompt: avatarPrompt },
+    {
+      onSuccess: (data) => {
+        if (editedUser && data) {
+          setEditedUser({ ...editedUser, image: data })
+          setAvatarPrompt(undefined)
+          successToast(generateAIAvatarToastMessages.success, { id: generateAIAvatarToastID })
+        }
+      },
+      onError: (error) => errorToast(error.message, { id: generateAIAvatarToastID }),
     },
-    onError: (error) => errorToast(error.message, { id: generateAIAvatarToastID }),
-  })
-  const { openAvatarPromptModal, avatarPrompt } = useAvatarPromptStore()
+  )
   useEffect(() => {
-    if (avatarPrompt !== undefined) {
-      loadingToast('Генерация аватара', { id: generateAIAvatarToastID })
-      generateAvatar.mutate({ prompt: avatarPrompt })
+    if (generateAvatar.isLoading && avatarPrompt !== undefined) {
+      loadingToast(generateAIAvatarToastMessages.loading, { id: generateAIAvatarToastID })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [avatarPrompt])
+  }, [generateAvatar.isLoading, avatarPrompt])
 
   const { FileInput, openFileDialog, uploadToS3 } = usePresignedUpload()
   async function handlePhotoChange(file: File) {

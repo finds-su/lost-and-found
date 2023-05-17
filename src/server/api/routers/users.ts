@@ -157,10 +157,21 @@ export const usersRouter = createTRPCRouter({
   generateAIAvatar: protectedProcedure
     .input(
       z.object({
-        prompt: z.string().transform((value) => (value.length !== 0 ? value : 'придумай аватар')),
+        prompt: z
+          .string()
+          .optional()
+          .transform((value) => {
+            if (value === undefined || value.length !== 0) {
+              return value
+            }
+            return 'придумай аватар'
+          }),
       }),
     )
-    .mutation(async ({ ctx, input }) => {
+    .query(async ({ ctx, input }) => {
+      if (input.prompt === undefined) {
+        return null
+      }
       const url = await generateAvatar(input.prompt)
       if (url) {
         const response = await axios.get(url, {

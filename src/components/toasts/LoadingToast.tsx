@@ -1,7 +1,7 @@
 import { Spinner, Toast as FlowbiteToast } from 'flowbite-react'
 import { type ReactNode } from 'react'
 import toast, { type Toast } from 'react-hot-toast'
-import type { AppToast, AppToastOptions } from '@/components/toasts/Toast'
+import type { AppToast, AppToastOptions } from '@/lib/types/Toast'
 
 function LoadingToast(props: { toastOptions: Toast; message: string; icon?: ReactNode }) {
   return (

@@ -2,7 +2,7 @@ import { Toast as FlowbiteToast } from 'flowbite-react'
 import { type ReactNode } from 'react'
 import { CheckIcon } from '@heroicons/react/24/outline'
 import toast, { type Toast } from 'react-hot-toast'
-import type { AppToast, AppToastOptions } from '@/components/toasts/Toast'
+import type { AppToast, AppToastOptions } from '@/lib/types/Toast'
 
 function SuccessToast(props: { toastOptions: Toast; message: string; icon?: ReactNode }) {
   return (

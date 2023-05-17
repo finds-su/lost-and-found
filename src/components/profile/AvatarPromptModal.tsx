@@ -49,7 +49,7 @@ export default function AvatarPromptModal() {
                       alt=''
                       width={10}
                       height={10}
-                      className='h-6 w-6 fill-blue-600'
+                      className='h-6 w-6'
                     />
                   </div>
                   <div className='mt-3 text-center sm:mt-5'>
@@ -66,7 +66,7 @@ export default function AvatarPromptModal() {
                         Prompt
                       </label>
                       <input
-                        value={prompt}
+                        value={prompt ?? ''}
                         type='prompt'
                         name='prompt'
                         id='prompt'
@@ -82,7 +82,7 @@ export default function AvatarPromptModal() {
                     type='button'
                     className='inline-flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:col-start-2 sm:text-sm'
                     onClick={() => {
-                      setAvatarPrompt(prompt)
+                      setAvatarPrompt(prompt ?? '')
                       closeAvatarPromptModal()
                     }}
                   >
