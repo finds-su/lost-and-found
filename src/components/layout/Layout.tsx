@@ -10,7 +10,7 @@ import { type Session } from 'next-auth'
 import LayoutFooter from '@/components/layout/LayoutFooter'
 import classNames from 'classnames/dedupe'
 import DynamicMobileLayoutMenu from '@/components/layout/DynamicMobileLayoutMenu'
-import DynamicLayoutProfile from '@/components/layout/DynamicLayoutProfile'
+import LayoutAvatar from '@/components/layout/LayoutAvatar'
 
 export type Navigation = { name: string; href: string }[]
 export const navigation: Navigation = [
@@ -25,7 +25,7 @@ export interface LayoutProps {
   children: React.ReactNode
 }
 
-export type UserNavigation = { name: string; func?: () => void }[][]
+export type UserNavigation = { name: string; func?: () => void; href?: string }[][]
 
 export default function Layout(props: LayoutProps) {
   const router = useRouter()
@@ -35,15 +35,18 @@ export default function Layout(props: LayoutProps) {
     [
       {
         name: 'Ваш профиль',
-        func: () => void router.push(session ? `/u/${session.user.nickname}/` : '/'),
+        func: () => void router.push(session ? `/u/${session.user.nickname}` : '/'),
+        href: '/u/[nickname]',
       },
       {
         name: 'Ваши пропажи',
         func: () => void router.push(session ? '/losses/my' : '/losses'),
+        href: '/losses/my',
       },
       {
         name: 'Ваши находки',
         func: () => void router.push(session ? '/finds/my' : '/finds'),
+        href: '/finds/my',
       },
     ],
     [{ name: 'Выйти', func: () => void signOut() }],
@@ -90,7 +93,7 @@ export default function Layout(props: LayoutProps) {
                     </div>
                   </div>
                   {props.session ? (
-                    <DynamicLayoutProfile session={props.session} userNavigation={userNavigation} />
+                    <LayoutAvatar session={props.session} userNavigation={userNavigation} />
                   ) : (
                     <button
                       onClick={() => void signIn()}

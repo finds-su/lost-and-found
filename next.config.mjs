@@ -28,6 +28,19 @@ const config = {
       },
     },
   }),
+  async headers() {
+    return [
+      {
+        source: '/me',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-store',
+          },
+        ],
+      },
+    ]
+  },
   async redirects() {
     return [
       {

@@ -121,15 +121,15 @@ export const usersRouter = createTRPCRouter({
       if (input.image) {
         // transfer preloaded image from bucket/tmp/user_id/file to bucket/user_id/file
         const key = input.image.split('/tmp/')[1]
-        const format = key?.split('.').at(-1)
-        if (key && format) {
+        if (key) {
+          const newKey = `${ctx.session.user.id}/${key}`
           const copyCommand = new CopyObjectCommand({
             CopySource: `${env.S3_UPLOAD_BUCKET}/tmp/${key}`,
             Bucket: env.S3_UPLOAD_BUCKET,
-            Key: `${ctx.session.user.id}/avatar.${format}`,
+            Key: newKey,
           })
           await s3.send(copyCommand)
-          input.image = `${env.S3_UPLOAD_ENDPOINT_URL}/${env.S3_UPLOAD_BUCKET}/${ctx.session.user.id}/avatar.${format}`
+          input.image = `${env.S3_UPLOAD_ENDPOINT_URL}/${env.S3_UPLOAD_BUCKET}/${newKey}`
         }
       }
       await ctx.prisma.$transaction(async (tx) => {
@@ -167,7 +167,9 @@ export const usersRouter = createTRPCRouter({
           decompress: false,
           responseType: 'arraybuffer',
         })
-        const key = `tmp/${ctx.session.user.id}/${sanitizeKey(input.prompt)}.png`
+        const key = `tmp/${ctx.session.user.id}/${sanitizeKey(
+          Math.floor(Math.random() * 10000000).toString(),
+        )}.png`
         await s3.send(
           new PutObjectCommand({
             Bucket: env.S3_UPLOAD_BUCKET,

@@ -13,7 +13,7 @@ interface MobileLayoutMenuProps {
   session: Session | null
 }
 
-export default function MobileLayoutMenu(props: MobileLayoutMenuProps) {
+export default function MobileLayoutDropdown(props: MobileLayoutMenuProps) {
   const router = useRouter()
   const { session } = props
 
@@ -67,7 +67,7 @@ export default function MobileLayoutMenu(props: MobileLayoutMenuProps) {
               </Link>
             </div>
             <div className='mt-3 space-y-1 px-2'>
-              {props.userNavigation.map((item) => (
+              {props.userNavigation.flat().map((item) => (
                 <Disclosure.Button
                   key={item.name}
                   as='a'

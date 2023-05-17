@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic'
 
-const DynamicMobileLayoutMenu = dynamic(() => import('@/components/layout/MobileLayoutMenu'), {
+const DynamicMobileLayoutMenu = dynamic(() => import('@/components/layout/MobileLayoutDropdown'), {
   ssr: false,
 })
 

@@ -6,7 +6,7 @@ interface AvatarPromptState {
   closeAvatarPromptModal: () => void
   openAvatarPromptModal: () => void
   avatarPrompt: string | undefined
-  setAvatarPrompt: (prompt: string) => void
+  setAvatarPrompt: (prompt: string | undefined) => void
 }
 
 const useAvatarPromptStore = create<AvatarPromptState>()(
