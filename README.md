@@ -9,6 +9,8 @@
 ```shell
 npm run dev
 
+OR
+
 docker compose build && docker compose up
 ```
 

@@ -25,29 +25,28 @@ export interface LayoutProps {
   children: React.ReactNode
 }
 
-export type UserNavigation = { name: string; func?: () => void; href?: string }[]
+export type UserNavigation = { name: string; func?: () => void }[][]
 
 export default function Layout(props: LayoutProps) {
   const router = useRouter()
   const session = props.session
 
   const userNavigation: UserNavigation = [
-    {
-      name: 'Ваш профиль',
-      func: () => void router.push(session ? `/u/${session.user.nickname}/` : '/'),
-      href: '/u/[nickname]',
-    },
-    {
-      name: 'Ваши пропажи',
-      func: () => void router.push(session ? '/losses/my' : '/losses'),
-      href: '/losses/my',
-    },
-    {
-      name: 'Ваши находки',
-      func: () => void router.push(session ? '/finds/my' : '/finds'),
-      href: '/finds/my',
-    },
-    { name: 'Выйти', func: () => void signOut() },
+    [
+      {
+        name: 'Ваш профиль',
+        func: () => void router.push(session ? `/u/${session.user.nickname}/` : '/'),
+      },
+      {
+        name: 'Ваши пропажи',
+        func: () => void router.push(session ? '/losses/my' : '/losses'),
+      },
+      {
+        name: 'Ваши находки',
+        func: () => void router.push(session ? '/finds/my' : '/finds'),
+      },
+    ],
+    [{ name: 'Выйти', func: () => void signOut() }],
   ]
 
   return (
