@@ -129,10 +129,10 @@ export default function Layout(props: LayoutProps) {
             <h1 className='text-lg font-semibold leading-6 text-gray-900'>{props.pageName}</h1>
           </div>
         </header>
-        <div className='mx-4 min-h-[78vh] max-w-7xl py-4 sm:px-6 md:mx-auto lg:px-8'>
-          {props.children}
+        <div className='mx-4 flex min-h-[88vh] max-w-7xl flex-col place-content-between py-4 sm:px-6 md:mx-auto lg:px-8'>
+          <div>{props.children}</div>
+          <DynamicLayoutFooter />
         </div>
-        <DynamicLayoutFooter />
       </div>
     </>
   )

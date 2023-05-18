@@ -2,16 +2,8 @@ import Link from 'next/link'
 
 const social = [
   {
-    name: 'Форум',
-    href: 'https://mirea.ninja',
-  },
-  {
-    name: 'Группа в ВК',
-    href: 'https://vk.com/mirea.ninja',
-  },
-  {
-    name: 'Чат в ТГ',
-    href: 'https://t.me/+4Cfo9i7_N404NjUy',
+    name: 'Саппорт',
+    href: 'https://t.me/mirea_help_bot',
   },
 ]
 
@@ -23,7 +15,7 @@ export default function LayoutFooter() {
           <div className='mb-6 mt-0 w-full max-w-full shrink-0 px-3 lg:mb-0 lg:w-1/2 lg:flex-none'>
             <div className='text-size-sm items-center space-x-1 text-center leading-normal text-slate-500 lg:text-left'>
               © {new Date().getFullYear()}, сделано с{' '}
-              <span className='transform transition duration-[2000ms] hover:text-red-600'>♥</span>{' '}
+              <span className='transform transition duration-[10000ms] hover:text-red-600'>♥</span>{' '}
               командой
               <Link
                 href='https://mirea.ninja'
@@ -32,7 +24,7 @@ export default function LayoutFooter() {
               >
                 Mirea Ninja
               </Link>
-              для РТУ МИРЭА
+              для студентов РТУ МИРЭА
             </div>
           </div>
           <div className='mt-0 w-full max-w-full shrink-0 px-3 lg:w-1/2 lg:flex-none'>
