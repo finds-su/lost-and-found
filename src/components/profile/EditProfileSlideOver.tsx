@@ -18,6 +18,9 @@ import useAvatarPromptStore from '@/lib/hooks/store/avatarPromptStore'
 import AvatarPromptModal from '@/components/profile/AvatarPromptModal'
 import loadingToast from '@/components/toasts/LoadingToast'
 import { type PromiseToastMessages } from '@/lib/types/Toast'
+import Input from '@/components/form/Input'
+import { convertEmptyStringToNull } from '@/lib/convertEmptyStringToNull'
+import TextArea from '@/components/form/TextArea'
 
 const generateAIAvatarToastID = 'generateAIAvatarToastID'
 const generateAIAvatarToastMessages: Pick<PromiseToastMessages, 'success' | 'loading'> = {
@@ -31,11 +34,11 @@ export default function EditProfileSlideOver() {
   const { session } = useSessionStore()
   const [editedUser, setEditedUser] = useState<EditedUser | undefined>(session?.user)
   const mutateUser = api.users.editUser.useMutation({
-    onSuccess: async () => {
+    onSuccess: async (data, variables) => {
       if (editedUser) {
         successToast('Профиль изменен')
         editProfile.close()
-        await router.push(`/u/${editedUser.nickname}`)
+        await router.push(`/u/${variables.nickname}`)
       }
     },
     onError: (error) => errorToast(error.message),
@@ -55,10 +58,10 @@ export default function EditProfileSlideOver() {
     },
   )
   useEffect(() => {
-    if (generateAvatar.isLoading && avatarPrompt !== undefined) {
+    if ((generateAvatar.isLoading || generateAvatar.isSuccess) && avatarPrompt !== undefined) {
       loadingToast(generateAIAvatarToastMessages.loading, { id: generateAIAvatarToastID })
     }
-  }, [generateAvatar.isLoading, avatarPrompt])
+  }, [generateAvatar.isLoading, generateAvatar.isSuccess, avatarPrompt])
 
   const { FileInput, openFileDialog, uploadToS3 } = usePresignedUpload()
   async function handlePhotoChange(file: File) {
@@ -73,57 +76,60 @@ export default function EditProfileSlideOver() {
     value?: string | null
     setInputValue?: (e: FormEvent<HTMLInputElement>) => void
     setTextAreaValue?: (e: FormEvent<HTMLTextAreaElement>) => void
-    type: 'input' | 'textarea'
   }[] = [
     {
       name: 'Имя',
       value: editedUser?.name,
       setInputValue: (e: FormEvent<HTMLInputElement>) => {
         if (editedUser) {
-          setEditedUser({ ...editedUser, name: e.currentTarget.value })
+          setEditedUser({ ...editedUser, name: convertEmptyStringToNull(e.currentTarget.value) })
         }
       },
-      type: 'input',
     },
     {
       name: 'Никнейм',
       value: editedUser?.nickname,
       setInputValue: (e: FormEvent<HTMLInputElement>) => {
         if (editedUser) {
-          setEditedUser({ ...editedUser, nickname: e.currentTarget.value })
+          setEditedUser({
+            ...editedUser,
+            nickname: e.currentTarget.value,
+          })
         }
       },
-      type: 'input',
     },
     {
       name: 'Почта',
       value: editedUser?.email,
       setInputValue: (e: FormEvent<HTMLInputElement>) => {
         if (editedUser) {
-          setEditedUser({ ...editedUser, email: e.currentTarget.value })
+          setEditedUser({ ...editedUser, email: convertEmptyStringToNull(e.currentTarget.value) })
         }
       },
-      type: 'input',
     },
     {
       name: 'Телеграм',
       value: editedUser?.telegramLink,
       setInputValue: (e: FormEvent<HTMLInputElement>) => {
         if (editedUser) {
-          setEditedUser({ ...editedUser, telegramLink: e.currentTarget.value })
+          setEditedUser({
+            ...editedUser,
+            telegramLink: convertEmptyStringToNull(e.currentTarget.value),
+          })
         }
       },
-      type: 'input',
     },
     {
       name: 'Обо мне',
       value: editedUser?.userInfo,
       setTextAreaValue: (e: FormEvent<HTMLTextAreaElement>) => {
         if (editedUser) {
-          setEditedUser({ ...editedUser, userInfo: e.currentTarget.value })
+          setEditedUser({
+            ...editedUser,
+            userInfo: convertEmptyStringToNull(e.currentTarget.value),
+          })
         }
       },
-      type: 'textarea',
     },
   ]
   const cancelButtonRef = useRef(null)
@@ -283,24 +289,21 @@ export default function EditProfileSlideOver() {
                                 </label>
                               </div>
                               <div className='sm:col-span-2'>
-                                {attribute.type === 'input' && (
-                                  <input
+                                {attribute.setInputValue && (
+                                  <Input
+                                    hideLabel
                                     type='text'
-                                    name={attribute.name}
-                                    id={attribute.name}
-                                    defaultValue={attribute.value ?? ''}
+                                    value={attribute.value ?? ''}
                                     onChange={attribute.setInputValue}
-                                    className='block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
+                                    label={attribute.name}
                                   />
                                 )}
-                                {attribute.type === 'textarea' && (
-                                  <textarea
-                                    name={attribute.name}
-                                    id={attribute.name}
+                                {attribute.setTextAreaValue && (
+                                  <TextArea
+                                    label={attribute.name}
                                     value={attribute.value ?? ''}
                                     onChange={attribute.setTextAreaValue}
                                     rows={3}
-                                    className='block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
                                   />
                                 )}
                               </div>

@@ -2,6 +2,7 @@ import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import useAvatarPromptStore from '@/lib/hooks/store/avatarPromptStore'
 import Image from 'next/image'
+import Input from '@/components/form/Input'
 
 export default function AvatarPromptModal() {
   const { isAvatarPromptModalOpen, closeAvatarPromptModal, avatarPrompt, setAvatarPrompt } =
@@ -61,18 +62,15 @@ export default function AvatarPromptModal() {
                         Опишите аватар, который бы Вы хотели видеть у себя в профиле.
                       </p>
                     </div>
-                    <div className='m-3'>
-                      <label htmlFor='prompt' className='sr-only'>
-                        Prompt
-                      </label>
-                      <input
+                    <div className='my-3'>
+                      <Input
+                        type='text'
+                        isOptional
+                        hideLabel
+                        label='prompt'
                         value={prompt ?? ''}
-                        type='prompt'
-                        name='prompt'
-                        id='prompt'
                         onChange={(e) => setPrompt(e.currentTarget.value)}
-                        className='block w-full rounded-md border-gray-300 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
-                        placeholder='Кот в сапогах'
+                        placeholder='кот в сапогах'
                       />
                     </div>
                   </div>

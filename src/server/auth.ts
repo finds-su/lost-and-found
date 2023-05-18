@@ -22,9 +22,7 @@ declare module 'next-auth' {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface User extends PrismaUser {
-    image: string | null
-  }
+  interface User extends PrismaUser {}
 }
 
 /**
