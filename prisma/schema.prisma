@@ -92,8 +92,8 @@ enum PostItemReason {
 
 enum Campus {
   V78
-  V86
   S20
+  V86
   MP1
   SG22
   SHP23

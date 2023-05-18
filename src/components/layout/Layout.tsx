@@ -7,10 +7,10 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Head from 'next/head'
 import { type Session } from 'next-auth'
-import LayoutFooter from '@/components/layout/LayoutFooter'
 import classNames from 'classnames/dedupe'
 import DynamicMobileLayoutMenu from '@/components/layout/DynamicMobileLayoutMenu'
 import LayoutAvatar from '@/components/layout/LayoutAvatar'
+import DynamicLayoutFooter from '@/components/layout/footer/DynamicLayoutFooter'
 
 export type Navigation = { name: string; href: string }[]
 export const navigation: Navigation = [
@@ -129,10 +129,10 @@ export default function Layout(props: LayoutProps) {
             <h1 className='text-lg font-semibold leading-6 text-gray-900'>{props.pageName}</h1>
           </div>
         </header>
-        <div className='mx-4 min-h-[78vh] max-w-7xl py-6 sm:px-6 md:mx-auto lg:px-8'>
+        <div className='mx-4 min-h-[78vh] max-w-7xl py-4 sm:px-6 md:mx-auto lg:px-8'>
           {props.children}
         </div>
-        <LayoutFooter />
+        <DynamicLayoutFooter />
       </div>
     </>
   )

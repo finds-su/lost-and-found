@@ -3,7 +3,7 @@ import { getServerAuthSession } from '@/server/auth'
 import { type GetServerSideProps } from 'next'
 import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
 import Image from 'next/image'
-import DynamicInfiniteScrollGrid from '@/components/itemsGrid/DynamicInfiniteScrollGrid'
+import DynamicInfiniteScrollGridWithFilter from '@/components/itemsGrid/DynamicInfiniteScrollGridWithFilter'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)
@@ -12,17 +12,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const Losses: NextPageWithLayout = () => {
   return (
-    <div className='px-4 py-4 sm:px-0'>
-      <DynamicInfiniteScrollGrid
-        reason='LOST'
-        endMessage={
-          <div>
-            <Image src='/assets/illustrations/gift.png' alt='' width={250} height={250} />
-            Пропаж больше нет
-          </div>
-        }
-      />
-    </div>
+    <DynamicInfiniteScrollGridWithFilter
+      reason='LOST'
+      endMessage={
+        <div>
+          <Image src='/assets/illustrations/gift.png' alt='' width={200} height={200} />
+          Пропаж больше нет
+        </div>
+      }
+    />
   )
 }
 
