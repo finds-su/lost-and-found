@@ -3,14 +3,20 @@ import { Dialog, Disclosure, Transition } from '@headlessui/react'
 import { ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { filters } from '@/components/itemsGrid/GridFilter'
 import classNames from 'classnames/dedupe'
+import { type PostItemReason } from '@prisma/client'
+import useScrollGridStore from '@/lib/hooks/store/scrollGridsStore'
 
 interface MobileFilterDialogProps {
   mobileFiltersOpen: boolean
   setMobileFiltersOpen: Dispatch<SetStateAction<boolean>>
+  reason: PostItemReason
 }
 
 export default function MobileFilterDialog(props: MobileFilterDialogProps) {
   const { mobileFiltersOpen, setMobileFiltersOpen } = props
+  const scrollGridStore = useScrollGridStore()
+  const { checkedFilters, addFilter, deleteFilter } = scrollGridStore[props.reason]
+
   return (
     <Transition.Root show={mobileFiltersOpen} as={Fragment}>
       <Dialog as='div' className='relative z-40 sm:hidden' onClose={setMobileFiltersOpen}>
@@ -38,7 +44,7 @@ export default function MobileFilterDialog(props: MobileFilterDialogProps) {
           >
             <Dialog.Panel className='relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-6 shadow-xl'>
               <div className='flex items-center justify-between px-4'>
-                <h2 className='text-lg font-medium text-gray-900'>Filters</h2>
+                <h2 className='text-lg font-medium text-gray-900'>Фильтры</h2>
                 <button
                   type='button'
                   className='-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500'
@@ -82,7 +88,14 @@ export default function MobileFilterDialog(props: MobileFilterDialogProps) {
                                   name={`${section.id}[]`}
                                   defaultValue={option.value}
                                   type='checkbox'
-                                  defaultChecked={option.checked}
+                                  defaultChecked={checkedFilters.includes(option.value)}
+                                  onChange={(e) => {
+                                    if (e.currentTarget.checked) {
+                                      addFilter(e.currentTarget.value)
+                                    } else {
+                                      deleteFilter(e.currentTarget.value)
+                                    }
+                                  }}
                                   className='h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500'
                                 />
                                 <label

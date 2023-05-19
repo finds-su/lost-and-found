@@ -37,7 +37,7 @@ export default function InfiniteScrollGridWithFilter(props: {
 
   return (
     <div>
-      <GridFilter />
+      <GridFilter reason={props.reason} />
       <InfiniteScroll
         dataLength={items.length}
         next={fetchMoreData}
