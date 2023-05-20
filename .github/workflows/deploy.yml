@@ -12,7 +12,7 @@ env:
   CI_ENV_PROD: ${{ secrets.CI_ENV_PROD }}
 
 jobs:
-  build-frontend:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
