@@ -47,40 +47,38 @@ services:
       retries: 5
 
   pgadmin:
-    container_name: pgadmin
     image: dpage/pgadmin4
-    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - 5050:80
     networks:
       - application
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
-    ports:
-      - '5050:80'
+  #    labels:
+  #      - traefik.enable=true
+  #      - traefik.constraint-label-stack=lost-and-found
+  #      - traefik.docker.network=application
+  #      - traefik.http.services.lost_and_found.loadbalancer.server.port=80
+  #      #http
+  #      - traefik.http.routers.lost_and_found_pgadmin_http.entrypoints=lost_and_found_web
+  #      - traefik.http.routers.lost_and_found_pgadmin_http.rule=Host(`${DOMAIN}`) && Path(`/pgadmin`)
+  #      - traefik.http.routers.lost_and_found_pgadmin_http.service=lost_and_found
+  #      - traefik.http.routers.lost_and_found_pgadmin_http.middlewares=lost_and_found_pgadmin_redirect_https
+  #      # https
+  #      - traefik.http.middlewares.lost_and_found_pgadmin_redirect_https.redirectscheme.scheme=https
+  #      - traefik.http.middlewares.lost_and_found_pgadmin_redirect_https.redirectscheme.permanent=true
+  #      - traefik.http.routers.lost_and_found_pgadmin_https.entrypoints=lost_and_found_websecure
+  #      - traefik.http.routers.lost_and_found_pgadmin_https.rule=Host(`${DOMAIN}`) && Path(`/pgadmin`)
+  #      - traefik.http.routers.lost_and_found_pgadmin_https.service=lost_and_found
+  #      - traefik.http.routers.lost_and_found_pgadmin_https.tls=true
+  #      - traefik.http.routers.lost_and_found_pgadmin_https.tls.certresolver=${CERT_RESOLVER}
 
   app:
-    build:
-      context: .
-      args:
-        DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
-        ANALYZE: ${ANALYZE}
-        DISABLE_PWA: ${DISABLE_PWA}
-        S3_UPLOAD_KEY: ${S3_UPLOAD_KEY}
-        S3_UPLOAD_SECRET: ${S3_UPLOAD_SECRET}
-        S3_UPLOAD_BUCKET: ${S3_UPLOAD_BUCKET}
-        S3_UPLOAD_HOSTNAME: ${S3_UPLOAD_HOSTNAME}
-        S3_UPLOAD_ENDPOINT_URL: ${S3_UPLOAD_ENDPOINT_URL}
-        S3_UPLOAD_REGION: ${S3_UPLOAD_REGION}
-        OPENAI_API_KEY: ${OPENAI_API_KEY}
-        NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS: ${NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS}
-        NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
-        NEXTAUTH_URL: ${NEXTAUTH_URL}
-        MIREA_CLIENT_ID: ${MIREA_CLIENT_ID}
-        MIREA_CLIENT_SECRET: ${MIREA_CLIENT_SECRET}
-        GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
-        GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
-        GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
-        GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
+    image: cr.yandex/crpi1cf1kcv47hpc0aq7/lost-and-found:latest
     depends_on:
       db:
         condition: service_healthy
