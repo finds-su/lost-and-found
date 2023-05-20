@@ -45,17 +45,17 @@ export default function ProfileBody(props: ProfileProps) {
         <title>{props.user.name}</title>
       </Head>
       <Window>
-        <div className='flex flex-row justify-between'>
+        <div className='grid grid-cols-1 place-content-between justify-between md:grid-cols-2'>
           <div>
             <h3 className='text-lg font-medium leading-6 text-gray-900'>Информация приложения</h3>
             <p className='mt-1 max-w-2xl text-sm text-gray-500'>Детализация личной информации.</p>
           </div>
           {props.isOwner && (
-            <span className='ml-4 flex-shrink-0'>
+            <span className='text-right'>
               <button
                 type='button'
                 onClick={editProfile.open}
-                className='rounded-md bg-white font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+                className='mb:self-end rounded-md bg-white font-medium text-blue-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
               >
                 Редактировать
               </button>

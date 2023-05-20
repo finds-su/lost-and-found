@@ -14,8 +14,9 @@ interface MobileFilterDialogProps {
 
 export default function MobileFilterDialog(props: MobileFilterDialogProps) {
   const { mobileFiltersOpen, setMobileFiltersOpen } = props
-  const scrollGridStore = useScrollGridStore()
-  const { checkedFilters, addFilter, deleteFilter } = scrollGridStore[props.reason]
+  const { checkedFilters, addFilter, deleteFilter } = useScrollGridStore(
+    (state) => state[props.reason],
+  )
 
   return (
     <Transition.Root show={mobileFiltersOpen} as={Fragment}>

@@ -32,9 +32,8 @@ interface GridFilterProps {
 }
 export default function GridFilter(props: GridFilterProps) {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
-  const scrollGridStore = useScrollGridStore()
   const { enabledSortOption, setSortOption, checkedFilters, addFilter, deleteFilter } =
-    scrollGridStore[props.reason]
+    useScrollGridStore((state) => state[props.reason])
 
   return (
     <>
@@ -123,7 +122,7 @@ export default function GridFilter(props: GridFilterProps) {
                           {
                             section.options
                               .map((item) => item.value)
-                              .filter((value) => checkedFilters.includes(value)).length
+                              .filter((value) => checkedFilters.includes(value)).length // intersection
                           }
                         </span>
                       ) : null}
