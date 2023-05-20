@@ -12,7 +12,7 @@ COPY prisma ./prisma/
 
 # Install dependencies based on the preferred package manager
 
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml\* ./
+COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 
 RUN \
  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
