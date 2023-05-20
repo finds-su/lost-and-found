@@ -24,6 +24,11 @@ jobs:
       - name: Create local env
         run: |
           echo ${{ env.CI_ENV_PROD }} | base64 --decode > .env
+      - name: Export variables to environment
+        run: |
+          set -o allexport
+          source .env
+          set +o allexport
       - name: Build and Push Image
         run: |
           docker build \
