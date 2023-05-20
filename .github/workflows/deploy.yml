@@ -23,35 +23,30 @@ jobs:
           yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
       - name: Create local env
         run: |
-          echo ${{ env.CI_ENV_PROD }} | base64 --decode > .env
-      - name: Export variables to environment
-        run: |
-          set -o allexport
-          source .env
-          set +o allexport
+          echo ${{ env.CI_ENV_PROD }} | base64 --decode >> $GITHUB_ENV
       - name: Build and Push Image
         run: |
           docker build \
           --pull \
-          --build-arg DATABASE_URL \
-          --build-arg ANALYZE \
-          --build-arg DISABLE_PWA \
-          --build-arg S3_UPLOAD_KEY \
-          --build-arg S3_UPLOAD_SECRET \
-          --build-arg S3_UPLOAD_BUCKET \
-          --build-arg S3_UPLOAD_HOSTNAME= \
-          --build-arg S3_UPLOAD_ENDPOINT_URL \
-          --build-arg S3_UPLOAD_REGION \
-          --build-arg OPENAI_API_KEY \
-          --build-arg NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS \
-          --build-arg NEXTAUTH_SECRET \
-          --build-arg NEXTAUTH_URL \
-          --build-arg MIREA_CLIENT_ID \
-          --build-arg MIREA_CLIENT_SECRET \
-          --build-arg GOOGLE_CLIENT_ID \
-          --build-arg GOOGLE_CLIENT_SECRET \
-          --build-arg GITHUB_CLIENT_ID \
-          --build-arg GITHUB_CLIENT_SECRET \
+          --build-arg DATABASE_URL=${{ env.DATABASE_URL }} \
+          --build-arg ANALYZE=${{ env.ANALYZE }} \
+          --build-arg DISABLE_PWA=${{ env.DISABLE_PWA }} \
+          --build-arg S3_UPLOAD_KEY=${{ env.S3_UPLOAD_KEY }} \
+          --build-arg S3_UPLOAD_SECRET=${{ env.S3_UPLOAD_SECRET }} \
+          --build-arg S3_UPLOAD_BUCKET=${{ env.S3_UPLOAD_BUCKET }} \
+          --build-arg S3_UPLOAD_HOSTNAME=${{ env.S3_UPLOAD_HOSTNAME }} \
+          --build-arg S3_UPLOAD_ENDPOINT_URL=${{ env.S3_UPLOAD_ENDPOINT_URL }} \
+          --build-arg S3_UPLOAD_REGION=${{ env.S3_UPLOAD_REGION }} \
+          --build-arg OPENAI_API_KEY=${{ env.OPENAI_API_KEY }} \
+          --build-arg NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS=${{ env.NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS }} \
+          --build-arg NEXTAUTH_SECRET=${{ env.NEXTAUTH_SECRET }} \
+          --build-arg NEXTAUTH_URL=${{ env.NEXTAUTH_URL }} \
+          --build-arg MIREA_CLIENT_ID=${{ env.MIREA_CLIENT_ID }} \
+          --build-arg MIREA_CLIENT_SECRET=${{ env.MIREA_CLIENT_SECRET }} \
+          --build-arg GOOGLE_CLIENT_ID=${{ env.GOOGLE_CLIENT_ID }} \
+          --build-arg GOOGLE_CLIENT_SECRET=${{ env.GOOGLE_CLIENT_SECRET }} \
+          --build-arg GITHUB_CLIENT_ID=${{ env.GITHUB_CLIENT_ID }} \
+          --build-arg GITHUB_CLIENT_SECRET=${{ env.GITHUB_CLIENT_SECRET }} \
           --cache-from cr.yandex/${{ env.CR_REGISTRY }}/${{ env.CR_IMAGE_FRONTEND }}:latest \
           --label "org.image.title=${{ github.repository }}" \
           --label "org.image.url=${{ github.repositoryUrl }}" \
