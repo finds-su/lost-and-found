@@ -22,38 +22,38 @@ const useScrollGridStore = create<ScrollGridsState>()(
     immer((set) => ({
       LOST: {
         enabledSortOption: SortOption.newFirst,
-        checkedFilters: [PrismaCampus.V78],
+        checkedFilters: Object.values(PrismaCampus),
         setSortOption: (option) =>
-          set((store) => {
-            ;(store as ScrollGridsState).LOST.enabledSortOption = option
+          set((state) => {
+            state.LOST.enabledSortOption = option
           }),
         addFilter: (filter) =>
-          set((store) => {
-            ;(store as ScrollGridsState).LOST.checkedFilters.push(filter)
+          set((state) => {
+            state.LOST.checkedFilters.push(filter)
           }),
         deleteFilter: (filterToDelete) =>
-          set((store) => {
-            ;(store as ScrollGridsState).LOST.checkedFilters = (
-              store as ScrollGridsState
-            ).LOST.checkedFilters.filter((value) => value !== filterToDelete)
+          set((state) => {
+            state.LOST.checkedFilters = state.LOST.checkedFilters.filter(
+              (value) => value !== filterToDelete,
+            )
           }),
       },
       FOUND: {
         enabledSortOption: SortOption.newFirst,
-        checkedFilters: [PrismaCampus.V78],
+        checkedFilters: Object.values(PrismaCampus),
         setSortOption: (option) =>
-          set((store) => {
-            ;(store as ScrollGridsState).FOUND.enabledSortOption = option
+          set((state) => {
+            state.FOUND.enabledSortOption = option
           }),
         addFilter: (filter) =>
-          set((store) => {
-            ;(store as ScrollGridsState).FOUND.checkedFilters.push(filter)
+          set((state) => {
+            state.FOUND.checkedFilters.push(filter)
           }),
         deleteFilter: (filterToDelete) =>
-          set((store) => {
-            ;(store as ScrollGridsState).FOUND.checkedFilters = (
-              store as ScrollGridsState
-            ).FOUND.checkedFilters.filter((value) => value !== filterToDelete)
+          set((state) => {
+            state.LOST.checkedFilters = state.LOST.checkedFilters.filter(
+              (value) => value !== filterToDelete,
+            )
           }),
       },
     })),
