@@ -23,6 +23,7 @@ jobs:
       - name: Build and Push Image
         run: |
           docker build \
+          --file Dockerfile.prod \
           --pull \
           --cache-from cr.yandex/${{ env.CR_REGISTRY }}/${{ env.CR_IMAGE_FRONTEND }}:latest \
           --label "org.image.title=${{ github.repository }}" \

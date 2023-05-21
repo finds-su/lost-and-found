@@ -196,7 +196,7 @@ export default function EditProfileSlideOver() {
                                 <div className='inline-flex overflow-hidden rounded-lg border-4 border-white'>
                                   <Avatar
                                     size='xl'
-                                    className='h-32 w-32 flex-shrink-0 sm:h-36 sm:w-36'
+                                    className='h-32 w-32 flex-shrink-0 bg-white sm:h-36 sm:w-36'
                                     placeholderInitials={session?.user.nickname
                                       .slice(0, 2)
                                       .toUpperCase()}

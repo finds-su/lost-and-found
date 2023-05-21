@@ -1,35 +1,6 @@
 version: '3.9'
 
 services:
-  traefik:
-    image: traefik:latest
-    command:
-      - --accesslog=true
-      - --log.level=INFO
-      - --providers.docker=true
-      - --providers.docker.exposedByDefault=false
-      - --providers.docker.constraints=Label(`traefik.constraint-label-stack`,`lost-and-found`)
-      - --entrypoints.lost_and_found_web.address=:80
-      - --entrypoints.lost_and_found_websecure.address=:443
-      # LetsEncrypt Staging Server
-      # - --certificatesResolvers.letsencrypt.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory
-      - --certificatesresolvers.letsencrypt.acme.httpchallenge=true
-      - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=lost_and_found_web
-      - --certificatesresolvers.letsencrypt.acme.email=${EMAIL}
-      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
-    restart: unless-stopped
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./data/letsencrypt:/letsencrypt
-    depends_on:
-      - app
-    networks:
-      - gateway
-      - application
-
   db:
     image: postgres:15
     volumes:
@@ -58,30 +29,35 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
-  #    labels:
-  #      - traefik.enable=true
-  #      - traefik.constraint-label-stack=lost-and-found
-  #      - traefik.docker.network=application
-  #      - traefik.http.services.lost_and_found.loadbalancer.server.port=80
-  #      #http
-  #      - traefik.http.routers.lost_and_found_pgadmin_http.entrypoints=lost_and_found_web
-  #      - traefik.http.routers.lost_and_found_pgadmin_http.rule=Host(`${DOMAIN}`) && Path(`/pgadmin`)
-  #      - traefik.http.routers.lost_and_found_pgadmin_http.service=lost_and_found
-  #      - traefik.http.routers.lost_and_found_pgadmin_http.middlewares=lost_and_found_pgadmin_redirect_https
-  #      # https
-  #      - traefik.http.middlewares.lost_and_found_pgadmin_redirect_https.redirectscheme.scheme=https
-  #      - traefik.http.middlewares.lost_and_found_pgadmin_redirect_https.redirectscheme.permanent=true
-  #      - traefik.http.routers.lost_and_found_pgadmin_https.entrypoints=lost_and_found_websecure
-  #      - traefik.http.routers.lost_and_found_pgadmin_https.rule=Host(`${DOMAIN}`) && Path(`/pgadmin`)
-  #      - traefik.http.routers.lost_and_found_pgadmin_https.service=lost_and_found
-  #      - traefik.http.routers.lost_and_found_pgadmin_https.tls=true
-  #      - traefik.http.routers.lost_and_found_pgadmin_https.tls.certresolver=${CERT_RESOLVER}
 
   app:
-    image: cr.yandex/crpi1cf1kcv47hpc0aq7/lost-and-found:latest
+    build:
+      context: .
+      args:
+        DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+        ANALYZE: ${ANALYZE}
+        DISABLE_PWA: ${DISABLE_PWA}
+        S3_UPLOAD_KEY: ${S3_UPLOAD_KEY}
+        S3_UPLOAD_SECRET: ${S3_UPLOAD_SECRET}
+        S3_UPLOAD_BUCKET: ${S3_UPLOAD_BUCKET}
+        S3_UPLOAD_HOSTNAME: ${S3_UPLOAD_HOSTNAME}
+        S3_UPLOAD_ENDPOINT_URL: ${S3_UPLOAD_ENDPOINT_URL}
+        S3_UPLOAD_REGION: ${S3_UPLOAD_REGION}
+        OPENAI_API_KEY: ${OPENAI_API_KEY}
+        NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS: ${NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS}
+        NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+        NEXTAUTH_URL: ${NEXTAUTH_URL}
+        MIREA_CLIENT_ID: ${MIREA_CLIENT_ID}
+        MIREA_CLIENT_SECRET: ${MIREA_CLIENT_SECRET}
+        GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+        GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+        GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
+        GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
     depends_on:
       db:
         condition: service_healthy
+    ports:
+      - 3000:3000
     networks:
       - application
     environment:
@@ -104,27 +80,8 @@ services:
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
       GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
       GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
-    labels:
-      - traefik.enable=true
-      - traefik.constraint-label-stack=lost-and-found
-      - traefik.docker.network=application
-      - traefik.http.services.lost_and_found.loadbalancer.server.port=3000
-      #http
-      - traefik.http.routers.lost_and_found_http.entrypoints=lost_and_found_web
-      - traefik.http.routers.lost_and_found_http.rule=Host(`${DOMAIN}`)
-      - traefik.http.routers.lost_and_found_http.service=lost_and_found
-      - traefik.http.routers.lost_and_found_http.middlewares=lost_and_found_redirect_https
-      # https
-      - traefik.http.middlewares.lost_and_found_redirect_https.redirectscheme.scheme=https
-      - traefik.http.middlewares.lost_and_found_redirect_https.redirectscheme.permanent=true
-      - traefik.http.routers.lost_and_found_https.entrypoints=lost_and_found_websecure
-      - traefik.http.routers.lost_and_found_https.rule=Host(`${DOMAIN}`)
-      - traefik.http.routers.lost_and_found_https.service=lost_and_found
-      - traefik.http.routers.lost_and_found_https.tls=true
-      - traefik.http.routers.lost_and_found_https.tls.certresolver=${CERT_RESOLVER}
 
 networks:
-  gateway:
   application:
 
 volumes:
