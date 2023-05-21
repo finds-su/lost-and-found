@@ -35,10 +35,12 @@ ENV S3_UPLOAD_BUCKET=mn-lost-and-found
 ENV S3_UPLOAD_HOSTNAME=storage.yandexcloud.net
 ENV S3_UPLOAD_ENDPOINT_URL=https://storage.yandexcloud.net
 ENV S3_UPLOAD_REGION=ru-central
-
 ENV NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS=.png,.jpg,.jpeg,.gif,.webp
 
 ENV OPENAI_API_KEY=sk-secret
+
+ENV UPSTASH_REDIS_REST_URL=http://localhost:6379
+ENV UPSTASH_REDIS_REST_TOKEN=default
 
 ENV NEXTAUTH_SECRET=secret
 ENV NEXTAUTH_URL=http://localhost:3000

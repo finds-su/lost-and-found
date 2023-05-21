@@ -16,6 +16,9 @@
  */
 import { type CreateNextContextOptions } from '@trpc/server/adapters/next'
 import { type Session } from 'next-auth'
+import { Ratelimit } from '@upstash/ratelimit'
+import { Redis } from '@upstash/redis'
+import { env } from '@/env.mjs'
 
 import { getServerAuthSession } from '@/server/auth'
 import { prisma } from '@/server/db'
@@ -121,6 +124,32 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
   })
 })
 
+/** Reusable middleware that check user API usage limit is not exhausted before running the procedure. */
+const enforceUserHasAIAccess = t.middleware(async ({ ctx, next }) => {
+  if (ctx.session && ctx.session.user) {
+    const ratelimit = new Ratelimit({
+      redis: Redis.fromEnv(),
+      limiter: Ratelimit.slidingWindow(10, '1 d'),
+      analytics: env.NODE_ENV === 'development',
+      prefix: 'ai',
+    })
+    const { success } = await ratelimit.limit(ctx.session.user.id)
+    if (!success) {
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: 'Лимит использования ИИ исчерпан. Попробуйте позже',
+      })
+    }
+    return next({
+      ctx: {
+        // infers the `session` as non-nullable
+        session: { ...ctx.session, user: ctx.session.user },
+      },
+    })
+  }
+  throw new TRPCError({ code: 'UNAUTHORIZED' })
+})
+
 /**
  * Protected (authenticated) procedure
  *
@@ -130,3 +159,8 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
  * @see https://trpc.io/docs/procedures
  */
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed)
+
+/**
+ * Protected (authenticated) rate limit procedure for AI usage
+ */
+export const protectedAIProcedure = protectedProcedure.use(enforceUserHasAIAccess)

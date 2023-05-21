@@ -22,6 +22,8 @@ export const env = createEnv({
     S3_UPLOAD_ENDPOINT_URL: z.string().min(1),
     S3_UPLOAD_REGION: z.string().min(1),
     OPENAI_API_KEY: z.string().startsWith('sk-'),
+    UPSTASH_REDIS_REST_URL: z.string().url(),
+    UPSTASH_REDIS_REST_TOKEN: z.string().min(1),
     NEXTAUTH_SECRET: z.string().min(1),
     NEXTAUTH_URL: z.string().url(),
     MIREA_CLIENT_ID: z.string().min(1),
@@ -64,6 +66,9 @@ export const env = createEnv({
     NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS: process.env.NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS,
 
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+
+    UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
+    UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
 
     MIREA_CLIENT_ID: process.env.MIREA_CLIENT_ID,
     MIREA_CLIENT_SECRET: process.env.MIREA_CLIENT_SECRET,

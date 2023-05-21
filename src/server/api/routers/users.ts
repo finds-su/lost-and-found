@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
+import { createTRPCRouter, protectedProcedure, protectedAIProcedure } from '@/server/api/trpc'
 import { TRPCError } from '@trpc/server'
 import { minNicknameLength, telegramUsernameRegex } from '@/constants.mjs'
 import { generateAvatar } from '@/server/openai'
@@ -165,7 +165,7 @@ export const usersRouter = createTRPCRouter({
       })
     }),
 
-  generateAIAvatar: protectedProcedure
+  generateAIAvatar: protectedAIProcedure
     .input(
       z.object({
         prompt: z
