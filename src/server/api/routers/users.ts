@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { createTRPCRouter, protectedProcedure, protectedAIProcedure } from '@/server/api/trpc'
+import { createTRPCRouter, protectedProcedure, AIrateLimiter } from '@/server/api/trpc'
 import { TRPCError } from '@trpc/server'
 import { minNicknameLength, telegramUsernameRegex } from '@/constants.mjs'
 import { generateAvatar } from '@/server/openai'
@@ -165,7 +165,7 @@ export const usersRouter = createTRPCRouter({
       })
     }),
 
-  generateAIAvatar: protectedAIProcedure
+  generateAIAvatar: protectedProcedure
     .input(
       z.object({
         prompt: z
@@ -183,6 +183,7 @@ export const usersRouter = createTRPCRouter({
       if (input.prompt === undefined) {
         return null
       }
+      await AIrateLimiter(ctx.session.user.id)
       const url = await generateAvatar(input.prompt)
       if (url) {
         const response = await axios.get(url, {
