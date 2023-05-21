@@ -19,7 +19,6 @@ import { type Session } from 'next-auth'
 import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
 import { env } from '@/env.mjs'
-import { User } from '@prisma/client'
 
 import { getServerAuthSession } from '@/server/auth'
 import { prisma } from '@/server/db'
@@ -72,6 +71,7 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
 import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
 import { ZodError } from 'zod'
+import { aIRateLimitPerDay } from '@/constants.mjs'
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
@@ -129,7 +129,7 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
 export async function AIrateLimiter(userId: string) {
   const ratelimit = new Ratelimit({
     redis: Redis.fromEnv(),
-    limiter: Ratelimit.slidingWindow(3, '1 d'),
+    limiter: Ratelimit.slidingWindow(aIRateLimitPerDay, '1 d'),
     analytics: env.NODE_ENV === 'development',
     prefix: 'ai',
   })

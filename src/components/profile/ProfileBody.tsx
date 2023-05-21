@@ -74,7 +74,7 @@ export default function ProfileBody(props: ProfileProps) {
             ))}
           </dl>
         </div>
-        <DynamicEditProfileSlideOver />
+        {props.isOwner && <DynamicEditProfileSlideOver />}
       </Window>
     </>
   )
