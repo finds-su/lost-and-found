@@ -1,9 +1,13 @@
 import Link from 'next/link'
 
-const social = [
+export const social = [
   {
     name: 'Саппорт',
     href: 'https://t.me/mirea_help_bot',
+  },
+  {
+    name: 'Политика конфиденциальности',
+    href: '/docs/privacy-policy',
   },
 ]
 
