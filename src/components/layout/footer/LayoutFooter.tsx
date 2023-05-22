@@ -1,8 +1,6 @@
-import Link from 'next/link'
-
 export const footerContent = [
   {
-    name: 'Тех. поддержка',
+    name: 'Служба поддержки',
     href: 'https://t.me/mirea_help_bot',
   },
   {
@@ -20,21 +18,21 @@ export default function LayoutFooter() {
     <footer className='pt-4'>
       <div className='mx-auto w-full px-6'>
         <div className='-mx-3 flex flex-wrap items-center lg:justify-between'>
-          <div className='mb-6 mt-0 w-full max-w-full shrink-0 px-3 lg:mb-0 lg:w-1/3 lg:flex-none'>
+          <div className='mb-6 mt-0 w-full max-w-full shrink-0 px-3 lg:mb-0 lg:w-1/4 lg:flex-none'>
             <div className='text-size-sm items-center space-x-1 text-center leading-normal text-slate-500 lg:text-left'>
-              © {new Date().getFullYear()},{/*сделано с{' '}*/}
+              © {new Date().getFullYear()}, {/*сделано с{' '}*/}
               {/*<span className='transform transition duration-[10000ms] hover:text-red-600'>♥</span>{' '}*/}
               {/*командой*/}
-              <Link
-                href='https://mirea.ninja'
-                className='p-1 font-semibold text-slate-700 hover:text-slate-900'
-                target='_blank'
-              >
-                Mirea Ninja
-              </Link>
+              {/*<Link*/}
+              {/*  href='https://mirea.ninja'*/}
+              {/*  className='p-1 font-semibold text-slate-700 hover:text-slate-900'*/}
+              {/*  target='_blank'*/}
+              {/*>*/}
+              Mirea Ninja
+              {/*</Link>*/}
             </div>
           </div>
-          <div className='mt-0 w-full max-w-full shrink-0 px-3 lg:w-2/3 lg:flex-none'>
+          <div className='mt-0 w-full max-w-full shrink-0 px-3 lg:w-3/4 lg:flex-none'>
             <ul className='mb-0 flex list-none flex-wrap justify-center pl-0 lg:justify-end'>
               {footerContent.map((item, index) => (
                 <li className='nav-item' key={index}>

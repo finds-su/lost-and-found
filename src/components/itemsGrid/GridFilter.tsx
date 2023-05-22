@@ -19,8 +19,8 @@ export const filters: {
   options: { value: string; label: string }[]
 }[] = [
   {
-    id: 'institute',
-    name: 'Институт',
+    id: 'campus',
+    name: 'Кампус',
     options: (Object.keys(PrismaCampus) as Array<keyof typeof PrismaCampus>).map((key) => {
       return { value: key.toString(), label: Campus[key] }
     }),

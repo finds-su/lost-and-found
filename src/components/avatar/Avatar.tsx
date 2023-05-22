@@ -10,8 +10,8 @@ export default function Avatar(props: Omit<AvatarProps, 'img'> & { src?: string 
         img={({ className, ...imgProps }) => (
           <Image
             priority
-            src={props.src as string}
-            className={classNames('object-cover', className)}
+            src={props.src ?? ''}
+            className={classNames('bg-white object-cover', className)}
             alt=''
             width={100}
             height={100}
