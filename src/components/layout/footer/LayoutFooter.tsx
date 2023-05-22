@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 export const footerContent = [
   {
-    name: 'Саппорт',
+    name: 'Тех. поддержка',
     href: 'https://t.me/mirea_help_bot',
   },
   {
