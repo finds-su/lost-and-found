@@ -20,6 +20,7 @@ export default function LayoutFooter() {
               href={item.href}
               className='flex flex-row align-baseline text-gray-400 hover:text-gray-500'
               target='_blank'
+              rel='noreferrer'
             >
               <span className='pl-1'>{item.name}</span>
             </a>
