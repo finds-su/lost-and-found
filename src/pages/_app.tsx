@@ -75,7 +75,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
         }
       `}</style>
       <main className={`${inter.variable} font-sans`}>
-        <NextNProgress height={3} color='#0ea5e9' options={{ showSpinner: false }} />
+        <NextNProgress height={3} color='#0ea5e9' options={{ showSpinner: false, speed: 500 }} />
         {getLayout ? (
           getLayout(<Component {...pageProps} />, { session, error })
         ) : (

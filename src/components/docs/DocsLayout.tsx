@@ -1,7 +1,6 @@
-import { type ReactNode } from 'react'
-import Link from 'next/link'
-import { ArrowSmallLeftIcon } from '@heroicons/react/24/outline'
+import React, { type ReactNode } from 'react'
 import Head from 'next/head'
+import DocsNavigation from '@/components/docs/DocsNavigation'
 
 interface DocsLayoutProps {
   children: ReactNode
@@ -20,9 +19,9 @@ export default function DocsLayout(props: DocsLayoutProps) {
         <div className='relative px-4 sm:px-6 lg:px-8'>
           <div className='mx-auto max-w-prose text-lg'>
             <h1>
-              <Link href='/' className='flex flex-row items-center text-left text-gray-700'>
-                <ArrowSmallLeftIcon className='h-5 w-5' /> Назад к сайту
-              </Link>
+              <div className='pb-3'>
+                <DocsNavigation />
+              </div>
               <span className='block text-center text-lg font-semibold text-blue-600'>
                 Бюро находок Mirea Ninja
               </span>

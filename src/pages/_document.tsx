@@ -3,7 +3,7 @@ import Script from 'next/script'
 
 export default function Document() {
   return (
-    <Html className='h-full bg-gray-100'>
+    <Html className='h-full bg-gray-100' lang='ru'>
       <Head>
         <Script type='module' src='https://cdn.jsdelivr.net/npm/@headlessui/react@1.7.14/+esm' />
         <Script crossOrigin='anonymous' src='https://unpkg.com/react@18/umd/react.production.js' />

@@ -55,6 +55,7 @@ export default function EditProfileSlideOver() {
         }
       },
       onError: (error) => errorToast(error.message, { id: generateAIAvatarToastID }),
+      refetchOnWindowFocus: false,
     },
   )
   useEffect(() => {

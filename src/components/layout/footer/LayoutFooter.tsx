@@ -4,50 +4,31 @@ export const footerContent = [
     href: 'https://t.me/mirea_help_bot',
   },
   {
-    name: 'Пользовательское соглашение',
-    href: '/docs/terms-of-use',
-  },
-  {
-    name: 'Политика конфиденциальности',
-    href: '/docs/privacy-policy',
+    name: 'Документы',
+    href: '/docs',
   },
 ]
 
 export default function LayoutFooter() {
   return (
     <footer className='pt-4'>
-      <div className='mx-auto w-full px-6'>
-        <div className='-mx-3 flex flex-wrap items-center lg:justify-between'>
-          <div className='mb-6 mt-0 w-full max-w-full shrink-0 px-3 lg:mb-0 lg:w-1/4 lg:flex-none'>
-            <div className='text-size-sm items-center space-x-1 text-center leading-normal text-slate-500 lg:text-left'>
-              © {new Date().getFullYear()}, {/*сделано с{' '}*/}
-              {/*<span className='transform transition duration-[10000ms] hover:text-red-600'>♥</span>{' '}*/}
-              {/*командой*/}
-              {/*<Link*/}
-              {/*  href='https://mirea.ninja'*/}
-              {/*  className='p-1 font-semibold text-slate-700 hover:text-slate-900'*/}
-              {/*  target='_blank'*/}
-              {/*>*/}
-              Mirea Ninja
-              {/*</Link>*/}
-            </div>
-          </div>
-          <div className='mt-0 w-full max-w-full shrink-0 px-3 lg:w-3/4 lg:flex-none'>
-            <ul className='mb-0 flex list-none flex-wrap justify-center pl-0 lg:justify-end'>
-              {footerContent.map((item, index) => (
-                <li className='nav-item' key={index}>
-                  <a
-                    rel='noreferrer'
-                    href={item.href}
-                    className='ease-soft-in-out text-size-sm block px-4 pb-1 pt-0 font-normal text-slate-700 transition-colors hover:text-slate-900'
-                    target='_blank'
-                  >
-                    {item.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+      <div className='mx-auto max-w-7xl px-4 py-12 sm:px-6 md:flex md:items-center md:justify-between lg:px-8'>
+        <div className='flex justify-center space-x-6 md:order-2'>
+          {footerContent.map((item) => (
+            <a
+              key={item.name}
+              href={item.href}
+              className='flex flex-row align-baseline text-gray-400 hover:text-gray-500'
+              target='_blank'
+            >
+              <span className='pl-1'>{item.name}</span>
+            </a>
+          ))}
+        </div>
+        <div className='mt-8 md:order-1 md:mt-0'>
+          <p className='text-center text-base text-gray-400'>
+            &copy; {new Date().getFullYear()}, Mirea Ninja
+          </p>
         </div>
       </div>
     </footer>
