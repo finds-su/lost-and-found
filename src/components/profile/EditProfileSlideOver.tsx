@@ -202,6 +202,7 @@ export default function EditProfileSlideOver() {
                                       .slice(0, 2)
                                       .toUpperCase()}
                                     src={editedUser?.image}
+                                    resolution={300}
                                   />
                                 </div>
                               </div>

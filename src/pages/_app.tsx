@@ -13,6 +13,8 @@ import Head from 'next/head'
 import { type ErrorProps } from '@/components/Error'
 import NextNProgress from 'nextjs-progressbar'
 import useSessionStore from '@/lib/hooks/store/sessionStore'
+import { NextSeo } from 'next-seo'
+import { env } from '@/env.mjs'
 
 const inter = Inter({
   subsets: ['latin', 'cyrillic', 'cyrillic-ext'],
@@ -44,20 +46,31 @@ const MyApp: AppType<{ session: Session | null }> = ({
   const getLayout = Component.getLayout
   return (
     <SessionProvider session={session}>
+      <NextSeo
+        title='Бюро находок Mirea Ninja'
+        description='Приложение для поиска потерянных и размещения найденных вещей'
+        canonical='https://finds.mirea.ninja/'
+        openGraph={{
+          url: env.NEXT_PUBLIC_NEXTAUTH_URL,
+          title: 'Бюро находок Mirea Ninja',
+          description: 'Приложение для поиска потерянных и размещения найденных вещей',
+          images: [
+            {
+              url: '/logo-icons/apple-touch-icon-precomposed.png',
+              width: 300,
+              height: 300,
+              alt: 'Логотип Mirea Ninja',
+              type: 'image/png',
+            },
+          ],
+        }}
+      />
       <Head>
-        <title>Бюро находок Mirea Ninja</title>
         <meta charSet='utf-8' />
         <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
         <meta
           name='viewport'
           content='width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=5'
-        />
-        <meta name='description' content='Сайт Бюро находок Mirea Ninja' />
-
-        <meta property='og:image' content='/assets/ninja-logo-black.svg' />
-        <meta
-          name='keywords'
-          content='Стромынка, Проспект Вернадского, Бюро находок в МИРЭА, Находки на кампусе, Потерянные вещи в МИРЭА, Регистрация находок в МИРЭА, Объявления о находках в МИРЭА, База данных находок в МИРЭА, Находки в аудиториях, Поиск потерянных вещей в университете, Находки в библиотеке университета, Утерянные документы в университете, Находки в спортивном зале МИРЭА, Находки в столовой университета, Бесплатная регистрация находок в университете, Находки в учебных кабинетах, Поиск утерянных вещей на территории РТУ МИРЭА'
         />
         <link rel='manifest' href='/manifest.json' />
         <link href='/logo-icons/favicon-16x16.png' rel='icon' type='image/png' sizes='16x16' />

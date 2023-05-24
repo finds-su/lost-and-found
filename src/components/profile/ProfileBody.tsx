@@ -28,6 +28,7 @@ export default function ProfileBody(props: ProfileProps) {
           placeholderInitials={user.nickname.slice(0, 2).toUpperCase()}
           src={user.image}
           rounded
+          resolution={100}
         />
       ),
     },

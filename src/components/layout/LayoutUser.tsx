@@ -32,6 +32,7 @@ export default function LayoutUser(props: LayoutUserProps) {
           placeholderInitials={props.session.user.nickname.slice(0, 2).toUpperCase()}
           src={props.session.user.image}
           rounded
+          resolution={50}
         />
       ),
       beforeNavigation: (
