@@ -67,21 +67,23 @@ export default function MobileLayoutDropdown(props: MobileLayoutMenuProps) {
               </Link>
             </div>
             <div className='mt-3 space-y-1 px-2'>
-              {props.userNavigation.flat().map((item) => (
-                <Disclosure.Button
-                  key={item.name}
-                  as='a'
-                  onClick={item.func}
-                  className={classNames(
-                    router.pathname === item.href
-                      ? 'bg-gray-900 text-white'
-                      : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                    'block rounded-md px-3 py-2 text-sm font-medium',
-                  )}
-                >
-                  {item.name}
-                </Disclosure.Button>
-              ))}
+              {[...props.userNavigation.create, ...props.userNavigation.profile]
+                .flat()
+                .map((item) => (
+                  <Disclosure.Button
+                    key={item.name}
+                    as='a'
+                    onClick={item.func}
+                    className={classNames(
+                      router.pathname === item.href
+                        ? 'bg-gray-900 text-white'
+                        : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                      'block rounded-md px-3 py-2 text-sm font-medium',
+                    )}
+                  >
+                    {item.name}
+                  </Disclosure.Button>
+                ))}
             </div>
           </>
         )}

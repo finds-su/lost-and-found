@@ -9,7 +9,7 @@ import Head from 'next/head'
 import { type Session } from 'next-auth'
 import classNames from 'classnames/dedupe'
 import DynamicMobileLayoutMenu from '@/components/layout/DynamicMobileLayoutMenu'
-import LayoutAvatar from '@/components/layout/LayoutAvatar'
+import DynamicLayoutUser from '@/components/layout/DynamicLayoutUser'
 import DynamicLayoutFooter from '@/components/layout/footer/DynamicLayoutFooter'
 
 export type Navigation = { name: string; href: string }[]
@@ -25,32 +25,50 @@ export interface LayoutProps {
   children: React.ReactNode
 }
 
-export type UserNavigation = { name: string; func?: () => void; href?: string }[][]
+export type UserNavigationDropdown = { name: string; func: () => void; href?: string }[][]
+
+export type UserNavigation = Record<'profile' | 'create', UserNavigationDropdown>
 
 export default function Layout(props: LayoutProps) {
   const router = useRouter()
   const session = props.session
 
-  const userNavigation: UserNavigation = [
-    [
-      {
-        name: 'Ваш профиль',
-        func: () => void router.push(session ? `/u/${session.user.nickname}` : '/'),
-        href: '/u/[nickname]',
-      },
-      {
-        name: 'Ваши пропажи',
-        func: () => void router.push(session ? '/losses/my' : '/losses'),
-        href: '/losses/my',
-      },
-      {
-        name: 'Ваши находки',
-        func: () => void router.push(session ? '/finds/my' : '/finds'),
-        href: '/finds/my',
-      },
+  const userNavigation: UserNavigation = {
+    create: [
+      [
+        {
+          name: 'Сообщить о находке',
+          func: () => void router.push(session ? '/finds/create' : '/finds'),
+          href: '/finds/create',
+        },
+        {
+          name: 'Сообщить о пропаже',
+          func: () => void router.push(session ? '/losses/create' : '/losses'),
+          href: '/losses/create',
+        },
+      ],
     ],
-    [{ name: 'Выйти', func: () => void signOut() }],
-  ]
+    profile: [
+      [
+        {
+          name: 'Ваш профиль',
+          func: () => void router.push(session ? `/u/${session.user.nickname}` : '/'),
+          href: '/u/[nickname]',
+        },
+        {
+          name: 'Ваши пропажи',
+          func: () => void router.push(session ? '/losses/my' : '/losses'),
+          href: '/losses/my',
+        },
+        {
+          name: 'Ваши находки',
+          func: () => void router.push(session ? '/finds/my' : '/finds'),
+          href: '/finds/my',
+        },
+      ],
+      [{ name: 'Выйти', func: () => void signOut() }],
+    ],
+  }
 
   return (
     <>
@@ -93,7 +111,7 @@ export default function Layout(props: LayoutProps) {
                     </div>
                   </div>
                   {props.session ? (
-                    <LayoutAvatar session={props.session} userNavigation={userNavigation} />
+                    <DynamicLayoutUser session={props.session} userNavigation={userNavigation} />
                   ) : (
                     <button
                       onClick={() => void signIn()}

@@ -1,4 +1,4 @@
-import Layout from '@/components/layout/Layout'
+import DynamicLayout from '@/components/layout/DynamicLayout'
 import { getServerAuthSession } from '@/server/auth'
 import { type GetServerSideProps } from 'next'
 import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
@@ -14,9 +14,9 @@ const Notifications: NextPageWithLayout = () => {
 
 Notifications.getLayout = function getLayout(page: JSX.Element, options: NextPageOptions) {
   return (
-    <Layout pageName='Уведомления' session={options.session}>
+    <DynamicLayout pageName='Уведомления' session={options.session}>
       {page}
-    </Layout>
+    </DynamicLayout>
   )
 }
 

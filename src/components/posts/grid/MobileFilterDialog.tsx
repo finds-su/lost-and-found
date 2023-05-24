@@ -1,7 +1,7 @@
 import { type Dispatch, Fragment, type SetStateAction } from 'react'
 import { Dialog, Disclosure, Transition } from '@headlessui/react'
 import { ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { filters } from '@/components/itemsGrid/GridFilter'
+import { filters } from '@/components/posts/grid/GridFilter'
 import classNames from 'classnames/dedupe'
 import { type PostItemReason } from '@prisma/client'
 import useScrollGridStore from '@/lib/hooks/store/scrollGridsStore'

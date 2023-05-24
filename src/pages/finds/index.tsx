@@ -1,9 +1,9 @@
-import Layout from '@/components/layout/Layout'
+import DynamicLayout from '@/components/layout/DynamicLayout'
 import { getServerAuthSession } from '@/server/auth'
 import { type GetServerSideProps } from 'next'
 import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
 import Image from 'next/image'
-import DynamicInfiniteScrollGridWithFilter from '@/components/itemsGrid/DynamicInfiniteScrollGridWithFilter'
+import DynamicInfiniteScrollGridWithFilter from '@/components/posts/grid/DynamicInfiniteScrollGridWithFilter'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)
@@ -32,9 +32,9 @@ const Finds: NextPageWithLayout = () => {
 
 Finds.getLayout = function getLayout(page: JSX.Element, options: NextPageOptions) {
   return (
-    <Layout pageName='Объявления о найденных вещах' session={options.session}>
+    <DynamicLayout pageName='Объявления о найденных вещах' session={options.session}>
       {page}
-    </Layout>
+    </DynamicLayout>
   )
 }
 

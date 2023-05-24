@@ -7,7 +7,7 @@ import { api } from '@/lib/api'
 import { humanReadableDate } from '@/lib/humanReadableDate'
 import { Spinner } from 'flowbite-react'
 import { type LostAndFoundItemInGrid } from '@/lib/types/LostAndFoundItemInGrid'
-import GridFilter from '@/components/itemsGrid/GridFilter'
+import GridFilter from '@/components/posts/grid/GridFilter'
 
 export default function InfiniteScrollGridWithFilter(props: {
   reason: PostItemReason

@@ -1,4 +1,4 @@
-import Layout from '@/components/layout/Layout'
+import DynamicLayout from '@/components/layout/DynamicLayout'
 import { getServerAuthSession } from '@/server/auth'
 import { type GetServerSideProps } from 'next'
 import { prisma } from '@/server/db'
@@ -56,9 +56,9 @@ Profile.getLayout = function getLayout(page: ReactElement, options: NextPageOpti
     return <Error {...options.error} />
   }
   return (
-    <Layout pageName='Профиль' hideTitle session={options.session}>
+    <DynamicLayout pageName='Профиль' hideTitle session={options.session}>
       {page}
-    </Layout>
+    </DynamicLayout>
   )
 }
 
