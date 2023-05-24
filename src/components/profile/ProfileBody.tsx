@@ -1,10 +1,11 @@
 import { type ReactNode } from 'react'
-import Head from 'next/head'
 import Window from '@/components/form/Window'
 import Avatar from '@/components/avatar/Avatar'
 import useEditProfileStore from '@/lib/hooks/store/editProfileStore'
 import { type User } from '@prisma/client'
 import DynamicEditProfileSlideOver from '@/components/profile/DynamicEditProfileSlideOver'
+import { NextSeo } from 'next-seo'
+import { env } from '@/env.mjs'
 
 export interface ProfileProps {
   isOwner: boolean
@@ -42,9 +43,24 @@ export default function ProfileBody(props: ProfileProps) {
 
   return (
     <>
-      <Head>
-        <title>{props.user.name}</title>
-      </Head>
+      <NextSeo
+        title={props.user.name ?? undefined}
+        openGraph={{
+          url: `${env.NEXT_PUBLIC_NEXTAUTH_URL}/u/${props.user.nickname}`,
+          title: props.user.name ?? undefined,
+          description: `@${props.user.nickname}`,
+          ...(props.user.image && {
+            images: [
+              {
+                url: props.user.image,
+                width: 300,
+                height: 300,
+                alt: props.user.nickname,
+              },
+            ],
+          }),
+        }}
+      />
       <Window>
         <div className='grid grid-cols-1 place-content-between justify-between md:grid-cols-2'>
           <div>

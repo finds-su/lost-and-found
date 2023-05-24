@@ -11,6 +11,8 @@ import classNames from 'classnames/dedupe'
 import DynamicMobileLayoutMenu from '@/components/layout/DynamicMobileLayoutMenu'
 import DynamicLayoutUser from '@/components/layout/DynamicLayoutUser'
 import DynamicLayoutFooter from '@/components/layout/footer/DynamicLayoutFooter'
+import { NextSeo } from 'next-seo'
+import { env } from '@/env.mjs'
 
 export type Navigation = { name: string; href: string }[]
 export const navigation: Navigation = [
@@ -72,6 +74,25 @@ export default function Layout(props: LayoutProps) {
 
   return (
     <>
+      <NextSeo
+        title={!props.hideTitle ? props.pageName : 'Бюро находок Mirea Ninja'}
+        description='Приложение для поиска потерянных и размещения найденных вещей'
+        canonical='https://finds.mirea.ninja/'
+        openGraph={{
+          url: env.NEXT_PUBLIC_NEXTAUTH_URL,
+          title: 'Бюро находок Mirea Ninja',
+          description: 'Приложение для поиска потерянных и размещения найденных вещей',
+          images: [
+            {
+              url: '/logo-icons/apple-touch-icon-precomposed.png',
+              width: 300,
+              height: 300,
+              alt: 'Логотип Mirea Ninja',
+              type: 'image/png',
+            },
+          ],
+        }}
+      />
       <Head>{!props.hideTitle && <title>{props.pageName}</title>}</Head>
       <div className='min-h-full'>
         <Disclosure as='nav' className='bg-gray-800'>

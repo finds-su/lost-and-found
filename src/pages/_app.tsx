@@ -13,8 +13,6 @@ import Head from 'next/head'
 import { type ErrorProps } from '@/components/Error'
 import NextNProgress from 'nextjs-progressbar'
 import useSessionStore from '@/lib/hooks/store/sessionStore'
-import { NextSeo } from 'next-seo'
-import { env } from '@/env.mjs'
 
 const inter = Inter({
   subsets: ['latin', 'cyrillic', 'cyrillic-ext'],
@@ -46,25 +44,6 @@ const MyApp: AppType<{ session: Session | null }> = ({
   const getLayout = Component.getLayout
   return (
     <SessionProvider session={session}>
-      <NextSeo
-        title='Бюро находок Mirea Ninja'
-        description='Приложение для поиска потерянных и размещения найденных вещей'
-        canonical='https://finds.mirea.ninja/'
-        openGraph={{
-          url: env.NEXT_PUBLIC_NEXTAUTH_URL,
-          title: 'Бюро находок Mirea Ninja',
-          description: 'Приложение для поиска потерянных и размещения найденных вещей',
-          images: [
-            {
-              url: '/logo-icons/apple-touch-icon-precomposed.png',
-              width: 300,
-              height: 300,
-              alt: 'Логотип Mirea Ninja',
-              type: 'image/png',
-            },
-          ],
-        }}
-      />
       <Head>
         <meta charSet='utf-8' />
         <meta httpEquiv='X-UA-Compatible' content='IE=edge' />

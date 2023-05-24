@@ -9,8 +9,6 @@ import Error, { type ErrorProps } from '@/components/Error'
 import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
 import DynamicProfileBody from '@/components/profile/DynamicProfileBody'
 import { type PublicUser } from '@/lib/types/PublicUser'
-import { NextSeo } from 'next-seo'
-import { env } from '../../../env.mjs'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)
@@ -50,29 +48,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 }
 
 const Profile: NextPageWithLayout = (props: ProfileProps) => {
-  return (
-    <>
-      <NextSeo
-        title={props.user.name ?? undefined}
-        openGraph={{
-          url: `${env.NEXT_PUBLIC_NEXTAUTH_URL}/u/${props.user.nickname}`,
-          title: props.user.name ?? undefined,
-          description: `@${props.user.nickname}`,
-          ...(props.user.image && {
-            images: [
-              {
-                url: props.user.image,
-                width: 300,
-                height: 300,
-                alt: props.user.nickname,
-              },
-            ],
-          }),
-        }}
-      />
-      <DynamicProfileBody {...props} />
-    </>
-  )
+  return <DynamicProfileBody {...props} />
 }
 
 Profile.getLayout = function getLayout(page: ReactElement, options: NextPageOptions) {
