@@ -5,6 +5,7 @@ import { type UserNavigation } from '@/components/layout/Layout'
 import Link from 'next/link'
 import LayoutDropdown, { type LayoutDropdownProps } from '@/components/layout/LayoutDropdown'
 import Avatar from '@/components/avatar/Avatar'
+import { Menu } from '@headlessui/react'
 
 export interface LayoutUserProps {
   session: Session
@@ -36,14 +37,16 @@ export default function LayoutUser(props: LayoutUserProps) {
         />
       ),
       beforeNavigation: (
-        <div className='px-4 py-3'>
-          <Link href={`/u/${props.session.user.nickname}`}>
-            <p className='text-sm'>Вы вошли как</p>
-            <p className='w-40 truncate text-ellipsis text-sm font-semibold text-gray-900'>
-              {props.session.user.nickname}
-            </p>
-          </Link>
-        </div>
+        <Menu.Item>
+          <div className='px-4 py-3'>
+            <a href={`/u/${props.session.user.nickname}`}>
+              <p className='text-sm'>Вы вошли как</p>
+              <p className='w-40 truncate text-ellipsis text-sm font-semibold text-gray-900'>
+                {props.session.user.nickname}
+              </p>
+            </a>
+          </div>
+        </Menu.Item>
       ),
     },
   ]

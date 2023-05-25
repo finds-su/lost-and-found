@@ -40,7 +40,7 @@ export default function LayoutDropdown(props: LayoutDropdownProps) {
                       onClick={navigation.func}
                       className={classNames(
                         active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                        'block px-4 py-2 text-sm',
+                        'block cursor-pointer px-4 py-2 text-sm',
                       )}
                     >
                       {navigation.name}
