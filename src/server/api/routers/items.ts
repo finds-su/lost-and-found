@@ -1,6 +1,7 @@
-import { createTRPCRouter, publicProcedure } from '@/server/api/trpc'
+import { createTRPCRouter, protectedProcedure, publicProcedure } from '@/server/api/trpc'
 import { z } from 'zod'
 import { prisma } from '@/server/db'
+import { Campus, PostItemReason } from '@prisma/client'
 
 export const itemsRouter = createTRPCRouter({
   infiniteItems: publicProcedure
@@ -50,5 +51,31 @@ export const itemsRouter = createTRPCRouter({
         items,
         nextCursor,
       }
+    }),
+
+  createPost: protectedProcedure
+    .input(
+      z.object({
+        name: z
+          .string()
+          .min(5, 'Название должно содержать 5 или больше символов')
+          .max(100, 'Название должно содержать 100 или меньше символов'),
+        description: z.string().max(512, 'Описание должно содержать не больше 512 символов'),
+        images: z.array(z.string()),
+        campus: z.nativeEnum(Campus),
+        reason: z.nativeEnum(PostItemReason),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      await prisma.lostAndFoundItem.create({
+        data: {
+          name: input.name,
+          description: input.description,
+          reason: input.reason,
+          campus: input.campus,
+          images: input.images,
+          userId: ctx.session.user.id,
+        },
+      })
     }),
 })

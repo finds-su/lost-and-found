@@ -3,6 +3,7 @@ import { getServerAuthSession } from '@/server/auth'
 import { type GetServerSideProps } from 'next'
 import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
 import CreatePost from '@/components/posts/create/CreatePost'
+import { PostItemReason } from '@prisma/client'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)
@@ -14,6 +15,8 @@ const CreateFind: NextPageWithLayout = () => {
     <CreatePost
       name='Находка'
       description='Опишите найденную вещь, чтобы хозяин смог легко ее узнать'
+      postItemReason={PostItemReason.FOUND}
+      routePushOnSuccess='/finds'
     />
   )
 }
