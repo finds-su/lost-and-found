@@ -3,7 +3,6 @@ import { type Navigation, type UserNavigation } from '@/components/layout/Layout
 import classNames from 'classnames/dedupe'
 import { type Session } from 'next-auth'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
 import Avatar from '@/components/avatar/Avatar'
 import { BellIcon } from '@heroicons/react/24/outline'
 
@@ -41,7 +40,11 @@ export default function MobileLayoutDropdown(props: MobileLayoutMenuProps) {
         {session && (
           <>
             <div className='flex items-center px-5'>
-              <Link className='flex items-center' href={`/u/${session.user.nickname}`}>
+              <Disclosure.Button
+                as='a'
+                className='flex items-center'
+                href={`/u/${session.user.nickname}`}
+              >
                 <Avatar
                   size='sm'
                   placeholderInitials={session.user.nickname.slice(0, 2).toUpperCase()}
@@ -57,15 +60,16 @@ export default function MobileLayoutDropdown(props: MobileLayoutMenuProps) {
                     {session.user.email}
                   </div>
                 </div>
-              </Link>
-              <Link
+              </Disclosure.Button>
+              <Disclosure.Button
+                as='a'
                 href='/notifications'
                 type='button'
                 className='ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'
               >
                 <span className='sr-only'>Просмотреть уведомления</span>
                 <BellIcon className='h-6 w-6' aria-hidden='true' />
-              </Link>
+              </Disclosure.Button>
             </div>
             <div className='mt-3 space-y-1 px-2'>
               {[...props.userNavigation.create, ...props.userNavigation.profile]
