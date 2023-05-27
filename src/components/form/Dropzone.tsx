@@ -6,12 +6,15 @@ import { env } from '@/env.mjs'
 
 interface DropzoneProps {
   images: string[]
-  addImage: (igm: string) => void
+  addImage: (image: string) => void
 }
 
 export default function Dropzone(props: DropzoneProps) {
   const { uploadToS3 } = usePresignedUpload()
   const { getRootProps, getInputProps } = useDropzone({
+    accept: {
+      'image/*': env.NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS,
+    },
     onDrop: (files) => void handleFilesChange(files),
     onError: (error) => errorToast(error.message),
     onDropRejected: (rejects) =>

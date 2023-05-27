@@ -2,7 +2,7 @@ import DynamicLayout from '@/components/layout/DynamicLayout'
 import { getServerAuthSession } from '@/server/auth'
 import { type GetServerSideProps } from 'next'
 import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
-import CreatePost from '@/components/posts/create/CreatePost'
+import DynamicCreatePost from '@/components/posts/create/DynamicCreatePost'
 import { PostItemReason } from '@prisma/client'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -12,7 +12,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const CreateFind: NextPageWithLayout = () => {
   return (
-    <CreatePost
+    <DynamicCreatePost
       name='Находка'
       description='Опишите найденную вещь, чтобы хозяин смог легко ее узнать'
       postItemReason={PostItemReason.FOUND}

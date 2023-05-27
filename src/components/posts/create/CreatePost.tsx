@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { Campus } from '@/lib/campus'
 import { api } from '@/lib/api'
 import errorToast from '@/components/toasts/ErrorToast'
-import Dropzone from '@/components/form/Dropzone'
+import DynamicDropzone from '@/components/form/DynamicDropzone'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 
@@ -87,7 +87,7 @@ export default function CreatePost(props: CreatePostProps) {
       className: 'sm:col-span-6',
       input: (
         <>
-          <Dropzone
+          <DynamicDropzone
             images={post.images}
             addImage={(img: string) =>
               setPost((current) => ({ ...current, images: [...current.images, img] }))

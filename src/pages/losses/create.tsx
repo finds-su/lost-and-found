@@ -2,7 +2,7 @@ import DynamicLayout from '@/components/layout/DynamicLayout'
 import { getServerAuthSession } from '@/server/auth'
 import { type GetServerSideProps } from 'next'
 import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
-import CreatePost from '@/components/posts/create/CreatePost'
+import DynamicCreatePost from '@/components/posts/create/DynamicCreatePost'
 import { PostItemReason } from '@prisma/client'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -12,7 +12,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 const CreateLoss: NextPageWithLayout = () => {
   return (
-    <CreatePost
+    <DynamicCreatePost
       name='Пропажа'
       description='Опишите вещь, которую потеряли, чтобы нашедший смог определить ее принадлежность'
       postItemReason={PostItemReason.LOST}

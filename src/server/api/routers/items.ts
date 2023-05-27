@@ -61,7 +61,7 @@ export const itemsRouter = createTRPCRouter({
           .min(5, 'Название должно содержать 5 или больше символов')
           .max(100, 'Название должно содержать 100 или меньше символов'),
         description: z.string().max(512, 'Описание должно содержать не больше 512 символов'),
-        images: z.array(z.string()),
+        images: z.array(z.string()).max(10),
         campus: z.nativeEnum(Campus),
         reason: z.nativeEnum(PostItemReason),
       }),
