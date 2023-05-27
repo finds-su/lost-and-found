@@ -13,3 +13,7 @@ type UploadToS3Options = {
 export const uploadAvatarToS3Options: UploadToS3Options = {
   endpoint: { request: { url: '/api/upload/avatar' } },
 }
+
+export const uploadPostImageToS3Options: UploadToS3Options = {
+  endpoint: { request: { url: '/api/upload/post-image' } },
+}

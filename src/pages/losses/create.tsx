@@ -16,7 +16,7 @@ const CreateLoss: NextPageWithLayout = () => {
       name='Пропажа'
       description='Опишите вещь, которую потеряли, чтобы нашедший смог определить ее принадлежность'
       postItemReason={PostItemReason.LOST}
-      routePushOnSuccess='/losses'
+      routePushOnExit='/losses'
     />
   )
 }

@@ -16,7 +16,7 @@ const CreateFind: NextPageWithLayout = () => {
       name='Находка'
       description='Опишите найденную вещь, чтобы хозяин смог легко ее узнать'
       postItemReason={PostItemReason.FOUND}
-      routePushOnSuccess='/finds'
+      routePushOnExit='/finds'
     />
   )
 }

@@ -5,12 +5,15 @@ import { useRouter } from 'next/router'
 import { Campus } from '@/lib/campus'
 import { api } from '@/lib/api'
 import errorToast from '@/components/toasts/ErrorToast'
+import Dropzone from '@/components/form/Dropzone'
+import { XMarkIcon } from '@heroicons/react/24/outline'
+import Image from 'next/image'
 
 interface CreatePostProps {
   name: string
   description: string
   postItemReason: PostItemReason
-  routePushOnSuccess: string
+  routePushOnExit: string
 }
 
 type Post = Pick<LostAndFoundItem, 'name' | 'description' | 'campus' | 'images'>
@@ -19,7 +22,7 @@ export default function CreatePost(props: CreatePostProps) {
   const router = useRouter()
   const createPost = api.items.createPost.useMutation({
     onSuccess: async () => {
-      await router.push(props.routePushOnSuccess)
+      await router.push(props.routePushOnExit)
     },
     onError: (error) => errorToast(error.message),
   })
@@ -83,35 +86,52 @@ export default function CreatePost(props: CreatePostProps) {
       name: 'Фотографии',
       className: 'sm:col-span-6',
       input: (
-        <div className='flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pb-6 pt-5'>
-          <div className='space-y-1 text-center'>
-            <svg
-              className='mx-auto h-12 w-12 text-gray-400'
-              stroke='currentColor'
-              fill='none'
-              viewBox='0 0 48 48'
-              aria-hidden='true'
-            >
-              <path
-                d='M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02'
-                strokeWidth={2}
-                strokeLinecap='round'
-                strokeLinejoin='round'
-              />
-            </svg>
-            <div className='flex text-sm text-gray-600'>
-              <label
-                htmlFor='file-upload'
-                className='relative cursor-pointer rounded-md bg-white font-medium text-blue-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 hover:text-blue-500'
-              >
-                <span>Загрузите фотографии</span>
-                <input id='file-upload' name='file-upload' type='file' className='sr-only' />
-              </label>
-              <p className='pl-1'>или перетащите</p>
-            </div>
-            <p className='text-xs text-gray-500'>PNG, JPG, GIF до 10MB</p>
+        <>
+          <Dropzone
+            images={post.images}
+            addImage={(img: string) =>
+              setPost((current) => ({ ...current, images: [...current.images, img] }))
+            }
+          />
+          <div className='mt-6 flow-root'>
+            <ul role='list' className='-my-5 divide-y divide-gray-200'>
+              {post.images.map((url, index) => (
+                <li key={index} className='py-4'>
+                  <div className='flex items-center space-x-4'>
+                    <div className='flex-shrink-0'>
+                      <Image
+                        className='h-8 w-8 rounded-full'
+                        height={30}
+                        width={30}
+                        src={url}
+                        alt=''
+                      />
+                    </div>
+                    <div className='min-w-0 flex-1'>
+                      <p className='truncate text-sm font-medium text-gray-900'>
+                        {url.split('/').at(-1)}
+                      </p>
+                      {/*<p className='truncate text-sm text-gray-500'>{'@' + person.handle}</p>*/}
+                    </div>
+                    <div>
+                      <button
+                        onClick={() =>
+                          setPost({
+                            ...post,
+                            images: post.images.filter((currUrl, currIndex) => index !== currIndex),
+                          })
+                        }
+                        className='inline-flex items-center rounded-full border border-gray-300 bg-white px-2.5 py-0.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50'
+                      >
+                        <XMarkIcon className='h-5 w-5' />
+                      </button>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
-        </div>
+        </>
       ),
     },
   ]
@@ -141,7 +161,7 @@ export default function CreatePost(props: CreatePostProps) {
         <div className='pt-5'>
           <div className='flex justify-end'>
             <button
-              onClick={() => router.back()}
+              onClick={() => void router.push(props.routePushOnExit)}
               type='button'
               className='rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
             >
