@@ -8,7 +8,7 @@ export const postsRouter = createTRPCRouter({
   infiniteItems: publicProcedure
     .input(
       z.object({
-        limit: z.number().min(1).max(100).nullish(),
+        limit: z.number().min(1).max(16, 'Превышен лимит запроса').nullish(),
         cursor: z.string().nullish(), // <-- "cursor" needs to exist, but can be any type
         reason: z.nativeEnum(PostItemReason),
         orderByCreationDate: z.nativeEnum(SortOption),
