@@ -2,14 +2,16 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from '@/server/
 import { z } from 'zod'
 import { prisma } from '@/server/db'
 import { Campus, PostItemReason } from '@prisma/client'
+import { SortOption } from '@/lib/types/SortOption'
 
-export const itemsRouter = createTRPCRouter({
+export const postsRouter = createTRPCRouter({
   infiniteItems: publicProcedure
     .input(
       z.object({
         limit: z.number().min(1).max(100).nullish(),
         cursor: z.string().nullish(), // <-- "cursor" needs to exist, but can be any type
         reason: z.enum(['LOST', 'FOUND']),
+        orderByCreationDate: z.enum([SortOption.newFirst, SortOption.oldFirst]),
       }),
     )
     .query(async ({ input }) => {
@@ -39,7 +41,7 @@ export const itemsRouter = createTRPCRouter({
         },
         cursor: cursor ? { id: cursor } : undefined,
         orderBy: {
-          created: 'desc',
+          created: input.orderByCreationDate,
         },
       })
       let nextCursor: typeof cursor | undefined = undefined

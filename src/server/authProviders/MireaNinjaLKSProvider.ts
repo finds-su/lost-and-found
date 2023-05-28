@@ -1,4 +1,4 @@
-import type { Provider } from 'next-auth/providers'
+import type { OAuthConfig, Provider } from 'next-auth/providers'
 import { nicknameValidation } from '@/lib/nicknameValidation'
 import { Role } from '@prisma/client'
 
@@ -17,13 +17,9 @@ interface MireaProfile {
   arUser: ArUser
 }
 
-export default function MireaNinjaLKSProvider({
-  clientId,
-  clientSecret,
-}: {
-  clientId: string
-  clientSecret: string
-}): Provider {
+type MireaNinjaLKSProviderConfig = Required<Pick<OAuthConfig<any>, 'clientId' | 'clientSecret'>>
+
+export default function MireaNinjaLKSProvider(options: MireaNinjaLKSProviderConfig): Provider {
   return {
     id: 'mirea',
     name: 'Mirea',
@@ -58,7 +54,7 @@ export default function MireaNinjaLKSProvider({
         blockReason: null,
       }
     },
-    clientId,
-    clientSecret,
+    clientId: options.clientId,
+    clientSecret: options.clientSecret,
   }
 }

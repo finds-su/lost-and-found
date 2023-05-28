@@ -1,4 +1,4 @@
 export enum SortOption {
-  newFirst,
-  oldFirst,
+  newFirst = 'desc',
+  oldFirst = 'asc',
 }

@@ -20,7 +20,7 @@ type Post = Pick<LostAndFoundItem, 'name' | 'description' | 'campus' | 'images'>
 
 export default function CreatePost(props: CreatePostProps) {
   const router = useRouter()
-  const createPost = api.items.createPost.useMutation({
+  const createPost = api.posts.createPost.useMutation({
     onSuccess: async () => {
       await router.push(props.routePushOnExit)
     },

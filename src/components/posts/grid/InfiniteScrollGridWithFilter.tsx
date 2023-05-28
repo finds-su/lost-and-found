@@ -8,13 +8,15 @@ import { humanReadableDate } from '@/lib/humanReadableDate'
 import { type LostAndFoundItemInGrid } from '@/lib/types/LostAndFoundItemInGrid'
 import GridFilter from '@/components/posts/grid/GridFilter'
 import { SpinnerInfinity } from 'spinners-react'
+import useScrollGridStore from '@/lib/hooks/store/scrollGridsStore'
 
 export default function InfiniteScrollGridWithFilter(props: {
   reason: PostItemReason
   endMessage: ReactNode
 }) {
-  const itemsQuery = api.items.infiniteItems.useInfiniteQuery(
-    { limit: 12, reason: props.reason },
+  const { enabledSortOption } = useScrollGridStore((state) => state[props.reason])
+  const itemsQuery = api.posts.infiniteItems.useInfiniteQuery(
+    { limit: 12, reason: props.reason, orderByCreationDate: enabledSortOption },
     { getNextPageParam: (lastPage) => lastPage.nextCursor },
   )
   const [items, setItems] = useState<LostAndFoundItemInGrid[]>([])
