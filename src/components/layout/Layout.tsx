@@ -13,7 +13,7 @@ import DynamicLayoutUser from '@/components/layout/DynamicLayoutUser'
 import DynamicLayoutFooter from '@/components/layout/footer/DynamicLayoutFooter'
 import { NextSeo } from 'next-seo'
 import { env } from '@/env.mjs'
-import { whiteLogoHref, organizationName, projectName, fillLogoHref } from '@/constants.mjs'
+import { whiteLogoHref, organizationName, projectName, fillLogoHref } from '@/constants.js'
 
 export type Navigation = { name: string; href: string }[]
 export const navigation: Navigation = [

@@ -1,9 +1,9 @@
-import { organizationName, supportServiceHref } from '@/constants.mjs'
+import { organizationName } from '@/constants.js'
 
 export const footerContent = [
   {
     name: 'Служба поддержки',
-    href: supportServiceHref,
+    href: 'https://t.me/mirea_help_bot',
   },
   {
     name: 'Документы',
@@ -13,7 +13,7 @@ export const footerContent = [
 
 export default function LayoutFooter() {
   return (
-    <footer className='h-auto pt-4'>
+    <footer className='pt-4'>
       <div className='mx-auto max-w-7xl px-4 py-12 sm:px-6 md:flex md:items-center md:justify-between lg:px-8'>
         <div className='flex justify-center space-x-6 md:order-2'>
           {footerContent.map((item) => (

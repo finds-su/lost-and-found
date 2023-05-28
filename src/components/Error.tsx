@@ -2,7 +2,7 @@ import { FlagIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import Head from 'next/head'
-import { organizationName, blackLogoHref } from '@/constants.mjs'
+import { organizationName, blackLogoHref } from '@/constants.js'
 
 export interface ErrorProps {
   code?: number

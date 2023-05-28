@@ -5,7 +5,7 @@ import { authOptions } from '@/server/auth'
 import Head from 'next/head'
 import { type GetServerSideProps } from 'next'
 import { getServerSession } from 'next-auth'
-import { blackLogoHref, organizationName } from '@/constants.mjs'
+import { blackLogoHref, organizationName } from '@/constants.js'
 
 export default function SignIn() {
   const router = useRouter()

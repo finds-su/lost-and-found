@@ -71,7 +71,7 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
 import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
 import { ZodError } from 'zod'
-import { aIRateLimitPerDay } from '@/constants.mjs'
+import { aIRateLimitPerDay } from '@/constants.js'
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,

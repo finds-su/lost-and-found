@@ -1,7 +1,7 @@
 import React, { type ReactNode } from 'react'
 import Head from 'next/head'
 import DocsNavigation from '@/components/docs/DocsNavigation'
-import { projectName } from '@/constants.mjs'
+import { projectName } from '@/constants.js'
 
 interface DocsLayoutProps {
   children: ReactNode
