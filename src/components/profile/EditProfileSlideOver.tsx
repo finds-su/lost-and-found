@@ -7,7 +7,6 @@ import Avatar from '@/components/avatar/Avatar'
 import { usePresignedUpload } from 'next-s3-upload'
 import { uploadAvatarToS3Options } from '@/lib/uploadToS3Options'
 import { env } from '@/env.mjs'
-import promiseToast from '@/components/toasts/PromiseToast'
 import errorToast from '@/components/toasts/ErrorToast'
 import { api } from '@/lib/api'
 import { useRouter } from 'next/router'
@@ -21,6 +20,8 @@ import { type PromiseToastMessages } from '@/lib/types/Toast'
 import Input from '@/components/form/Input'
 import { convertEmptyStringToNull } from '@/lib/convertEmptyStringToNull'
 import TextArea from '@/components/form/TextArea'
+import { ErrorCode, useDropzone } from 'react-dropzone'
+import mapFileError from '@/lib/mapFileError'
 
 const generateAIAvatarToastID = 'generateAIAvatarToastID'
 const generateAIAvatarToastMessages: Pick<PromiseToastMessages, 'success' | 'loading'> = {
@@ -64,11 +65,26 @@ export default function EditProfileSlideOver() {
     }
   }, [generateAvatar.isLoading, generateAvatar.isSuccess, avatarPrompt])
 
-  const { FileInput, openFileDialog, uploadToS3 } = usePresignedUpload()
-  async function handlePhotoChange(file: File) {
-    const { url } = await uploadToS3(file, uploadAvatarToS3Options)
-    if (editedUser) {
-      setEditedUser({ ...editedUser, image: url })
+  const { getRootProps, getInputProps, open } = useDropzone({
+    accept: {
+      'image/*': env.NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS,
+    },
+    onDrop: (files) => void handlePhotoChange(files),
+    onError: (error) => errorToast(error.message),
+    onDropRejected: (rejects) =>
+      rejects.map((reject) => reject.errors.map((error) => mapFileError(error))),
+    maxSize: 10 * 1024 * 1024, // 10 MB
+    noClick: true,
+    noKeyboard: true,
+  })
+  const { uploadToS3 } = usePresignedUpload()
+  async function handlePhotoChange(files: File[]) {
+    const file = files.at(0)
+    if (file) {
+      const { key } = await uploadToS3(file, uploadAvatarToS3Options)
+      if (editedUser) {
+        setEditedUser({ ...editedUser, image: `${env.NEXT_PUBLIC_CDN_ENDPOINT_URL}/${key}` })
+      }
     }
   }
 
@@ -214,30 +230,13 @@ export default function EditProfileSlideOver() {
                                 </h3>
                                 <p className='text-sm text-gray-500'>@{session?.user.nickname}</p>
                               </div>
-                              <div className='mt-5 flex flex-wrap space-y-3 sm:space-x-3 sm:space-y-0'>
-                                <FileInput
-                                  onChange={(file: File) => {
-                                    if (
-                                      env.NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS.some((suffix) =>
-                                        file.name.endsWith(suffix),
-                                      )
-                                    ) {
-                                      void promiseToast(handlePhotoChange(file), {
-                                        loading: 'Загрузка...',
-                                        success: 'Успешно загружено',
-                                        error: 'Ошибка загрузки',
-                                      })
-                                    } else {
-                                      errorToast(
-                                        `Поддерживаются только форматы ${env.NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS.join(
-                                          ', ',
-                                        )}`,
-                                      )
-                                    }
-                                  }}
-                                />
+                              <div
+                                {...getRootProps()}
+                                className='mt-5 flex flex-wrap space-y-3 sm:space-x-3 sm:space-y-0'
+                              >
+                                <input {...getInputProps()} />
                                 <button
-                                  onClick={openFileDialog}
+                                  onClick={open}
                                   type='button'
                                   className='inline-flex w-full flex-shrink-0 items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:flex-1'
                                 >

@@ -34,6 +34,7 @@ ENV S3_UPLOAD_SECRET=secret
 ENV S3_UPLOAD_BUCKET=mn-lost-and-found
 ENV S3_UPLOAD_HOSTNAME=storage.yandexcloud.net
 ENV S3_UPLOAD_ENDPOINT_URL=https://storage.yandexcloud.net
+NEXT_PUBLIC_CDN_ENDPOINT_URL=https://mn-lost-and-found.storage.yandexcloud.net
 ENV S3_UPLOAD_REGION=ru-central
 ENV NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS=.png,.jpg,.jpeg,.gif,.webp
 

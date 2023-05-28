@@ -129,7 +129,7 @@ export const usersRouter = createTRPCRouter({
             Key: newKey,
           })
           await s3.send(copyCommand)
-          input.image = `${env.S3_UPLOAD_ENDPOINT_URL}/${env.S3_UPLOAD_BUCKET}/${newKey}`
+          input.image = `${env.NEXT_PUBLIC_CDN_ENDPOINT_URL}/${newKey}`
         } else {
           input.image = undefined // do not change photo
         }
@@ -201,7 +201,7 @@ export const usersRouter = createTRPCRouter({
             Key: key,
           }),
         )
-        return `${env.S3_UPLOAD_ENDPOINT_URL}/${env.S3_UPLOAD_BUCKET}/${key}`
+        return `${env.NEXT_PUBLIC_CDN_ENDPOINT_URL}/${key}`
       }
       throw new TRPCError({
         code: 'BAD_REQUEST',

@@ -1,8 +1,9 @@
-import { ErrorCode, useDropzone } from 'react-dropzone'
+import { useDropzone } from 'react-dropzone'
 import { usePresignedUpload } from 'next-s3-upload'
 import { uploadPostImageToS3Options } from '@/lib/uploadToS3Options'
 import errorToast from '@/components/toasts/ErrorToast'
 import { env } from '@/env.mjs'
+import mapFileError from '@/lib/mapFileError'
 
 interface DropzoneProps {
   images: string[]
@@ -18,26 +19,7 @@ export default function Dropzone(props: DropzoneProps) {
     onDrop: (files) => void handleFilesChange(files),
     onError: (error) => errorToast(error.message),
     onDropRejected: (rejects) =>
-      rejects.map((reject) => {
-        if (reject.errors.length > 0) {
-          reject.errors.map((error) => {
-            switch (error.code) {
-              case ErrorCode.FileInvalidType:
-                errorToast('Неподдерживаемый тип файла')
-                break
-              case ErrorCode.FileTooLarge:
-                errorToast('Файл слишком большой')
-                break
-              case ErrorCode.FileTooSmall:
-                errorToast('Файл слишком маленький')
-                break
-              case ErrorCode.TooManyFiles:
-                errorToast('Слишком много файлов')
-                break
-            }
-          })
-        }
-      }),
+      rejects.map((reject) => reject.errors.map((error) => mapFileError(error))),
     maxFiles: 10,
     maxSize: 10 * 1024 * 1024, // 10 MB
   })
@@ -46,8 +28,8 @@ export default function Dropzone(props: DropzoneProps) {
     for (let index = 0; index < files.length; index++) {
       const file = files[index]
       if (file) {
-        const { url } = await uploadToS3(file, uploadPostImageToS3Options)
-        props.addImage(url)
+        const { key } = await uploadToS3(file, uploadPostImageToS3Options)
+        props.addImage(`${env.NEXT_PUBLIC_CDN_ENDPOINT_URL}/${key}`)
       }
     }
     console.log(files)

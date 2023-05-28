@@ -6,6 +6,7 @@ export default function Document() {
     <Html className='h-full bg-gray-100' lang='ru'>
       <Head>
         <Script type='module' src='https://cdn.jsdelivr.net/npm/@headlessui/react@1.7.14/+esm' />
+        <Script type='module' src='https://cdn.jsdelivr.net/npm/heroicons@2.0.18/+esm' />
         <Script crossOrigin='anonymous' src='https://unpkg.com/react@18/umd/react.production.js' />
         <Script
           crossOrigin='anonymous'

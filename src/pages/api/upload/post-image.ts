@@ -6,7 +6,8 @@ export default APIRoute.configure({
   accessKeyId: env.S3_UPLOAD_KEY,
   secretAccessKey: env.S3_UPLOAD_SECRET,
   bucket: env.S3_UPLOAD_BUCKET,
-  endpoint: env.S3_UPLOAD_ENDPOINT_URL,
+  region: env.S3_UPLOAD_REGION,
+  endpoint: `https://${env.S3_UPLOAD_HOSTNAME}`,
   async key(req, filename) {
     const session = await getSession({ req })
     if (session) {

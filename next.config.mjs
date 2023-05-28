@@ -10,16 +10,9 @@ const config = {
       'cdn.cms.mirea.ninja',
       'lk.mirea.ru',
       'avatars.githubusercontent.com',
+      env.NEXT_PUBLIC_CDN_ENDPOINT_URL.replace('https://', ''),
     ],
-    remotePatterns: [
-      { hostname: '*.googleusercontent.com' },
-      {
-        protocol: 'https',
-        hostname: env.S3_UPLOAD_HOSTNAME,
-        port: '',
-        pathname: `/${env.S3_UPLOAD_BUCKET}/**`,
-      },
-    ],
+    remotePatterns: [{ hostname: '*.googleusercontent.com' }],
   },
   ...(env.NODE_ENV === 'production' && {
     output: 'standalone',
