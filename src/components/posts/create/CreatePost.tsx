@@ -111,7 +111,6 @@ export default function CreatePost(props: CreatePostProps) {
                       <p className='truncate text-sm font-medium text-gray-900'>
                         {url.split('/').at(-1)}
                       </p>
-                      {/*<p className='truncate text-sm text-gray-500'>{'@' + person.handle}</p>*/}
                     </div>
                     <div>
                       <button

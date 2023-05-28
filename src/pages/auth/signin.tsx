@@ -5,6 +5,7 @@ import { authOptions } from '@/server/auth'
 import Head from 'next/head'
 import { type GetServerSideProps } from 'next'
 import { getServerSession } from 'next-auth'
+import { blackLogoHref, organizationName } from '@/constants.mjs'
 
 export default function SignIn() {
   const router = useRouter()
@@ -41,8 +42,8 @@ export default function SignIn() {
               <div>
                 <Image
                   className='h-12 w-auto'
-                  src='/assets/ninja-logo-black.svg'
-                  alt='Mirea Ninja'
+                  src={blackLogoHref}
+                  alt={organizationName}
                   width={100}
                   height={100}
                 />

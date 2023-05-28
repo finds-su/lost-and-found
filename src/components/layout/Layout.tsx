@@ -13,6 +13,7 @@ import DynamicLayoutUser from '@/components/layout/DynamicLayoutUser'
 import DynamicLayoutFooter from '@/components/layout/footer/DynamicLayoutFooter'
 import { NextSeo } from 'next-seo'
 import { env } from '@/env.mjs'
+import { whiteLogoHref, organizationName, projectName, fillLogoHref } from '@/constants.mjs'
 
 export type Navigation = { name: string; href: string }[]
 export const navigation: Navigation = [
@@ -75,26 +76,25 @@ export default function Layout(props: LayoutProps) {
   return (
     <>
       <NextSeo
-        title={!props.hideTitle ? props.pageName : 'Бюро находок Mirea Ninja'}
+        title={!props.hideTitle ? props.pageName : projectName}
         description='Приложение для поиска потерянных и размещения найденных вещей'
         canonical='https://finds.mirea.ninja/'
         openGraph={{
           url: env.NEXT_PUBLIC_NEXTAUTH_URL,
-          title: 'Бюро находок Mirea Ninja',
+          title: projectName,
           description: 'Приложение для поиска потерянных и размещения найденных вещей',
           images: [
             {
-              url: '/logo-icons/apple-touch-icon-precomposed.png',
+              url: fillLogoHref,
               width: 300,
               height: 300,
-              alt: 'Логотип Mirea Ninja',
-              type: 'image/png',
+              alt: `Логотип ${organizationName}`,
             },
           ],
         }}
       />
       <Head>{!props.hideTitle && <title>{props.pageName}</title>}</Head>
-      <div className='min-h-full'>
+      <div className='min-h-screen'>
         <Disclosure as='nav' className='bg-gray-800'>
           {({ open }) => (
             <>
@@ -105,10 +105,10 @@ export default function Layout(props: LayoutProps) {
                       <Image
                         priority
                         className='h-8 w-8'
-                        src='/assets/ninja-logo-white.svg'
-                        alt='Mirea Ninja'
-                        width={10}
-                        height={10}
+                        src={whiteLogoHref}
+                        alt={organizationName}
+                        width={50}
+                        height={50}
                       />
                     </Link>
                     <div className='hidden md:block'>
@@ -168,7 +168,7 @@ export default function Layout(props: LayoutProps) {
             <h1 className='text-lg font-semibold leading-6 text-gray-900'>{props.pageName}</h1>
           </div>
         </header>
-        <div className='mx-4 flex min-h-[88vh] max-w-7xl flex-col place-content-between py-4 sm:px-6 md:mx-auto lg:px-8'>
+        <div className='mx-4 flex max-w-7xl flex-col py-4 sm:px-6 md:mx-auto lg:px-8'>
           <div>{props.children}</div>
           <DynamicLayoutFooter />
         </div>

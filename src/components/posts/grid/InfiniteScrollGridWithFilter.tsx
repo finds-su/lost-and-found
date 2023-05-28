@@ -5,9 +5,9 @@ import { type PostItemReason } from '@prisma/client'
 import { Campus } from '@/lib/campus'
 import { api } from '@/lib/api'
 import { humanReadableDate } from '@/lib/humanReadableDate'
-import { Spinner } from 'flowbite-react'
 import { type LostAndFoundItemInGrid } from '@/lib/types/LostAndFoundItemInGrid'
 import GridFilter from '@/components/posts/grid/GridFilter'
+import { SpinnerInfinity } from 'spinners-react'
 
 export default function InfiniteScrollGridWithFilter(props: {
   reason: PostItemReason
@@ -43,16 +43,22 @@ export default function InfiniteScrollGridWithFilter(props: {
         next={fetchMoreData}
         hasMore={hasMore}
         loader={
-          <p className='col-span-2 flex justify-center text-center md:col-span-4'>
-            <Spinner size='lg' color='purple' />
+          <p className='col-span-2 flex justify-center py-5 text-center md:col-span-4'>
+            <SpinnerInfinity
+              size={50}
+              thickness={100}
+              speed={100}
+              color='rgba(14, 165, 233, 1)'
+              secondaryColor='rgba(203, 213, 225, 1)'
+            />
           </p>
         }
         endMessage={
-          <div className='col-span-2 flex justify-center text-center text-lg font-medium md:col-span-4'>
+          <div className='col-span-2 flex justify-center text-center font-medium text-gray-700 md:col-span-4'>
             {props.endMessage}
           </div>
         }
-        className='grid min-h-screen grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 md:gap-y-1 lg:gap-x-8'
+        className='grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 md:gap-y-1 lg:gap-x-8'
       >
         {items.map((post) => (
           <div key={post.id} className='group relative'>
@@ -60,8 +66,8 @@ export default function InfiniteScrollGridWithFilter(props: {
               <Image
                 src={post.images[0] ? post.images[0] : '/assets/placeholder.svg'}
                 alt={''}
-                width={150}
-                height={350}
+                width={800}
+                height={800}
                 className='h-full w-full object-cover object-center'
                 priority
               />

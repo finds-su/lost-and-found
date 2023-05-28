@@ -51,6 +51,7 @@
     "react-hot-toast": "^2.4.0",
     "react-infinite-scroll-component": "^6.1.0",
     "sharp": "^0.32.0",
+    "spinners-react": "^1.0.7",
     "superjson": "1.12.2",
     "transliteration": "^2.3.5",
     "unique-names-generator": "^4.7.1",
