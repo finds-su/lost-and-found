@@ -20,7 +20,7 @@ import { type PromiseToastMessages } from '@/lib/types/Toast'
 import Input from '@/components/form/Input'
 import { convertEmptyStringToNull } from '@/lib/convertEmptyStringToNull'
 import TextArea from '@/components/form/TextArea'
-import { ErrorCode, useDropzone } from 'react-dropzone'
+import { useDropzone } from 'react-dropzone'
 import mapFileError from '@/lib/mapFileError'
 
 const generateAIAvatarToastID = 'generateAIAvatarToastID'

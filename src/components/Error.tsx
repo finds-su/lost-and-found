@@ -31,7 +31,7 @@ export default function Error(props: ErrorProps) {
       <Head>
         <title>{props.name}</title>
       </Head>
-      <div className='h-screen bg-white'>
+      <div className='h-full min-h-screen bg-white'>
         <main className='mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8'>
           <div className='flex-shrink-0 pt-16'>
             <Image

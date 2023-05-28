@@ -32,7 +32,6 @@ export default function Dropzone(props: DropzoneProps) {
         props.addImage(`${env.NEXT_PUBLIC_CDN_ENDPOINT_URL}/${key}`)
       }
     }
-    console.log(files)
   }
 
   return (

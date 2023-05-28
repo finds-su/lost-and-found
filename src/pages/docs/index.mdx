@@ -1,4 +1,4 @@
-import DocsLayout from '../../components/docs/DocsLayout'
+import DynamicDocsLayout from '../../components/docs/DynamicDocsLayout'
 
 export const meta = {
   title: 'Документы',
@@ -8,7 +8,7 @@ export const meta = {
 - [Пользовательское соглашение](/docs/terms-of-use)
 
 export default ({ children }) => (
-  <DocsLayout meta={meta} disableBackButton={true}>
+  <DynamicDocsLayout meta={meta} disableBackButton={true}>
     {children}
-  </DocsLayout>
+  </DynamicDocsLayout>
 )

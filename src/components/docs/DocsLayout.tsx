@@ -15,7 +15,7 @@ export default function DocsLayout(props: DocsLayoutProps) {
       <Head>
         <title>{props.meta.title}</title>
       </Head>
-      <div className='relative overflow-hidden bg-white py-16'>
+      <div className='relative h-full min-h-screen overflow-hidden bg-white py-16'>
         <div className='relative px-4 sm:px-6 lg:px-8'>
           <div className='mx-auto max-w-prose text-lg'>
             <h1>
