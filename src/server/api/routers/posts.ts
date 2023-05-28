@@ -10,12 +10,16 @@ export const postsRouter = createTRPCRouter({
       z.object({
         limit: z.number().min(1).max(100).nullish(),
         cursor: z.string().nullish(), // <-- "cursor" needs to exist, but can be any type
-        reason: z.enum(['LOST', 'FOUND']),
-        orderByCreationDate: z.enum([SortOption.newFirst, SortOption.oldFirst]),
+        reason: z.nativeEnum(PostItemReason),
+        orderByCreationDate: z.nativeEnum(SortOption),
+        filters: z.array(z.string()).max(30),
       }),
     )
     .query(async ({ input }) => {
       const limit = input.limit ?? 50
+      const instituteFilters = input.filters.filter((filter) =>
+        Object.values(Campus).includes(filter as Campus),
+      ) as Array<Campus>
       const { cursor } = input
       const items = await prisma.lostAndFoundItem.findMany({
         select: {
@@ -38,6 +42,9 @@ export const postsRouter = createTRPCRouter({
         take: limit + 1, // get an extra item at the end which we'll use as next cursor
         where: {
           reason: input.reason,
+          campus: {
+            in: instituteFilters,
+          },
         },
         cursor: cursor ? { id: cursor } : undefined,
         orderBy: {

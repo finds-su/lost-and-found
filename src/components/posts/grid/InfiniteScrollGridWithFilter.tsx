@@ -14,9 +14,14 @@ export default function InfiniteScrollGridWithFilter(props: {
   reason: PostItemReason
   endMessage: ReactNode
 }) {
-  const { enabledSortOption } = useScrollGridStore((state) => state[props.reason])
+  const { enabledSortOption, checkedFilters } = useScrollGridStore((state) => state[props.reason])
   const itemsQuery = api.posts.infiniteItems.useInfiniteQuery(
-    { limit: 12, reason: props.reason, orderByCreationDate: enabledSortOption },
+    {
+      limit: 12,
+      reason: props.reason,
+      orderByCreationDate: enabledSortOption,
+      filters: checkedFilters,
+    },
     { getNextPageParam: (lastPage) => lastPage.nextCursor },
   )
   const [items, setItems] = useState<LostAndFoundItemInGrid[]>([])
