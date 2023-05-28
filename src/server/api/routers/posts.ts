@@ -17,7 +17,7 @@ export const postsRouter = createTRPCRouter({
     )
     .query(async ({ input }) => {
       const limit = input.limit ?? 50
-      const instituteFilters = input.filters.filter((filter) =>
+      const campusFilters = input.filters.filter((filter) =>
         Object.values(Campus).includes(filter as Campus),
       ) as Array<Campus>
       const { cursor } = input
@@ -43,7 +43,7 @@ export const postsRouter = createTRPCRouter({
         where: {
           reason: input.reason,
           campus: {
-            in: instituteFilters,
+            in: campusFilters,
           },
         },
         cursor: cursor ? { id: cursor } : undefined,
