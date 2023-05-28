@@ -1,4 +1,4 @@
-import { organizationName } from '@/constants.js'
+import { organizationName } from '@/constants.mjs'
 
 export const footerContent = [
   {

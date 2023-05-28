@@ -5,7 +5,7 @@ import {
   type Config as UniqueNamesGeneratorConfig,
   adjectives,
 } from 'unique-names-generator'
-import { telegramUsernameRegex } from '@/constants.js'
+import { telegramUsernameRegex } from '@/constants.mjs'
 
 const uniqueNamesGeneratorConfig: UniqueNamesGeneratorConfig = {
   dictionaries: [adjectives],
