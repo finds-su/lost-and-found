@@ -1,5 +1,3 @@
-import { organizationName } from '@/constants.mjs'
-
 export const footerContent = [
   {
     name: 'Служба поддержки',
@@ -30,7 +28,7 @@ export default function LayoutFooter() {
         </div>
         <div className='mt-8 md:order-1 md:mt-0'>
           <p className='text-center text-base text-gray-400'>
-            &copy; {new Date().getFullYear()}, {organizationName}
+            &copy; {new Date().getFullYear()}, Mirea Ninja
           </p>
         </div>
       </div>

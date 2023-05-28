@@ -1,7 +1,6 @@
 import React, { type ReactNode } from 'react'
 import Head from 'next/head'
 import DocsNavigation from '@/components/docs/DocsNavigation'
-import { projectName } from '@/constants.mjs'
 
 interface DocsLayoutProps {
   children: ReactNode
@@ -24,7 +23,7 @@ export default function DocsLayout(props: DocsLayoutProps) {
                 <DocsNavigation />
               </div>
               <span className='block text-center text-lg font-semibold text-blue-600'>
-                {projectName}
+                Бюро находок Mirea Ninja
               </span>
               <span className='mt-2 block text-center text-3xl font-bold leading-8 tracking-tight text-gray-900 sm:text-4xl'>
                 {props.meta.title}

@@ -13,7 +13,6 @@ import DynamicLayoutUser from '@/components/layout/DynamicLayoutUser'
 import DynamicLayoutFooter from '@/components/layout/footer/DynamicLayoutFooter'
 import { NextSeo } from 'next-seo'
 import { env } from '@/env.mjs'
-import { whiteLogoHref, organizationName, projectName, fillLogoHref } from '@/constants.mjs'
 
 export type Navigation = { name: string; href: string }[]
 export const navigation: Navigation = [
@@ -76,19 +75,19 @@ export default function Layout(props: LayoutProps) {
   return (
     <>
       <NextSeo
-        title={!props.hideTitle ? props.pageName : projectName}
+        title={!props.hideTitle ? props.pageName : 'Бюро находок Mirea Ninja'}
         description='Приложение для поиска потерянных и размещения найденных вещей'
         canonical='https://finds.mirea.ninja/'
         openGraph={{
           url: env.NEXT_PUBLIC_NEXTAUTH_URL,
-          title: projectName,
+          title: 'Бюро находок Mirea Ninja',
           description: 'Приложение для поиска потерянных и размещения найденных вещей',
           images: [
             {
-              url: fillLogoHref,
+              url: '/logo-icons/apple-touch-icon-precomposed.png',
               width: 300,
               height: 300,
-              alt: `Логотип ${organizationName}`,
+              alt: `Логотип Mirea Ninja`,
             },
           ],
         }}
@@ -105,8 +104,8 @@ export default function Layout(props: LayoutProps) {
                       <Image
                         priority
                         className='h-8 w-8'
-                        src={whiteLogoHref}
-                        alt={organizationName}
+                        src='/assets/ninja-logo-white.svg'
+                        alt='Mirea Ninja'
                         width={50}
                         height={50}
                       />

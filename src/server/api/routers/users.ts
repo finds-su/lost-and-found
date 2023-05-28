@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 import { createTRPCRouter, protectedProcedure, AIrateLimiter } from '@/server/api/trpc'
 import { TRPCError } from '@trpc/server'
-import { minNicknameLength, telegramUsernameRegex } from '@/constants.mjs'
+import { minNicknameLength, telegramUsernameRegex } from '@/lib/constants'
 import { generateAvatar } from '@/server/openai'
 import { s3 } from '@/server/s3'
 import { env } from '@/env.mjs'

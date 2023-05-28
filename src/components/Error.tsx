@@ -2,7 +2,6 @@ import { FlagIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import Head from 'next/head'
-import { organizationName, blackLogoHref } from '@/constants.mjs'
 
 export interface ErrorProps {
   code?: number
@@ -37,8 +36,8 @@ export default function Error(props: ErrorProps) {
           <div className='flex-shrink-0 pt-16'>
             <Image
               className='mx-auto h-12 w-auto transform transition duration-1000 hover:scale-105'
-              src={blackLogoHref}
-              alt={organizationName}
+              src='/assets/ninja-logo-black.svg'
+              alt='Mirea Ninja'
               width={100}
               height={100}
               aria-hidden='true'
