@@ -2,12 +2,12 @@ import DynamicLayout from '@/components/layout/DynamicLayout'
 import { getServerAuthSession } from '@/server/auth'
 import { type GetServerSideProps } from 'next'
 import { prisma } from '@/server/db'
-import { type ProfileProps } from '@/components/profile/ProfileBody'
+import { type ProfileProps } from '@/components/profile/profileBody/ProfileBody'
 
 import { type ReactElement } from 'react'
 import Error, { type ErrorProps } from '@/components/Error'
 import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
-import DynamicProfileBody from '@/components/profile/DynamicProfileBody'
+import DynamicProfileBody from '@/components/profile/profileBody/DynamicProfileBody'
 import { type PublicUser } from '@/lib/types/PublicUser'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
