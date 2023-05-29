@@ -81,4 +81,9 @@ export const env = createEnv({
     GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
     GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
   },
+  /**
+   * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
+   * This is especially useful for Docker builds.
+   */
+  skipValidation: !!process.env.SKIP_ENV_VALIDATION,
 })

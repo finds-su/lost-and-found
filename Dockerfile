@@ -25,42 +25,12 @@ RUN \
 
 FROM base AS builder
 
-ENV DATABASE_URL=postgres://postgres:postgres@0.0.0.0:5432/postgres
 ENV ANALYZE=false
 ENV DISABLE_PWA=true
 
-ENV S3_UPLOAD_KEY=secret
-ENV S3_UPLOAD_SECRET=secret
-
-ARG S3_UPLOAD_BUCKET
-ENV S3_UPLOAD_BUCKET=$S3_UPLOAD_BUCKET
-ARG S3_UPLOAD_HOSTNAME
-ENV S3_UPLOAD_HOSTNAME=$S3_UPLOAD_HOSTNAME
-ARG S3_UPLOAD_ENDPOINT_URL
-ENV S3_UPLOAD_ENDPOINT_URL=$S3_UPLOAD_ENDPOINT_URL
-ARG NEXT_PUBLIC_CDN_ENDPOINT_URL
 ENV NEXT_PUBLIC_CDN_ENDPOINT_URL=$NEXT_PUBLIC_CDN_ENDPOINT_URL
-ENV S3_UPLOAD_REGION=ru-central
-ARG NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS
 ENV NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS=$NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS
-
-ENV OPENAI_API_KEY=sk-secret
-
-ENV UPSTASH_REDIS_REST_URL=http://localhost:6379
-ENV UPSTASH_REDIS_REST_TOKEN=default
-
-ENV NEXTAUTH_SECRET=secret
-ENV NEXTAUTH_URL=http://localhost:3000
-ENV NEXT_PUBLIC_NEXTAUTH_URL=http://localhost:3000
-
-ENV MIREA_CLIENT_ID=default
-ENV MIREA_CLIENT_SECRET=default
-
-ENV GOOGLE_CLIENT_ID=default
-ENV GOOGLE_CLIENT_SECRET=default
-
-ENV GITHUB_CLIENT_ID=default
-ENV GITHUB_CLIENT_SECRET=default
+ENV NEXT_PUBLIC_NEXTAUTH_URL=$NEXT_PUBLIC_NEXTAUTH_URL
 
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
@@ -70,9 +40,9 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN \
- if [ -f yarn.lock ]; then yarn build; \
- elif [ -f package-lock.json ]; then npm run build; \
- elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm run build; \
+ if [ -f yarn.lock ]; then SKIP_ENV_VALIDATION=1 yarn build; \
+ elif [ -f package-lock.json ]; then SKIP_ENV_VALIDATION=1 npm run build; \
+ elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && SKIP_ENV_VALIDATION=1 pnpm run build; \
  else echo "Lockfile not found." && exit 1; \
  fi
 
