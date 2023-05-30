@@ -1,7 +1,7 @@
 import DynamicLayout from '@/components/layout/DynamicLayout'
 import { getServerAuthSession } from '@/server/auth'
 import { type GetServerSideProps } from 'next'
-import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
+import { type NextPageWithLayout } from '@/pages/_app'
 import DynamicCreatePost from '@/components/posts/create/DynamicCreatePost'
 import { PostItemReason } from '@prisma/client'
 
@@ -21,12 +21,8 @@ const CreateFind: NextPageWithLayout = () => {
   )
 }
 
-CreateFind.getLayout = function getLayout(page: JSX.Element, options: NextPageOptions) {
-  return (
-    <DynamicLayout pageName='Сообщить о находке' session={options.session}>
-      {page}
-    </DynamicLayout>
-  )
+CreateFind.getLayout = function getLayout(page: JSX.Element) {
+  return <DynamicLayout pageName='Сообщить о находке'>{page}</DynamicLayout>
 }
 
 export default CreateFind

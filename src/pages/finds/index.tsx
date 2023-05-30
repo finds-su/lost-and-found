@@ -1,7 +1,7 @@
 import DynamicLayout from '@/components/layout/DynamicLayout'
 import { getServerAuthSession } from '@/server/auth'
 import { type GetServerSideProps } from 'next'
-import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
+import { type NextPageWithLayout } from '@/pages/_app'
 import Image from 'next/image'
 import DynamicInfiniteScrollGridWithFilter from '@/components/posts/grid/infiniteScrollGridWithFilter/DynamicInfiniteScrollGridWithFilter'
 
@@ -30,12 +30,8 @@ const Finds: NextPageWithLayout = () => {
   )
 }
 
-Finds.getLayout = function getLayout(page: JSX.Element, options: NextPageOptions) {
-  return (
-    <DynamicLayout pageName='Объявления о найденных вещах' session={options.session}>
-      {page}
-    </DynamicLayout>
-  )
+Finds.getLayout = function getLayout(page: JSX.Element) {
+  return <DynamicLayout pageName='Объявления о найденных вещах'>{page}</DynamicLayout>
 }
 
 export default Finds

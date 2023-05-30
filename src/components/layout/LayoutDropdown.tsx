@@ -1,10 +1,9 @@
 import { Menu, Transition } from '@headlessui/react'
 import { type ReactNode, Fragment } from 'react'
 import classNames from 'classnames/dedupe'
-import { type LayoutUserProps } from '@/components/layout/LayoutUser'
 import { type UserNavigationDropdown } from '@/components/layout/Layout'
 
-export type LayoutDropdownProps = Pick<LayoutUserProps, 'session'> & {
+export type LayoutDropdownProps = {
   navigation: UserNavigationDropdown
   name: string
   head: ReactNode
