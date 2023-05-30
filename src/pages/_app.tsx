@@ -10,9 +10,9 @@ import React, { type ReactElement, type ReactNode, useEffect } from 'react'
 import { type NextPage } from 'next'
 import { Toaster } from 'react-hot-toast'
 import Head from 'next/head'
-import { type ErrorProps } from '@/components/Error'
 import NextNProgress from 'nextjs-progressbar'
 import useSessionStore from '@/lib/hooks/store/sessionStore'
+import { type ErrorProps } from '@/lib/types/ErrorProps'
 
 const inter = Inter({
   subsets: ['latin', 'cyrillic', 'cyrillic-ext'],

@@ -3,35 +3,18 @@ import { getServerAuthSession } from '@/server/auth'
 import { type GetServerSideProps } from 'next'
 import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
 import DynamicOverviewPost from '@/components/posts/overview/DynamicOverviewPost'
-import { prisma } from '@/server/db'
-import Error, { type ErrorProps } from '@/components/Error'
-import { type OverviewPost } from '@/lib/types/OverviewPost'
-import * as console from 'console'
+import DynamicError from '@/components/error/DynamicError'
 import { PostItemReason } from '@prisma/client'
+import { prisma } from '@/server/db'
+import { type ErrorProps } from '@/lib/types/ErrorProps'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)
   const postId = context.params?.postId as string
-  const post: OverviewPost | null = await prisma.lostAndFoundItem.findFirst({
+  const post = await prisma.lostAndFoundItem.findFirst({
     where: { id: postId, reason: PostItemReason.FOUND },
-    select: {
-      id: true,
-      name: true,
-      description: true,
-      campus: true,
-      images: true,
-      created: true,
-      expires: true,
-      user: {
-        select: {
-          name: true,
-          nickname: true,
-          image: true,
-        },
-      },
-    },
+    select: { id: true },
   })
-  console.log(post)
   if (post === null) {
     return {
       props: {
@@ -44,16 +27,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 
-  return { props: { session, post: JSON.stringify(post) } }
+  return { props: { session } }
 }
 
-const Post: NextPageWithLayout = ({ post }: { post: string }) => {
-  return <DynamicOverviewPost post={JSON.parse(post) as OverviewPost} />
+const Post: NextPageWithLayout = () => {
+  return <DynamicOverviewPost reason={PostItemReason.FOUND} />
 }
 
 Post.getLayout = function getLayout(page: JSX.Element, options: NextPageOptions) {
   if (options.error) {
-    return <Error {...options.error} />
+    return <DynamicError {...options.error} />
   }
   return (
     <DynamicLayout pageName='Находка' session={options.session}>

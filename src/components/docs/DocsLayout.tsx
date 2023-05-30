@@ -1,20 +1,26 @@
 import React, { type ReactNode } from 'react'
 import Head from 'next/head'
 import DocsNavigation from '@/components/docs/DocsNavigation'
+import { NextSeo } from 'next-seo'
 
 interface DocsLayoutProps {
   children: ReactNode
   meta: {
     title: string
+    description: string
   }
 }
 
 export default function DocsLayout(props: DocsLayoutProps) {
   return (
     <>
-      <Head>
-        <title>{props.meta.title}</title>
-      </Head>
+      <NextSeo
+        title={props.meta.title}
+        openGraph={{
+          title: props.meta.title,
+          description: props.meta.description,
+        }}
+      />
       <div className='relative h-full min-h-screen overflow-hidden bg-white py-16'>
         <div className='relative px-4 sm:px-6 lg:px-8'>
           <div className='mx-auto max-w-prose text-lg'>

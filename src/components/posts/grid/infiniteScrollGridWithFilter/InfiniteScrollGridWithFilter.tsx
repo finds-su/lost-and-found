@@ -5,7 +5,7 @@ import { type PostItemReason } from '@prisma/client'
 import { Campus } from '@/lib/campus'
 import { api } from '@/lib/api'
 import { humanReadableDate } from '@/lib/humanReadableDate'
-import { type LostAndFoundItemInGrid } from '@/lib/types/LostAndFoundItemInGrid'
+import { type LostAndFoundPostInGrid } from '@/lib/types/LostAndFoundPostInGrid'
 import GridFilter from '@/components/posts/grid/GridFilter'
 import { SpinnerInfinity } from 'spinners-react'
 import useScrollGridStore from '@/lib/hooks/store/scrollGridsStore'
@@ -15,7 +15,7 @@ export default function InfiniteScrollGridWithFilter(props: {
   endMessage: ReactNode
 }) {
   const { enabledSortOption, checkedFilters } = useScrollGridStore((state) => state[props.reason])
-  const itemsQuery = api.posts.infiniteItems.useInfiniteQuery(
+  const postsQuery = api.posts.infiniteItems.useInfiniteQuery(
     {
       limit: 12,
       reason: props.reason,
@@ -24,29 +24,29 @@ export default function InfiniteScrollGridWithFilter(props: {
     },
     { getNextPageParam: (lastPage) => lastPage.nextCursor },
   )
-  const [items, setItems] = useState<LostAndFoundItemInGrid[]>([])
+  const [posts, setPosts] = useState<LostAndFoundPostInGrid[]>([])
   const [hasMore, setHasMore] = useState(true)
 
   useEffect(() => {
-    if (itemsQuery.data) {
-      setItems(itemsQuery.data.pages.map((query) => query.items).flat())
-      setHasMore(itemsQuery.data.pages.at(-1)?.nextCursor !== undefined)
+    if (postsQuery.data) {
+      setPosts(postsQuery.data.pages.map((query) => query.items).flat())
+      setHasMore(postsQuery.data.pages.at(-1)?.nextCursor !== undefined)
     }
-  }, [itemsQuery.data])
+  }, [postsQuery.data])
 
   const fetchMoreData = () => {
-    if (itemsQuery.data && itemsQuery.data.pages.length * 10 >= 500) {
+    if (postsQuery.data && postsQuery.data.pages.length * 10 >= 500) {
       setHasMore(false)
       return
     }
-    void itemsQuery.fetchNextPage()
+    void postsQuery.fetchNextPage()
   }
 
   return (
     <div>
       <GridFilter reason={props.reason} />
       <InfiniteScroll
-        dataLength={items.length}
+        dataLength={posts.length}
         next={fetchMoreData}
         hasMore={hasMore}
         loader={
@@ -67,7 +67,7 @@ export default function InfiniteScrollGridWithFilter(props: {
         }
         className='grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 md:gap-y-1 lg:gap-x-8'
       >
-        {items.map((post) => (
+        {posts.map((post) => (
           <div key={post.id} className='group relative'>
             <div className='h-56 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:h-72 xl:h-80'>
               <Image
@@ -80,7 +80,7 @@ export default function InfiniteScrollGridWithFilter(props: {
               />
             </div>
             <h3 className='mt-4 text-sm text-gray-900'>
-              <a href={`${post.reason === 'LOST' ? 'losses' : 'finds'}/${post.id}`}>
+              <a href={`${props.reason === 'LOST' ? 'losses' : 'finds'}/${post.id}`}>
                 <span className='absolute inset-0' />
                 {post.name}
               </a>

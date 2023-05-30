@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { prisma } from '@/server/db'
 import { Campus, PostItemReason } from '@prisma/client'
 import { SortOption } from '@/lib/types/SortOption'
+import { TRPCError } from '@trpc/server'
 
 export const postsRouter = createTRPCRouter({
   infiniteItems: publicProcedure
@@ -20,28 +21,25 @@ export const postsRouter = createTRPCRouter({
       const campusFilters = input.filters.filter((filter) =>
         Object.values(Campus).includes(filter as Campus),
       ) as Array<Campus>
-      const { cursor } = input
+      const { cursor, reason } = input
       const items = await prisma.lostAndFoundItem.findMany({
         select: {
           id: true,
           name: true,
           campus: true,
-          reason: true,
           images: true,
           created: true,
           user: {
             select: {
               name: true,
               nickname: true,
-              role: true,
-              userInfo: true,
               image: true,
             },
           },
         },
         take: limit + 1, // get an extra item at the end which we'll use as next cursor
         where: {
-          reason: input.reason,
+          reason,
           campus: {
             in: campusFilters,
           },
@@ -85,6 +83,37 @@ export const postsRouter = createTRPCRouter({
           images: input.images,
           userId: ctx.session.user.id,
         },
+      })
+    }),
+
+  getPost: publicProcedure
+    .input(z.object({ postId: z.string(), reason: z.nativeEnum(PostItemReason) }))
+    .query(async ({ input }) => {
+      const post = await prisma.lostAndFoundItem.findFirst({
+        where: { id: input.postId, reason: input.reason },
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          campus: true,
+          images: true,
+          created: true,
+          expires: true,
+          user: {
+            select: {
+              name: true,
+              nickname: true,
+              image: true,
+            },
+          },
+        },
+      })
+      if (post) {
+        return post
+      }
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: 'Пост не найден.',
       })
     }),
 })

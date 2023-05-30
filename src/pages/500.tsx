@@ -1,4 +1,4 @@
-import Error from '@/components/Error'
+import Error from '@/components/error/Error'
 
 export default function InternalServerError() {
   return (

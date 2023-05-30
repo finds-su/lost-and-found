@@ -5,10 +5,11 @@ import { prisma } from '@/server/db'
 import { type ProfileProps } from '@/components/profile/profileBody/ProfileBody'
 
 import { type ReactElement } from 'react'
-import Error, { type ErrorProps } from '@/components/Error'
+import DynamicError from '@/components/error/DynamicError'
 import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
 import DynamicProfileBody from '@/components/profile/profileBody/DynamicProfileBody'
 import { type PublicUser } from '@/lib/types/PublicUser'
+import { type ErrorProps } from '@/lib/types/ErrorProps'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)
@@ -53,7 +54,7 @@ const Profile: NextPageWithLayout = (props: ProfileProps) => {
 
 Profile.getLayout = function getLayout(page: ReactElement, options: NextPageOptions) {
   if (options.error) {
-    return <Error {...options.error} />
+    return <DynamicError {...options.error} />
   }
   return (
     <DynamicLayout pageName='Профиль' hideTitle session={options.session}>

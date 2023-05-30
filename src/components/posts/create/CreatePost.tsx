@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { Campus } from '@/lib/campus'
 import { api } from '@/lib/api'
 import errorToast from '@/components/toasts/ErrorToast'
-import DynamicDropzone from '@/components/form/DynamicDropzone'
+import DynamicDropzone from '@/components/form/dropzone/DynamicDropzone'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 
