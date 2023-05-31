@@ -6,13 +6,13 @@ import { signIn, signOut } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Head from 'next/head'
-import { type Session } from 'next-auth'
 import classNames from 'classnames/dedupe'
 import DynamicMobileLayoutMenu from '@/components/layout/DynamicMobileLayoutMenu'
 import DynamicLayoutUser from '@/components/layout/DynamicLayoutUser'
 import DynamicLayoutFooter from '@/components/layout/footer/DynamicLayoutFooter'
 import { NextSeo } from 'next-seo'
 import { env } from '@/env.mjs'
+import useSessionStore from '@/lib/hooks/store/sessionStore'
 
 export type Navigation = { name: string; href: string }[]
 export const navigation: Navigation = [
@@ -21,7 +21,6 @@ export const navigation: Navigation = [
 ]
 
 export interface LayoutProps {
-  session: Session | null
   pageName: string
   hideTitle?: boolean
   children: React.ReactNode
@@ -33,7 +32,7 @@ export type UserNavigation = Record<'profile' | 'create', UserNavigationDropdown
 
 export default function Layout(props: LayoutProps) {
   const router = useRouter()
-  const session = props.session
+  const { session } = useSessionStore()
 
   const userNavigation: UserNavigation = {
     create: [
@@ -130,8 +129,8 @@ export default function Layout(props: LayoutProps) {
                       </div>
                     </div>
                   </div>
-                  {props.session ? (
-                    <DynamicLayoutUser session={props.session} userNavigation={userNavigation} />
+                  {session ? (
+                    <DynamicLayoutUser userNavigation={userNavigation} />
                   ) : (
                     <button
                       onClick={() => void signIn()}

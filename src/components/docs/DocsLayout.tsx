@@ -1,14 +1,11 @@
 import React, { type ReactNode } from 'react'
-import Head from 'next/head'
 import DocsNavigation from '@/components/docs/DocsNavigation'
 import { NextSeo } from 'next-seo'
+import { type DocsMeta } from '@/lib/types/DocsMeta'
 
 interface DocsLayoutProps {
   children: ReactNode
-  meta: {
-    title: string
-    description: string
-  }
+  meta: DocsMeta
 }
 
 export default function DocsLayout(props: DocsLayoutProps) {
@@ -16,9 +13,18 @@ export default function DocsLayout(props: DocsLayoutProps) {
     <>
       <NextSeo
         title={props.meta.title}
+        description={props.meta.description}
         openGraph={{
           title: props.meta.title,
           description: props.meta.description,
+          images: [
+            {
+              url: '/logo-icons/apple-touch-icon-precomposed.png',
+              width: 300,
+              height: 300,
+              alt: `Логотип Mirea Ninja`,
+            },
+          ],
         }}
       />
       <div className='relative h-full min-h-screen overflow-hidden bg-white py-16'>

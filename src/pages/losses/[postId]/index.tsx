@@ -33,15 +33,11 @@ const Post: NextPageWithLayout = () => {
   return <DynamicOverviewPost reason={PostItemReason.LOST} />
 }
 
-Post.getLayout = function getLayout(page: JSX.Element, options: NextPageOptions) {
+Post.getLayout = (page: JSX.Element, options: NextPageOptions) => {
   if (options.error) {
     return <DynamicError {...options.error} />
   }
-  return (
-    <DynamicLayout pageName='Пропажа' session={options.session}>
-      {page}
-    </DynamicLayout>
-  )
+  return <DynamicLayout pageName='Пропажа'>{page}</DynamicLayout>
 }
 
 export default Post
