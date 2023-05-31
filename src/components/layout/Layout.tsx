@@ -99,7 +99,7 @@ export default function Layout(props: LayoutProps) {
             <>
               <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
                 <div className='flex h-16 items-center justify-between'>
-                  <div className='flex md:hidden'>
+                  <div className='flex basis-1/3 justify-start md:hidden md:basis-0'>
                     {/* Mobile menu button */}
                     <Disclosure.Button className='inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'>
                       <span className='sr-only'>Открыть главное меню</span>
@@ -110,7 +110,7 @@ export default function Layout(props: LayoutProps) {
                       )}
                     </Disclosure.Button>
                   </div>
-                  <div className='flex items-center'>
+                  <div className='flex basis-1/3 items-center justify-center md:basis-2/3 md:justify-start'>
                     <Link className='flex-shrink-0' href='/'>
                       <Image
                         priority
@@ -141,12 +141,9 @@ export default function Layout(props: LayoutProps) {
                       </div>
                     </div>
                   </div>
-                  <div>
+                  <div className='flex basis-1/3 justify-end'>
                     {session ? (
-                      <>
-                        <DynamicLayoutUser userNavigation={userNavigation} />
-                        <div className='h-10 w-10 md:hidden' />
-                      </>
+                      <DynamicLayoutUser userNavigation={userNavigation} />
                     ) : (
                       <button
                         onClick={() => void signIn()}
