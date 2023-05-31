@@ -20,6 +20,7 @@ const inter = Inter({
 })
 
 export interface NextPageOptions {
+  session: Session | null
   error?: ErrorProps
 }
 
@@ -68,7 +69,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <main className={`${inter.variable} font-sans`}>
         <NextNProgress height={3} color='#0ea5e9' options={{ showSpinner: false, speed: 500 }} />
         {getLayout ? (
-          getLayout(<Component {...pageProps} />, { error })
+          getLayout(<Component {...pageProps} />, { error, session })
         ) : (
           <Component {...pageProps} />
         )}

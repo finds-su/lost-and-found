@@ -57,7 +57,7 @@ Profile.getLayout = function getLayout(page: ReactElement, options: NextPageOpti
     return <DynamicError {...options.error} />
   }
   return (
-    <DynamicLayout pageName='Профиль' hideTitle>
+    <DynamicLayout pageName='Профиль' session={options.session} hideTitle>
       {page}
     </DynamicLayout>
   )

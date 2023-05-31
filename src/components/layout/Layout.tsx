@@ -12,7 +12,7 @@ import DynamicLayoutUser from '@/components/layout/DynamicLayoutUser'
 import DynamicLayoutFooter from '@/components/layout/footer/DynamicLayoutFooter'
 import { NextSeo } from 'next-seo'
 import { env } from '@/env.mjs'
-import useSessionStore from '@/lib/hooks/store/sessionStore'
+import { type Session } from 'next-auth'
 
 export type Navigation = { name: string; href: string }[]
 export const navigation: Navigation = [
@@ -24,6 +24,7 @@ export interface LayoutProps {
   pageName: string
   hideTitle?: boolean
   children: React.ReactNode
+  session: Session | null
 }
 
 export type UserNavigationDropdown = { name: string; func: () => void; href?: string }[][]
@@ -32,7 +33,7 @@ export type UserNavigation = Record<'profile' | 'create', UserNavigationDropdown
 
 export default function Layout(props: LayoutProps) {
   const router = useRouter()
-  const { session } = useSessionStore()
+  const session = props.session
 
   const userNavigation: UserNavigation = {
     create: [
@@ -98,6 +99,17 @@ export default function Layout(props: LayoutProps) {
             <>
               <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
                 <div className='flex h-16 items-center justify-between'>
+                  <div className='flex md:hidden'>
+                    {/* Mobile menu button */}
+                    <Disclosure.Button className='inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'>
+                      <span className='sr-only'>Открыть главное меню</span>
+                      {open ? (
+                        <XMarkIcon className='block h-6 w-6' aria-hidden='true' />
+                      ) : (
+                        <Bars3Icon className='block h-6 w-6' aria-hidden='true' />
+                      )}
+                    </Disclosure.Button>
+                  </div>
                   <div className='flex items-center'>
                     <Link className='flex-shrink-0' href='/'>
                       <Image
@@ -129,26 +141,20 @@ export default function Layout(props: LayoutProps) {
                       </div>
                     </div>
                   </div>
-                  {session ? (
-                    <DynamicLayoutUser userNavigation={userNavigation} />
-                  ) : (
-                    <button
-                      onClick={() => void signIn()}
-                      className='rounded-md border px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white'
-                    >
-                      Войти
-                    </button>
-                  )}
-                  <div className='-mr-2 flex md:hidden'>
-                    {/* Mobile menu button */}
-                    <Disclosure.Button className='inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'>
-                      <span className='sr-only'>Открыть главное меню</span>
-                      {open ? (
-                        <XMarkIcon className='block h-6 w-6' aria-hidden='true' />
-                      ) : (
-                        <Bars3Icon className='block h-6 w-6' aria-hidden='true' />
-                      )}
-                    </Disclosure.Button>
+                  <div>
+                    {session ? (
+                      <>
+                        <DynamicLayoutUser userNavigation={userNavigation} />
+                        <div className='h-8 w-8 md:hidden' />
+                      </>
+                    ) : (
+                      <button
+                        onClick={() => void signIn()}
+                        className='rounded-md border px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white'
+                      >
+                        Войти
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

@@ -38,7 +38,11 @@ Post.getLayout = function getLayout(page: JSX.Element, options: NextPageOptions)
   if (options.error) {
     return <DynamicError {...options.error} />
   }
-  return <DynamicLayout pageName='Находка'>{page}</DynamicLayout>
+  return (
+    <DynamicLayout session={options.session} pageName='Находка'>
+      {page}
+    </DynamicLayout>
+  )
 }
 
 export default Post
