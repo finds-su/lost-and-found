@@ -145,7 +145,7 @@ export default function Layout(props: LayoutProps) {
                     {session ? (
                       <>
                         <DynamicLayoutUser userNavigation={userNavigation} />
-                        <div className='h-8 w-8 md:hidden' />
+                        <div className='h-10 w-10 md:hidden' />
                       </>
                     ) : (
                       <button
