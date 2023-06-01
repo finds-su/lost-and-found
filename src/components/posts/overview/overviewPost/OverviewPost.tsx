@@ -1,6 +1,5 @@
 import Window from '@/components/form/Window'
 import { type OverviewPost as OverviewPostData } from '@/lib/types/OverviewPost'
-import Image from 'next/image'
 import { Campus } from '@/lib/campus'
 import { formatDate } from '@/lib/formatDate'
 import { api } from '@/lib/api'
@@ -8,6 +7,7 @@ import { useRouter } from 'next/router'
 import { type PostItemReason } from '@prisma/client'
 import { useState } from 'react'
 import errorToast from '@/components/toasts/ErrorToast'
+import DynamicOverviewPostImage from '@/components/posts/overview/overviewPostImage/DynamicOverviewPostImage'
 
 interface OverviewPostProps {
   reason: PostItemReason
@@ -73,14 +73,7 @@ export default function OverviewPost(props: OverviewPostProps) {
         </div>
         <div className='grid grid-cols-2 grid-rows-2 gap-4 sm:gap-6 lg:gap-8'>
           {post?.images.map((image, index) => (
-            <Image
-              key={index}
-              src={image}
-              alt=''
-              height={500}
-              width={500}
-              className='rounded-lg bg-gray-100'
-            />
+            <DynamicOverviewPostImage key={index} src={image} />
           ))}
         </div>
       </div>

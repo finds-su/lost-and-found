@@ -57,7 +57,9 @@ export default function InfiniteScrollGridWithFilter(props: {
               speed={100}
               color='rgba(14, 165, 233, 1)'
               secondaryColor='rgba(203, 213, 225, 1)'
+              aria-hidden='true'
             />
+            <span className='sr-only'>Загрузка...</span>
           </p>
         }
         endMessage={
@@ -77,9 +79,10 @@ export default function InfiniteScrollGridWithFilter(props: {
                 height={800}
                 className='h-full w-full object-cover object-center'
                 priority
+                aria-hidden='true'
               />
             </div>
-            <h3 className='mt-4 text-sm text-gray-900'>
+            <h3 className='mt-4 overflow-hidden text-ellipsis text-sm text-gray-900'>
               <a href={`${props.reason === 'LOST' ? 'losses' : 'finds'}/${post.id}`}>
                 <span className='absolute inset-0' />
                 {post.name}

@@ -72,7 +72,7 @@ export default function CreatePost(props: CreatePostProps) {
           id='campus'
           name='campus'
           onChange={(e) => setPost({ ...post, campus: e.target.value as PrismaCamus })}
-          className='block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+          className='block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
         >
           {Object.values(PrismaCamus).map((value, index) => (
             <option key={index} value={value}>

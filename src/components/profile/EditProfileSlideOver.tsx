@@ -255,7 +255,7 @@ export default function EditProfileSlideOver() {
                                 </button>
                                 <div className='ml-3 inline-flex sm:ml-0'>
                                   <button
-                                    className='inline-flex items-center rounded-md border border-gray-300 bg-white p-2 text-sm font-medium text-gray-400 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
+                                    className='inline-flex items-center rounded-md border border-gray-300 bg-white p-2 text-sm font-medium text-gray-400 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
                                     onClick={openAvatarPromptModal}
                                     disabled={generateAvatar.isLoading}
                                   >
