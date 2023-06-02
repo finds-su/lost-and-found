@@ -4,17 +4,17 @@ import { type GetServerSideProps } from 'next'
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const session = await getServerSession(req, res, authOptions)
-  if (session) {
+  if (!session) {
     return {
       redirect: {
-        destination: `/u/${session.user.nickname}/`,
+        destination: '/',
         permanent: false,
       },
     }
   }
   return {
     redirect: {
-      destination: '/',
+      destination: `/u/${session.user.nickname}/`,
       permanent: false,
     },
   }

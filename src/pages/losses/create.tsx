@@ -7,6 +7,14 @@ import { PostItemReason } from '@prisma/client'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)
+  if (!session) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/losses',
+      },
+    }
+  }
   return { props: { session } }
 }
 

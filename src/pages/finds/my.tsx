@@ -5,6 +5,14 @@ import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)
+  if (!session) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/finds',
+      },
+    }
+  }
   return { props: { session } }
 }
 
