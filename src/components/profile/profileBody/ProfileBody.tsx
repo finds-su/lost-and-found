@@ -23,15 +23,7 @@ export default function ProfileBody(props: ProfileProps) {
     },
     {
       name: 'Аватар',
-      value: (
-        <Avatar
-          size='md'
-          placeholderInitials={user.nickname.slice(0, 2).toUpperCase()}
-          src={user.image}
-          rounded
-          resolution={100}
-        />
-      ),
+      value: <Avatar size='md' src={user.image} rounded resolution={100} />,
     },
     { name: 'Никнейм', value: user.nickname },
     ...(user.email ? [{ name: 'Почта', value: user.email }] : []),

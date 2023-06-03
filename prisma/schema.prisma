@@ -71,6 +71,8 @@ model UserSessionNetwork {
   userId                         String
   user                           User                             @relation(fields: [userId], references: [id], onDelete: Cascade)
   lostAndFoundItemSocialNetworks LostAndFoundItemSocialNetworks[]
+
+  @@unique([userId, socialNetwork])
 }
 
 enum Role {
@@ -101,6 +103,8 @@ model LostAndFoundItemSocialNetworks {
   lostAndFoundItem    LostAndFoundItem   @relation(fields: [lostAndFoundItemId], references: [id], onDelete: Cascade)
   userSocialNetworkId String
   userSessionNetwork  UserSessionNetwork @relation(fields: [userSocialNetworkId], references: [id], onDelete: Cascade)
+
+  @@unique([lostAndFoundItemId, userSocialNetworkId])
 }
 
 enum PostItemReason {

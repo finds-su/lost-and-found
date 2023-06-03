@@ -57,6 +57,7 @@ export default function EditProfileSlideOver() {
       },
       onError: (error) => errorToast(error.message, { id: generateAIAvatarToastID }),
       refetchOnWindowFocus: false,
+      retry: false,
     },
   )
   useEffect(() => {
@@ -202,9 +203,6 @@ export default function EditProfileSlideOver() {
                                   <Avatar
                                     size='xl'
                                     className='h-32 w-32 flex-shrink-0 bg-white sm:h-36 sm:w-36'
-                                    placeholderInitials={session?.user.nickname
-                                      .slice(0, 2)
-                                      .toUpperCase()}
                                     src={editedUser?.image}
                                     resolution={300}
                                   />

@@ -45,13 +45,7 @@ export default function MobileLayoutDropdown(props: MobileLayoutMenuProps) {
                 className='flex items-center'
                 href={`/u/${session.user.nickname}`}
               >
-                <Avatar
-                  size='sm'
-                  placeholderInitials={session.user.nickname.slice(0, 2).toUpperCase()}
-                  src={session.user.image}
-                  rounded
-                  resolution={50}
-                />
+                <Avatar size='sm' src={session.user.image} rounded resolution={50} />
                 <div className='ml-3 truncate'>
                   <div className='w-56 truncate text-base font-medium text-white'>
                     {session.user.name}

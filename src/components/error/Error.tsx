@@ -32,8 +32,8 @@ export default function Error(props: ErrorProps) {
               className='mx-auto h-12 w-auto transform transition duration-1000 hover:scale-105'
               src='/assets/ninja-logo-black.svg'
               alt='Mirea Ninja'
-              width={100}
-              height={100}
+              width={10}
+              height={10}
               aria-hidden='true'
             />
           </div>

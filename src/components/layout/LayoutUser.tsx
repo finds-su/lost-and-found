@@ -28,15 +28,7 @@ export default function LayoutUser(props: LayoutUserProps) {
         {
           navigation: props.userNavigation.profile,
           name: 'Открыть пользовательское меню',
-          head: (
-            <Avatar
-              size='sm'
-              placeholderInitials={session.user.nickname.slice(0, 2).toUpperCase()}
-              src={session.user.image}
-              rounded
-              resolution={50}
-            />
-          ),
+          head: <Avatar size='sm' src={session.user.image} rounded resolution={50} />,
           beforeNavigation: (
             <Menu.Item>
               <div className='px-4 py-3'>

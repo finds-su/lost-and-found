@@ -4,7 +4,10 @@ import classNames from 'classnames/dedupe'
 import { Avatar as FlowBiteAvatar } from 'flowbite-react'
 
 export default function Avatar(
-  props: Omit<AvatarProps, 'img'> & { src?: string | null; resolution: number },
+  props: Omit<AvatarProps, 'img' | 'placeholderInitials'> & {
+    src?: string | null
+    resolution: number
+  },
 ) {
   if (props.src) {
     return (

@@ -117,8 +117,8 @@ export default function Layout(props: LayoutProps) {
                         className='h-8 w-8'
                         src='/assets/ninja-logo-white.svg'
                         alt='Mirea Ninja'
-                        width={50}
-                        height={50}
+                        width={10}
+                        height={10}
                       />
                     </Link>
                     <div className='hidden md:block'>
