@@ -44,7 +44,6 @@ export default function MireaNinjaLKSProvider(options: MireaNinjaLKSProviderConf
         id: profile.arUser.ID,
         name,
         nickname: await nicknameValidation(name),
-        telegramLink: null,
         email: profile.arUser.LOGIN,
         emailVerified: new Date(),
         userInfo: null,
