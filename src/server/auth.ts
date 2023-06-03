@@ -41,7 +41,6 @@ export const authOptions: NextAuthOptions = {
         session.user.id = user.id
         session.user.name = user.name
         session.user.nickname = user.nickname
-        session.user.telegramLink = user.telegramLink
         session.user.email = user.email
         session.user.userInfo = user.userInfo
         session.user.role = user.role
@@ -61,7 +60,6 @@ export const authOptions: NextAuthOptions = {
           id: profile.id.toString(),
           name: profile.name ?? profile.login,
           nickname: await nicknameValidation(profile.login),
-          telegramLink: null,
           email: profile.email,
           emailVerified: new Date(),
           userInfo: null,
@@ -87,7 +85,6 @@ export const authOptions: NextAuthOptions = {
           id: profile.sub,
           name: profile.name,
           nickname: await nicknameValidation(profile.email.split('@')[0] ?? ''),
-          telegramLink: null,
           email: profile.email,
           emailVerified: new Date(),
           userInfo: null,

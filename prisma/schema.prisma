@@ -37,16 +37,16 @@ model Session {
 }
 
 model User {
-  id                String             @id @default(cuid())
+  id                String               @id @default(cuid())
   name              String?
-  nickname          String             @unique
-  telegramLink      String?
-  email             String?            @unique
+  nickname          String               @unique
+  socialNetworks    UserSessionNetwork[]
+  email             String?              @unique
   emailVerified     DateTime?
-  userInfo          String?            @db.VarChar(280)
-  role              Role               @default(USER)
+  userInfo          String?              @db.VarChar(280)
+  role              Role                 @default(USER)
   image             String?
-  isBlocked         Boolean            @default(false)
+  isBlocked         Boolean              @default(false)
   blockReason       String?
   accounts          Account[]
   sessions          Session[]
@@ -64,6 +64,15 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+model UserSessionNetwork {
+  id                             String                           @id @default(cuid())
+  socialNetwork                  SocialNetwork
+  link                           String
+  userId                         String
+  user                           User                             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lostAndFoundItemSocialNetworks LostAndFoundItemSocialNetworks[]
+}
+
 enum Role {
   USER
   MODERATOR
@@ -71,18 +80,27 @@ enum Role {
 }
 
 model LostAndFoundItem {
-  id          String         @id @default(cuid())
-  name        String         @db.VarChar(100)
-  description String         @default("") @db.VarChar(512)
-  campus      Campus
-  reason      PostItemReason
-  images      String[]
-  userId      String
-  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  created     DateTime       @default(now())
-  expires     DateTime       @default(dbgenerated("NOW() + interval '1 week'"))
+  id             String                           @id @default(cuid())
+  name           String                           @db.VarChar(100)
+  description    String                           @default("") @db.VarChar(512)
+  campus         Campus
+  reason         PostItemReason
+  images         String[]
+  userId         String
+  user           User                             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  socialNetworks LostAndFoundItemSocialNetworks[]
+  created        DateTime                         @default(now())
+  expires        DateTime                         @default(dbgenerated("NOW() + interval '1 week'"))
 
   @@index([id], type: Hash)
+}
+
+model LostAndFoundItemSocialNetworks {
+  id                  String             @id @default(cuid())
+  lostAndFoundItemId  String
+  lostAndFoundItem    LostAndFoundItem   @relation(fields: [lostAndFoundItemId], references: [id], onDelete: Cascade)
+  userSocialNetworkId String
+  userSessionNetwork  UserSessionNetwork @relation(fields: [userSocialNetworkId], references: [id], onDelete: Cascade)
 }
 
 enum PostItemReason {
@@ -98,4 +116,9 @@ enum Campus {
   SG22
   SHP23
   U7
+}
+
+enum SocialNetwork {
+  TELEGRAM
+  VK
 }

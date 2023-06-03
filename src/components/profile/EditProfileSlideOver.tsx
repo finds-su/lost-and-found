@@ -125,18 +125,6 @@ export default function EditProfileSlideOver() {
       },
     },
     {
-      name: 'Телеграм',
-      value: editedUser?.telegramLink,
-      setInputValue: (e: FormEvent<HTMLInputElement>) => {
-        if (editedUser) {
-          setEditedUser({
-            ...editedUser,
-            telegramLink: convertEmptyStringToNull(e.currentTarget.value),
-          })
-        }
-      },
-    },
-    {
       name: 'Обо мне',
       value: editedUser?.userInfo,
       setTextAreaValue: (e: FormEvent<HTMLTextAreaElement>) => {

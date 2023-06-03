@@ -39,16 +39,16 @@ const zodName = z
   .trim()
   .max(20, { message: 'Слишком длинное имя' })
 
-const zodTelegramLink = z
-  .string({
-    required_error: 'Telegram username обязательно',
-    invalid_type_error: 'Telegram username должно быть строкой',
-  })
-  .trim()
-  .max(50, { message: 'Слишком длинное Telegram username' })
-  .refine((username) => username === username.match(telegramUsernameRegex)?.at(0), {
-    message: 'Невалидный Telegram username',
-  })
+// const zodTelegramLink = z
+//   .string({
+//     required_error: 'Telegram username обязательно',
+//     invalid_type_error: 'Telegram username должно быть строкой',
+//   })
+//   .trim()
+//   .max(50, { message: 'Слишком длинное Telegram username' })
+//   .refine((username) => username === username.match(telegramUsernameRegex)?.at(0), {
+//     message: 'Невалидный Telegram username',
+//   })
 
 const zodUserInfo = z
   .string({
@@ -105,9 +105,6 @@ export const usersRouter = createTRPCRouter({
           .nullable()
           .optional()
           .transform((value) => (value?.length === 0 ? null : value)),
-        telegramLink: zodTelegramLink
-          .nullable()
-          .transform((value) => (value?.length === 0 ? null : value)),
         userInfo: zodUserInfo.nullable().transform((value) => (value?.length === 0 ? null : value)),
         image: z
           .string()
@@ -158,7 +155,6 @@ export const usersRouter = createTRPCRouter({
             nickname: input.nickname,
             image: input.image,
             email: input.email,
-            telegramLink: input.telegramLink,
             userInfo: input.userInfo,
           },
         })

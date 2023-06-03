@@ -35,7 +35,6 @@ export default function ProfileBody(props: ProfileProps) {
     },
     { name: 'Никнейм', value: user.nickname },
     ...(user.email ? [{ name: 'Почта', value: user.email }] : []),
-    ...(user.telegramLink ? [{ name: 'Telegram', value: user.telegramLink }] : []),
     { name: 'Роль', value: user.role },
     ...(user.isBlocked ? [{ name: 'Заблокирован', value: user.isBlocked ? 'да' : 'нет' }] : []),
     { name: 'Обо мне', value: user.userInfo },
