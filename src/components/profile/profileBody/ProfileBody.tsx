@@ -6,6 +6,7 @@ import { type User } from '@prisma/client'
 import DynamicEditProfileSlideOver from '@/components/profile/DynamicEditProfileSlideOver'
 import { NextSeo } from 'next-seo'
 import { env } from '@/env.mjs'
+import useSessionStore from '@/lib/hooks/store/sessionStore'
 
 export interface ProfileProps {
   isOwner: boolean
@@ -15,6 +16,7 @@ export interface ProfileProps {
 export default function ProfileBody(props: ProfileProps) {
   const user = props.user
   const editProfile = useEditProfileStore()
+  const { session } = useSessionStore()
 
   const profileInfo: { name: string; value: ReactNode }[] = [
     {
@@ -82,7 +84,7 @@ export default function ProfileBody(props: ProfileProps) {
             ))}
           </dl>
         </div>
-        {props.isOwner && <DynamicEditProfileSlideOver />}
+        {props.isOwner && session?.user && <DynamicEditProfileSlideOver user={session.user} />}
       </Window>
     </>
   )
