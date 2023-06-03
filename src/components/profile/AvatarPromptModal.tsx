@@ -64,13 +64,14 @@ export default function AvatarPromptModal() {
                     </div>
                     <div className='my-3'>
                       <Input
-                        type='text'
-                        isOptional
-                        hideLabel
+                        inputProps={{
+                          type: 'text',
+                          value: prompt ?? '',
+                          onChange: (e) => setPrompt(e.currentTarget.value),
+                          placeholder: 'кот в сапогах',
+                        }}
                         label='prompt'
-                        value={prompt ?? ''}
-                        onChange={(e) => setPrompt(e.currentTarget.value)}
-                        placeholder='кот в сапогах'
+                        isOptional
                       />
                     </div>
                   </div>
