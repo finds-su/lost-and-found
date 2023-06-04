@@ -39,7 +39,7 @@ export default function ProfileBody() {
       ]
     : []
 
-  if (!user || !isOwner || !profileQuery.data) {
+  if (!user || !profileQuery.data) {
     return <div />
   }
 

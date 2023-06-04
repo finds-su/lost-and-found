@@ -27,12 +27,14 @@ export const usersRouter = createTRPCRouter({
         select: {
           name: true,
           nickname: true,
-          socialNetworks: {
-            select: {
-              socialNetwork: isOwner,
-              link: isOwner,
+          ...(isOwner && {
+            socialNetworks: {
+              select: {
+                socialNetwork: isOwner,
+                link: isOwner,
+              },
             },
-          },
+          }),
           email: isOwner,
           userInfo: true,
           role: true,
