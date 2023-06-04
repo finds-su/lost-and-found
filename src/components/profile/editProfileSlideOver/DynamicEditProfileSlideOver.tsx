@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic'
 
 const DynamicEditProfileSlideOver = dynamic(
-  () => import('@/components/profile/EditProfileSlideOver'),
+  () => import('@/components/profile/editProfileSlideOver/EditProfileSlideOver'),
   {
     ssr: false,
   },
