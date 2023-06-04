@@ -5,7 +5,8 @@ export interface InputProps {
   label: string
   hideLabel?: boolean
   isOptional?: boolean
-  inputProps: ComponentProps<'input'>
+  inputProps: Omit<ComponentProps<'input'>, 'className'>
+  error?: string
 }
 
 export default function Input(props: InputProps) {
@@ -35,6 +36,7 @@ export default function Input(props: InputProps) {
         {...props.inputProps}
         className='block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
       />
+      {props.error}
     </div>
   )
 }

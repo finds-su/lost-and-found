@@ -2,13 +2,11 @@ import DynamicLayout from '@/components/layout/DynamicLayout'
 import { getServerAuthSession } from '@/server/auth'
 import { type GetServerSideProps } from 'next'
 import { prisma } from '@/server/db'
-import { type ProfileProps } from '@/components/profile/profileBody/ProfileBody'
 
 import { type ReactElement } from 'react'
 import DynamicError from '@/components/error/DynamicError'
 import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
 import DynamicProfileBody from '@/components/profile/profileBody/DynamicProfileBody'
-import { type PublicUser } from '@/lib/types/PublicUser'
 import { type ErrorProps } from '@/lib/types/ErrorProps'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -16,22 +14,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const nickname = context.params?.nickname as string
   if (session && session?.user.nickname === nickname) {
     return {
-      props: { isOwner: true, user: session.user, session } as ProfileProps,
+      props: { session },
     }
   }
 
-  const user = (await prisma.user.findUnique({
+  const user = await prisma.user.findUnique({
     where: {
       nickname,
     },
     select: {
-      name: true,
-      nickname: true,
-      role: true,
-      userInfo: true,
-      image: true,
+      id: true,
     },
-  })) as PublicUser | null
+  })
   if (user === null) {
     return {
       props: {
@@ -44,12 +38,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
   return {
-    props: { isOwner: false, user, session } as ProfileProps,
+    props: { session },
   }
 }
 
-const Profile: NextPageWithLayout = (props: ProfileProps) => {
-  return <DynamicProfileBody {...props} />
+const Profile: NextPageWithLayout = () => {
+  return <DynamicProfileBody />
 }
 
 Profile.getLayout = function getLayout(page: ReactElement, options: NextPageOptions) {

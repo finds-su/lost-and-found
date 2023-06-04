@@ -6,23 +6,24 @@ import errorToast from '@/components/toasts/ErrorToast'
 import { api } from '@/lib/api'
 import { useRouter } from 'next/router'
 import successToast from '@/components/toasts/SuccessToast'
-import { type EditedUser } from '@/lib/types/EditedUser'
-import AvatarPromptModal from '@/components/profile/AvatarPromptModal'
-import Input from '@/components/form/Input'
-import TextArea from '@/components/form/TextArea'
+import { type EditableProfile } from '@/lib/types/EditableProfile'
 import { FormProvider, useForm } from 'react-hook-form'
-import EditProfileSlideOverAvatar from '@/components/profile/editProfileSlideOverAvatar/editProfileSlideOverAvatar'
+import EditProfileSlideOverAvatar from '@/components/profile/editProfileSlideOver/EditProfileSlideOverAvatar'
+import EditProfileSlideOverBody from '@/components/profile/editProfileSlideOver/EditProfileSlideOverBody'
 
 interface EditProfileSlideOverProps {
-  user: EditedUser
+  user: EditableProfile
 }
 
 export default function EditProfileSlideOver(props: EditProfileSlideOverProps) {
   const router = useRouter()
   const { user } = props
   const editProfile = useEditProfileStore()
-  const editProfileForm = useForm<EditedUser>({ values: user })
-  const mutateUser = api.users.editUser.useMutation({
+  const editProfileForm = useForm<EditableProfile>({
+    values: user,
+    // resolver: zodResolver(zodEditUserInput),
+  })
+  const mutateProfile = api.users.editUser.useMutation({
     onSuccess: async (data, variables) => {
       successToast('Профиль изменен')
       editProfile.close()
@@ -30,33 +31,6 @@ export default function EditProfileSlideOver(props: EditProfileSlideOverProps) {
     },
     onError: (error) => errorToast(error.message),
   })
-
-  const editableAttributes: {
-    name: string
-    register: ReturnType<typeof editProfileForm.register>
-    type: 'input' | 'textArea'
-  }[] = [
-    {
-      name: 'Имя',
-      register: editProfileForm.register('name'),
-      type: 'input',
-    },
-    {
-      name: 'Никнейм',
-      register: editProfileForm.register('nickname'),
-      type: 'input',
-    },
-    {
-      name: 'Почта',
-      register: editProfileForm.register('email'),
-      type: 'input',
-    },
-    {
-      name: 'Обо мне',
-      register: editProfileForm.register('userInfo'),
-      type: 'textArea',
-    },
-  ]
   const cancelButtonRef = useRef(null)
 
   return (
@@ -118,36 +92,7 @@ export default function EditProfileSlideOver(props: EditProfileSlideOverProps) {
                             <div className='h-24 bg-blue-700 sm:h-20 lg:h-28' />
                             <EditProfileSlideOverAvatar user={user} />
                           </div>
-                          <div className='space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0'>
-                            {/* Project name */}
-                            {editableAttributes.map((attribute) => (
-                              <div
-                                key={attribute.name}
-                                className='space-y-1 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5'
-                              >
-                                <div>
-                                  <label
-                                    htmlFor={attribute.name}
-                                    className='block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2'
-                                  >
-                                    {attribute.name}
-                                  </label>
-                                </div>
-                                <div className='sm:col-span-2'>
-                                  {attribute.type === 'input' && (
-                                    <Input
-                                      label={attribute.name}
-                                      hideLabel
-                                      inputProps={attribute.register}
-                                    />
-                                  )}
-                                  {attribute.type === 'textArea' && (
-                                    <TextArea textareaProps={attribute.register} />
-                                  )}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
+                          <EditProfileSlideOverBody />
                           <div className='flex-shrink-0 border-t border-gray-200 px-4 py-5 sm:px-6'>
                             <div className='flex justify-end space-x-3'>
                               <button
@@ -159,9 +104,11 @@ export default function EditProfileSlideOver(props: EditProfileSlideOverProps) {
                                 Отменить
                               </button>
                               <button
-                                onClick={() => {
-                                  mutateUser.mutate(editProfileForm.getValues())
-                                }}
+                                onClick={() =>
+                                  void editProfileForm.handleSubmit((data) =>
+                                    mutateProfile.mutate(data),
+                                  )
+                                }
                                 type='submit'
                                 className='inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
                               >
@@ -179,7 +126,6 @@ export default function EditProfileSlideOver(props: EditProfileSlideOverProps) {
           </div>
         </Dialog>
       </Transition.Root>
-      <AvatarPromptModal />
     </>
   )
 }

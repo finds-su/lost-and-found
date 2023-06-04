@@ -1,54 +1,63 @@
-import { type ReactNode } from 'react'
+import { type ReactNode, useState } from 'react'
 import Window from '@/components/form/Window'
 import Avatar from '@/components/avatar/Avatar'
 import useEditProfileStore from '@/lib/hooks/store/editProfileStore'
-import { type User } from '@prisma/client'
 import DynamicEditProfileSlideOver from '@/components/profile/editProfileSlideOver/DynamicEditProfileSlideOver'
 import { NextSeo } from 'next-seo'
 import { env } from '@/env.mjs'
-import useSessionStore from '@/lib/hooks/store/sessionStore'
+import { api } from '@/lib/api'
+import { useRouter } from 'next/router'
+import { type RouterOutput } from '@/server/api/root'
 
-export interface ProfileProps {
-  isOwner: boolean
-  user: Partial<User> & { nickname: string }
-}
-
-export default function ProfileBody(props: ProfileProps) {
-  const user = props.user
+export default function ProfileBody() {
+  const router = useRouter()
+  const userNickname = router.query.nickname as string
+  const [profile, setProfile] = useState<RouterOutput['users']['getUser']>()
+  const user = profile?.user
+  const isOwner = profile?.isOwner
+  const profileQuery = api.users.getUser.useQuery(
+    { nickname: userNickname },
+    { onSuccess: (data) => setProfile(data) },
+  )
   const editProfile = useEditProfileStore()
-  const { session } = useSessionStore()
 
-  const profileInfo: { name: string; value: ReactNode }[] = [
-    {
-      name: 'Имя',
-      value: user.name,
-    },
-    {
-      name: 'Аватар',
-      value: <Avatar size='md' src={user.image} rounded resolution={100} />,
-    },
-    { name: 'Никнейм', value: user.nickname },
-    ...(user.email ? [{ name: 'Почта', value: user.email }] : []),
-    { name: 'Роль', value: user.role },
-    ...(user.isBlocked ? [{ name: 'Заблокирован', value: user.isBlocked ? 'да' : 'нет' }] : []),
-    { name: 'Обо мне', value: user.userInfo },
-  ]
+  const profileInfo: { name: string; value: ReactNode }[] = user
+    ? [
+        {
+          name: 'Имя',
+          value: user.name,
+        },
+        {
+          name: 'Аватар',
+          value: <Avatar size='md' src={user.image} rounded resolution={100} />,
+        },
+        { name: 'Никнейм', value: user.nickname },
+        ...(user.email ? [{ name: 'Почта', value: user.email }] : []),
+        { name: 'Роль', value: user.role },
+        ...(user.isBlocked ? [{ name: 'Заблокирован', value: user.isBlocked ? 'да' : 'нет' }] : []),
+        { name: 'Обо мне', value: user.userInfo },
+      ]
+    : []
+
+  if (!user || !isOwner || !profileQuery.data) {
+    return <div />
+  }
 
   return (
     <>
       <NextSeo
-        title={props.user.name ?? undefined}
+        title={user.name ?? undefined}
         openGraph={{
-          url: `${env.NEXT_PUBLIC_NEXTAUTH_URL}/u/${props.user.nickname}`,
-          title: props.user.name ?? undefined,
-          description: `@${props.user.nickname}`,
-          ...(props.user.image && {
+          url: `${env.NEXT_PUBLIC_NEXTAUTH_URL}/u/${user.nickname}`,
+          title: user.name ?? undefined,
+          description: `@${user.nickname}`,
+          ...(user.image && {
             images: [
               {
-                url: props.user.image,
+                url: user.image,
                 width: 300,
                 height: 300,
-                alt: props.user.nickname,
+                alt: user.nickname,
               },
             ],
           }),
@@ -60,7 +69,7 @@ export default function ProfileBody(props: ProfileProps) {
             <h3 className='text-lg font-medium leading-6 text-gray-900'>Информация приложения</h3>
             <p className='mt-1 max-w-2xl text-sm text-gray-500'>Детализация личной информации.</p>
           </div>
-          {props.isOwner && (
+          {isOwner && (
             <span className='text-right'>
               <button
                 type='button'
@@ -84,7 +93,7 @@ export default function ProfileBody(props: ProfileProps) {
             ))}
           </dl>
         </div>
-        {props.isOwner && session?.user && <DynamicEditProfileSlideOver user={session.user} />}
+        {isOwner && <DynamicEditProfileSlideOver user={user} />}
       </Window>
     </>
   )
