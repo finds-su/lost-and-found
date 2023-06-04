@@ -1,5 +1,9 @@
 # lost-and-found
 
+> **Warning**
+> 
+> Development in progress
+
 Бюро находок Mirea Ninja.
 
 ## Сборка проекта
@@ -27,6 +31,8 @@ docker compose up
 Префикс tmp
 Тип Expiration
 Срабатывание через 1 день
+
+#### Файлы, загружаемые к постам
 
 Префикс posts
 Тип Expiration
