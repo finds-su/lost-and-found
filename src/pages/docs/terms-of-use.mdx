@@ -1,4 +1,5 @@
 import DynamicDocsLayout from '../../components/docs/DynamicDocsLayout'
+import DocsNextSeo from '../../components/docs/DocsNextSeo'
 
 export const meta = {
   title: 'Пользовательское соглашение',
@@ -209,4 +210,9 @@ Mirea Ninja оставляет за собой право изменять, ре
 
 Как только Вы получите уведомление об обновлении настоящих условий, Вы должны согласиться с новыми условиями, чтобы продолжать пользоваться приложением.
 
-export default ({ children }) => <DynamicDocsLayout meta={meta}>{children}</DynamicDocsLayout>
+export default ({ children }) => (
+  <>
+    <DocsNextSeo title={meta.title} description={meta.description} />
+    <DynamicDocsLayout title={meta.title}>{children}</DynamicDocsLayout>
+  </>
+)

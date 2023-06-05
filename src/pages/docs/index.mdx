@@ -1,4 +1,6 @@
 import DynamicDocsLayout from '../../components/docs/DynamicDocsLayout'
+import { NextSeo } from 'next-seo'
+import DocsNextSeo from '../../components/docs/DocsNextSeo'
 
 export const meta = {
   title: 'Документы',
@@ -9,7 +11,8 @@ export const meta = {
 - [Пользовательское соглашение](/docs/terms-of-use)
 
 export default ({ children }) => (
-  <DynamicDocsLayout meta={meta} disableBackButton={true}>
-    {children}
-  </DynamicDocsLayout>
+  <>
+    <DocsNextSeo title={meta.title} description={meta.description} />
+    <DynamicDocsLayout title={meta.title}>{children}</DynamicDocsLayout>
+  </>
 )

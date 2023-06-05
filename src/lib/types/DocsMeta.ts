@@ -1,1 +1,1 @@
-export type DocsMeta = { title: string; description: string }
+export type DocsMeta = { title: string }

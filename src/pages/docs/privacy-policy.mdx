@@ -1,4 +1,6 @@
 import DynamicDocsLayout from '../../components/docs/DynamicDocsLayout'
+import { NextSeo } from 'next-seo'
+import DocsNextSeo from '../../components/docs/DocsNextSeo'
 
 export const meta = {
   title: 'Политика конфиденциальности',
@@ -105,4 +107,9 @@ export const meta = {
 
 Этот документ является CC-BY-SA. В последний раз он был обновлен 30 мая 2023 года.
 
-export default ({ children }) => <DynamicDocsLayout meta={meta}>{children}</DynamicDocsLayout>
+export default ({ children }) => (
+  <>
+    <DocsNextSeo title={meta.title} description={meta.description} />
+    <DynamicDocsLayout title={meta.title}>{children}</DynamicDocsLayout>
+  </>
+)

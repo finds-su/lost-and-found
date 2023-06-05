@@ -8,13 +8,23 @@ import DynamicError from '@/components/error/DynamicError'
 import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
 import DynamicProfileBody from '@/components/profile/profileBody/DynamicProfileBody'
 import { type ErrorProps } from '@/lib/types/ErrorProps'
+import { NextSeo } from 'next-seo'
+import { env } from '@/env.mjs'
+import { type SEOUser } from '@/lib/types/SEOUser'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)
   const nickname = context.params?.nickname as string
-  if (session && session?.user.nickname === nickname) {
+  if (session && session.user.nickname === nickname) {
     return {
-      props: { session },
+      props: {
+        session,
+        user: {
+          name: session.user.name,
+          nickname: session.user.nickname,
+          image: session.user.image,
+        } as SEOUser,
+      },
     }
   }
 
@@ -23,7 +33,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       nickname,
     },
     select: {
-      id: true,
+      name: true,
+      nickname: true,
+      image: true,
     },
   })
   if (user === null) {
@@ -38,12 +50,34 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
   return {
-    props: { session },
+    props: { session, user },
   }
 }
 
-const Profile: NextPageWithLayout = () => {
-  return <DynamicProfileBody />
+const Profile: NextPageWithLayout = ({ user }: { user: SEOUser }) => {
+  return (
+    <>
+      <NextSeo
+        title={user.name ?? undefined}
+        openGraph={{
+          url: `${env.NEXT_PUBLIC_NEXTAUTH_URL}/u/${user.nickname}`,
+          title: user.name ?? undefined,
+          description: `@${user.nickname}`,
+          ...(user.image && {
+            images: [
+              {
+                url: user.image,
+                width: 300,
+                height: 300,
+                alt: user.nickname,
+              },
+            ],
+          }),
+        }}
+      />
+      <DynamicProfileBody />
+    </>
+  )
 }
 
 Profile.getLayout = function getLayout(page: ReactElement, options: NextPageOptions) {
