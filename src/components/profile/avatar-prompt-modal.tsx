@@ -66,7 +66,7 @@ export default function AvatarPromptModal() {
                       <Input
                         inputProps={{
                           type: 'text',
-                          value: prompt,
+                          value: prompt ?? '',
                           onChange: (e) => setPrompt(e.currentTarget.value),
                           placeholder: 'кот в сапогах',
                         }}
