@@ -1,10 +1,12 @@
 import { useFormContext } from 'react-hook-form'
-import { type EditableProfile } from '@/lib/types/EditableProfile'
 import TextArea from '@/components/form/TextArea'
 import Input from '@/components/form/Input'
+import { SocialNetwork as PrismaSocialNetwork } from '@prisma/client'
+import { SocialNetwork } from '@/lib/socialNetwork'
+import { type RouterInputs } from '@/lib/api'
 
 export default function EditProfileSlideOverBody() {
-  const editProfileForm = useFormContext<EditableProfile>()
+  const editProfileForm = useFormContext<RouterInputs['users']['editUser']>()
   // const editProfileSocialNetworks = useFieldArray({
   //   control: editProfileForm.control,
   //   name: 'socialNetworks',
@@ -39,16 +41,17 @@ export default function EditProfileSlideOverBody() {
       type: 'textArea',
       error: editProfileForm.formState.errors.userInfo?.message,
     },
-    // ...Object.values(PrismaSocialNetwork).map((prismaSocialNetwork, index) => ({
-    //   name: SocialNetwork[prismaSocialNetwork],
-    //   register: editProfileForm.register(`socialNetworks.${index}.link`),
-    //   type: 'input' as 'input' | 'textArea',
-    // })),
+    ...Object.values(PrismaSocialNetwork).map((prismaSocialNetwork, index) => ({
+      name: SocialNetwork[prismaSocialNetwork],
+      register: editProfileForm.register(`socialNetworks.${index}.link`, {
+        onChange: (value) => ({ socialNetwork: prismaSocialNetwork, link: value as string }),
+      }),
+      type: 'input' as 'input' | 'textArea',
+    })),
   ]
 
   return (
     <div className='space-y-6 py-6 sm:space-y-0 sm:divide-y sm:divide-gray-200 sm:py-0'>
-      {/* Project name */}
       {editableProfileAttributes.map((attribute) => (
         <div
           key={attribute.name}

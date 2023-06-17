@@ -14,35 +14,57 @@ import { PutObjectCommand } from '@aws-sdk/client-s3'
 import { sanitizeKey } from 'next-s3-upload'
 import { CopyObjectCommand } from '@aws-sdk/client-s3'
 import { zodEditUserInput } from '@/lib/validationTypes/users'
+import { prisma } from '@/server/db'
+import { SocialNetwork as PrismaSocialNetwork } from '@prisma/client'
 
 export const usersRouter = createTRPCRouter({
   getUser: publicProcedure
     .input(z.object({ nickname: z.string() }))
     .query(async ({ ctx, input }) => {
       const isOwner = !!(ctx.session && ctx.session.user.nickname === input.nickname)
-      const user = await ctx.prisma.user.findUnique({
+      let user = await ctx.prisma.user.findUnique({
         where: {
           nickname: input.nickname,
         },
         select: {
           name: true,
           nickname: true,
-          ...(isOwner && {
-            socialNetworks: {
-              select: {
-                socialNetwork: isOwner,
-                link: isOwner,
-              },
-            },
-          }),
-          email: isOwner,
           userInfo: true,
           role: true,
           image: true,
-          isBlocked: isOwner,
-          blockReason: isOwner,
+          ...(isOwner && {
+            email: true,
+            isBlocked: true,
+            blockReason: true,
+            socialNetworks: {
+              select: {
+                socialNetwork: true,
+                link: true,
+              },
+            },
+          }),
         },
       })
+      if (user && user.socialNetworks === undefined) {
+        user = { ...{ socialNetworks: [] }, ...user }
+      }
+      if (user && user.socialNetworks) {
+        const existingNetworks = user.socialNetworks.map((network) => network.socialNetwork)
+        const notExistingNetworks = Object.values(PrismaSocialNetwork).filter(
+          (network) => !existingNetworks.includes(network),
+        )
+        user.socialNetworks.push(
+          ...notExistingNetworks.map((socialNetwork) => ({ socialNetwork, link: '' })),
+        )
+      }
+      // ...Object.values(PrismaSocialNetwork).map((prismaSocialNetwork, index) => ({
+      //     name: SocialNetwork[prismaSocialNetwork],
+      //     register: editProfileForm.register(`socialNetworks.${index}.link`, {
+      //       onChange: (value) => ({ socialNetwork: prismaSocialNetwork, link: value as string }),
+      //     }),
+      //     type: 'input' as 'input' | 'textArea',
+      //   }))
+
       return { user, isOwner }
     }),
 
@@ -90,6 +112,27 @@ export const usersRouter = createTRPCRouter({
           userInfo: input.userInfo,
         },
       })
+
+      if (input.socialNetworks) {
+        input.socialNetworks.map(async (socialNetwork) => {
+          await prisma.userSocialNetwork.upsert({
+            where: {
+              userId_socialNetwork: {
+                userId: ctx.session.user.id,
+                socialNetwork: socialNetwork.socialNetwork,
+              },
+            },
+            update: {
+              link: socialNetwork.link,
+            },
+            create: {
+              userId: ctx.session.user.id,
+              socialNetwork: socialNetwork.socialNetwork,
+              link: socialNetwork.link,
+            },
+          })
+        })
+      }
     })
   }),
 

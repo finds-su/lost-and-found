@@ -2,15 +2,16 @@ import { type ReactNode, useState } from 'react'
 import Window from '@/components/form/Window'
 import Avatar from '@/components/avatar/Avatar'
 import useEditProfileStore from '@/lib/hooks/store/editProfileStore'
-import DynamicEditProfileSlideOver from '@/components/profile/editProfileSlideOver/DynamicEditProfileSlideOver'
-import { api } from '@/lib/api'
+import DynamicEditProfileSlideOver from '@/components/profile/edit-profile-slide-over/DynamicEditProfileSlideOver'
+import { api, type RouterOutputs } from '@/lib/api'
 import { useRouter } from 'next/router'
-import { type RouterOutput } from '@/server/api/root'
+import { SocialNetwork as PrismaSocialNetwork } from '@prisma/client'
+import { SocialNetwork } from '@/lib/socialNetwork'
 
 export default function ProfileBody() {
   const router = useRouter()
   const userNickname = router.query.nickname as string
-  const [profile, setProfile] = useState<RouterOutput['users']['getUser']>()
+  const [profile, setProfile] = useState<RouterOutputs['users']['getUser']>()
   const user = profile?.user
   const isOwner = profile?.isOwner
   const profileQuery = api.users.getUser.useQuery(
@@ -32,15 +33,17 @@ export default function ProfileBody() {
             </div>
           ),
         },
-        // {
-        //   name: 'Аватар',
-        //   value: <Avatar size='md' src={user.image} rounded resolution={100} />,
-        // },
         { name: 'Никнейм', value: user.nickname },
         ...(user.email ? [{ name: 'Почта', value: user.email }] : []),
         { name: 'Роль', value: user.role },
         ...(user.isBlocked ? [{ name: 'Заблокирован', value: user.isBlocked ? 'да' : 'нет' }] : []),
         { name: 'Обо мне', value: user.userInfo },
+        ...Object.values(PrismaSocialNetwork).map((prismaSocialNetwork) => ({
+          name: SocialNetwork[prismaSocialNetwork],
+          value: user.socialNetworks?.filter(
+            (network) => prismaSocialNetwork === network.socialNetwork,
+          )[0]?.link,
+        })),
       ]
     : []
 

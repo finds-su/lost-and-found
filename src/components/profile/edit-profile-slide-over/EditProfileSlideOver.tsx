@@ -3,23 +3,23 @@ import { Fragment, useRef } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import useEditProfileStore from '@/lib/hooks/store/editProfileStore'
 import errorToast from '@/components/toasts/ErrorToast'
-import { api } from '@/lib/api'
+import { api, type RouterInputs } from '@/lib/api'
 import { useRouter } from 'next/router'
 import successToast from '@/components/toasts/SuccessToast'
-import { type EditableProfile } from '@/lib/types/EditableProfile'
 import { FormProvider, useForm } from 'react-hook-form'
-import EditProfileSlideOverAvatar from '@/components/profile/editProfileSlideOver/EditProfileSlideOverAvatar'
-import EditProfileSlideOverBody from '@/components/profile/editProfileSlideOver/EditProfileSlideOverBody'
+import EditProfileSlideOverAvatar from '@/components/profile/edit-profile-slide-over/EditProfileSlideOverAvatar'
+import EditProfileSlideOverBody from '@/components/profile/edit-profile-slide-over/EditProfileSlideOverBody'
 
 interface EditProfileSlideOverProps {
-  user: EditableProfile
+  user: RouterInputs['users']['editUser']
 }
 
 export default function EditProfileSlideOver(props: EditProfileSlideOverProps) {
   const router = useRouter()
+  const utils = api.useContext()
   const { user } = props
   const editProfile = useEditProfileStore()
-  const editProfileForm = useForm<EditableProfile>({
+  const editProfileForm = useForm<RouterInputs['users']['editUser']>({
     values: user,
     // resolver: zodResolver(zodEditUserInput),
   })
@@ -27,6 +27,7 @@ export default function EditProfileSlideOver(props: EditProfileSlideOverProps) {
     onSuccess: async (data, variables) => {
       successToast('Профиль изменен')
       editProfile.close()
+      await utils.users.getUser.invalidate()
       await router.push(`/u/${variables.nickname}`)
     },
     onError: (error) => errorToast(error.message),
@@ -87,7 +88,14 @@ export default function EditProfileSlideOver(props: EditProfileSlideOverProps) {
                       </div>
                       {/* Main */}
                       <FormProvider {...editProfileForm}>
-                        <div className='divide-y divide-gray-200'>
+                        <form
+                          className='divide-y divide-gray-200'
+                          onSubmit={(...args) =>
+                            void editProfileForm.handleSubmit((data) => mutateProfile.mutate(data))(
+                              ...args,
+                            )
+                          }
+                        >
                           <div className='pb-6'>
                             <div className='h-24 bg-blue-700 sm:h-20 lg:h-28' />
                             <EditProfileSlideOverAvatar user={user} />
@@ -104,7 +112,6 @@ export default function EditProfileSlideOver(props: EditProfileSlideOverProps) {
                                 Отменить
                               </button>
                               <button
-                                onClick={() => mutateProfile.mutate(editProfileForm.getValues())}
                                 type='submit'
                                 className='inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
                               >
@@ -112,7 +119,7 @@ export default function EditProfileSlideOver(props: EditProfileSlideOverProps) {
                               </button>
                             </div>
                           </div>
-                        </div>
+                        </form>
                       </FormProvider>
                     </div>
                   </Dialog.Panel>

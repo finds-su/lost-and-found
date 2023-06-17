@@ -1,8 +1,7 @@
 import Avatar from '@/components/avatar/Avatar'
 import { useFormContext } from 'react-hook-form'
-import { type EditableProfile } from '@/lib/types/EditableProfile'
 import useAvatarPromptStore from '@/lib/hooks/store/avatarPromptStore'
-import { api } from '@/lib/api'
+import { api, type RouterInputs } from '@/lib/api'
 import successToast from '@/components/toasts/SuccessToast'
 import errorToast from '@/components/toasts/ErrorToast'
 import { useEffect } from 'react'
@@ -23,12 +22,12 @@ const generateAIAvatarToastMessages: Pick<PromiseToastMessages, 'success' | 'loa
 }
 
 interface EditProfileSlideOverAvatarProps {
-  user: EditableProfile
+  user: RouterInputs['users']['editUser']
 }
 
 export default function EditProfileSlideOverAvatar(props: EditProfileSlideOverAvatarProps) {
   const { user } = props
-  const editProfileForm = useFormContext<EditableProfile>()
+  const editProfileForm = useFormContext<RouterInputs['users']['editUser']>()
   const { openAvatarPromptModal, avatarPrompt, setAvatarPrompt } = useAvatarPromptStore()
   const generateAIAvatar = api.users.generateAIAvatar.useQuery(
     { prompt: avatarPrompt },

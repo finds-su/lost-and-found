@@ -7,6 +7,7 @@ import {
   minNicknameLength,
   telegramUsernameRegex,
 } from '@/lib/constants'
+import { SocialNetwork } from '@prisma/client'
 
 export const zodNickname = z
   .string({
@@ -61,4 +62,7 @@ export const zodEditUserInput = z.object({
     .nullable()
     .optional()
     .transform((value) => (value?.length === 0 ? null : value)),
+  socialNetworks: z
+    .array(z.object({ socialNetwork: z.nativeEnum(SocialNetwork), link: z.string() }))
+    .optional(),
 })

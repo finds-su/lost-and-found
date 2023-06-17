@@ -10,6 +10,7 @@ export default {
       },
       height: {
         '110': '26rem',
+        '130': '30rem',
       },
     },
   },
