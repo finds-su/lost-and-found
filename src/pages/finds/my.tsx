@@ -1,4 +1,4 @@
-import DynamicLayout from '@/components/layout/DynamicLayout'
+import DynamicLayout from '@/components/layout/dynamic-layout'
 import { getServerAuthSession } from '@/server/auth'
 import { type GetServerSideProps } from 'next'
 import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'

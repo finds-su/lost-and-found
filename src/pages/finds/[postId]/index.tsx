@@ -1,12 +1,12 @@
-import DynamicLayout from '@/components/layout/DynamicLayout'
+import DynamicLayout from '@/components/layout/dynamic-layout'
 import { getServerAuthSession } from '@/server/auth'
 import { type GetServerSideProps } from 'next'
 import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
-import DynamicOverviewPost from '@/components/posts/overview/overview-post/DynamicOverviewPost'
-import DynamicError from '@/components/error/DynamicError'
+import DynamicOverviewPost from '@/components/posts/overview/overview-post/dynamic-overview-post'
+import DynamicError from '@/components/error/dynamic-error'
 import { PostItemReason } from '@prisma/client'
 import { prisma } from '@/server/db'
-import { type ErrorProps } from '@/lib/types/ErrorProps'
+import { type ErrorProps } from '@/lib/types/error-props'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)

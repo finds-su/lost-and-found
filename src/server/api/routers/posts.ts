@@ -2,7 +2,7 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from '@/server/
 import { z } from 'zod'
 import { prisma } from '@/server/db'
 import { Campus, PostItemReason } from '@prisma/client'
-import { SortOption } from '@/lib/types/SortOption'
+import { SortOption } from '@/lib/types/sort-option'
 import { TRPCError } from '@trpc/server'
 
 export const postsRouter = createTRPCRouter({

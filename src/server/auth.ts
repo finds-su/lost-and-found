@@ -3,12 +3,12 @@ import { getServerSession, type NextAuthOptions } from 'next-auth'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '@/server/db'
 import GoogleProvider, { type GoogleProfile } from 'next-auth/providers/google'
-import { nicknameValidation } from '@/lib/nicknameValidation'
+import { nicknameValidation } from '@/lib/nickname-validation'
 import GithubProvider, { type GithubProfile } from 'next-auth/providers/github'
 import { Role } from '@prisma/client'
 import { env } from '@/env.mjs'
 import { type User as PrismaUser } from '@prisma/client'
-import MireaNinjaLKSProvider from '@/server/authProviders/MireaNinjaLKSProvider'
+import MireaNinjaLksProvider from '@/server/auth-providers/mirea-ninja-lks-provider'
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -95,7 +95,7 @@ export const authOptions: NextAuthOptions = {
         }
       },
     }),
-    MireaNinjaLKSProvider({ clientId: env.MIREA_CLIENT_ID, clientSecret: env.MIREA_CLIENT_SECRET }),
+    MireaNinjaLksProvider({ clientId: env.MIREA_CLIENT_ID, clientSecret: env.MIREA_CLIENT_SECRET }),
     /**
      * ...add more providers here.
      *

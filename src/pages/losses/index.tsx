@@ -1,9 +1,9 @@
-import DynamicLayout from '@/components/layout/DynamicLayout'
+import DynamicLayout from '@/components/layout/dynamic-layout'
 import { getServerAuthSession } from '@/server/auth'
 import { type GetServerSideProps } from 'next'
 import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
 import Image from 'next/image'
-import DynamicInfiniteScrollGridWithFilter from '@/components/posts/grid/infinite-scroll-grid-with-filter/DynamicInfiniteScrollGridWithFilter'
+import DynamicInfiniteScrollGridWithFilter from '@/components/posts/grid/infinite-scroll-grid-with-filter/dynamic-infinite-scroll-grid-with-filter'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)

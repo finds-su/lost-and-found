@@ -1,16 +1,16 @@
-import DynamicLayout from '@/components/layout/DynamicLayout'
+import DynamicLayout from '@/components/layout/dynamic-layout'
 import { getServerAuthSession } from '@/server/auth'
 import { type GetServerSideProps } from 'next'
 import { prisma } from '@/server/db'
 
 import { type ReactElement } from 'react'
-import DynamicError from '@/components/error/DynamicError'
+import DynamicError from '@/components/error/dynamic-error'
 import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
-import DynamicProfileBody from '@/components/profile/profile-body/DynamicProfileBody'
-import { type ErrorProps } from '@/lib/types/ErrorProps'
+import DynamicProfileBody from '@/components/profile/profile-body/dynamic-profile-body'
+import { type ErrorProps } from '@/lib/types/error-props'
 import { NextSeo } from 'next-seo'
 import { env } from '@/env.mjs'
-import { type SEOUser } from '@/lib/types/SEOUser'
+import { type SeoUser } from '@/lib/types/seo-user'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)
@@ -23,7 +23,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           name: session.user.name,
           nickname: session.user.nickname,
           image: session.user.image,
-        } as SEOUser,
+        } as SeoUser,
       },
     }
   }
@@ -54,7 +54,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 }
 
-const Profile: NextPageWithLayout = ({ user }: { user: SEOUser }) => {
+const Profile: NextPageWithLayout = ({ user }: { user: SeoUser }) => {
   return (
     <>
       <NextSeo

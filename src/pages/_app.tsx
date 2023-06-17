@@ -11,8 +11,8 @@ import { type NextPage } from 'next'
 import { Toaster } from 'react-hot-toast'
 import Head from 'next/head'
 import NextNProgress from 'nextjs-progressbar'
-import useSessionStore from '@/lib/hooks/store/sessionStore'
-import { type ErrorProps } from '@/lib/types/ErrorProps'
+import useSessionStore from '@/lib/hooks/store/session-store'
+import { type ErrorProps } from '@/lib/types/error-props'
 
 const inter = Inter({
   subsets: ['latin', 'cyrillic', 'cyrillic-ext'],
