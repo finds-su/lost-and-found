@@ -13,7 +13,7 @@ import axios from 'axios'
 import { PutObjectCommand } from '@aws-sdk/client-s3'
 import { sanitizeKey } from 'next-s3-upload'
 import { CopyObjectCommand } from '@aws-sdk/client-s3'
-import { zodEditUserInput } from '@/lib/validationTypes/users'
+import { zodEditUserInput } from '@/lib/validation-types/users'
 import { prisma } from '@/server/db'
 import { SocialNetwork as PrismaSocialNetwork } from '@prisma/client'
 

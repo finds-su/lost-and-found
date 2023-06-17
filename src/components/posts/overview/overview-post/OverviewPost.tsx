@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 import { type PostItemReason } from '@prisma/client'
 import { useState } from 'react'
 import errorToast from '@/components/toasts/ErrorToast'
-import DynamicOverviewPostImage from '@/components/posts/overview/overviewPostImage/DynamicOverviewPostImage'
+import DynamicOverviewPostImage from '@/components/posts/overview/overview-post-image/DynamicOverviewPostImage'
 
 interface OverviewPostProps {
   reason: PostItemReason
