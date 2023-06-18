@@ -4,7 +4,6 @@ import { env } from './src/env.mjs'
 const config = {
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'mjs', 'cjs', 'md', 'mdx'],
   reactStrictMode: true,
-  transpilePackages: ['three'],
   images: {
     domains: [
       'www.mirea.ru',
@@ -36,15 +35,15 @@ const config = {
       },
     ]
   },
-  // async redirects() {
-  //   return [
-  //     {
-  //       source: '/',
-  //       destination: '/finds',
-  //       permanent: false,
-  //     },
-  //   ]
-  // },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/finds',
+        permanent: false,
+      },
+    ]
+  },
 }
 
 import { createRequire } from 'module'
