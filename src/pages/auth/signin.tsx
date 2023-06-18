@@ -1,9 +1,10 @@
 import Image from 'next/image'
 import { getProviders, signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import { getServerAuthSession } from '@/server/auth'
+import { authOptions } from '@/server/auth'
 import Head from 'next/head'
 import { type GetServerSideProps } from 'next'
+import { getServerSession } from 'next-auth'
 
 export default function SignIn() {
   const router = useRouter()
@@ -99,8 +100,8 @@ export default function SignIn() {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getServerAuthSession(context)
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const session = await getServerSession(req, res, authOptions)
   if (session) {
     return {
       redirect: {

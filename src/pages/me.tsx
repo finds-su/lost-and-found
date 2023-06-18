@@ -1,8 +1,9 @@
-import { getServerAuthSession } from '@/server/auth'
+import { authOptions } from '@/server/auth'
+import { getServerSession } from 'next-auth'
 import { type GetServerSideProps } from 'next'
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getServerAuthSession(context)
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const session = await getServerSession(req, res, authOptions)
   if (!session) {
     return {
       redirect: {
