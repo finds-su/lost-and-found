@@ -4,7 +4,6 @@ import { env } from './src/env.mjs'
 const config = {
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'mjs', 'cjs', 'md', 'mdx'],
   reactStrictMode: true,
-  transpilePackages: ['three'],
   images: {
     domains: [
       'www.mirea.ru',
@@ -75,4 +74,6 @@ const withMDX = require('@next/mdx')({
   },
 })
 
-export default withPWA(withMDX(withBundleAnalyzer(config)))
+const withTM = require('next-transpile-modules')(['three'])
+
+export default withTM(withPWA(withMDX(withBundleAnalyzer(config))))
