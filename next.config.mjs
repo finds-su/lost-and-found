@@ -2,6 +2,7 @@ import { env } from './src/env.mjs'
 
 /** @type {import("next").NextConfig} */
 const config = {
+  // transpilePackages: ['three'],
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'mjs', 'cjs', 'md', 'mdx'],
   reactStrictMode: true,
   images: {
@@ -35,15 +36,15 @@ const config = {
       },
     ]
   },
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/finds',
-        permanent: false,
-      },
-    ]
-  },
+  // async redirects() {
+  //   return [
+  //     {
+  //       source: '/',
+  //       destination: '/finds',
+  //       permanent: false,
+  //     },
+  //   ]
+  // },
 }
 
 import { createRequire } from 'module'

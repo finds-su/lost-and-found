@@ -1,24 +1,24 @@
-import { type GetServerSideProps } from 'next'
+import dynamic from 'next/dynamic'
+import { GetServerSideProps } from 'next'
 import { getServerAuthSession } from '@/server/auth'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)
   if (!session) {
     return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
+      props: {},
     }
   }
   return {
     redirect: {
-      destination: `/u/${session.user.nickname}/`,
+      destination: `/finds`,
       permanent: false,
     },
   }
 }
 
-export default function Me() {
-  return
+const Landing = dynamic(() => import('@/components/landing/landing'), { ssr: false })
+
+export default function LandingPage() {
+  return <Landing />
 }

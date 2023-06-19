@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import Head from 'next/head'
 import { type ErrorProps } from '@/lib/types/error-props'
+import Link from 'next/link'
 
 const recommendationLinks = [
   {
@@ -77,10 +78,13 @@ export default function Error(props: ErrorProps) {
                   ))}
                 </ul>
                 <div className='mt-8'>
-                  <a href='/' className='text-base font-medium text-blue-700 hover:text-blue-600'>
+                  <Link
+                    href='/'
+                    className='text-base font-medium text-blue-700 hover:text-blue-600'
+                  >
                     Или идите на начальную страницу
                     <span aria-hidden='true'> &rarr;</span>
-                  </a>
+                  </Link>
                 </div>
               </div>
             )}
