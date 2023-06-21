@@ -1,10 +1,13 @@
 .env
 .env.*
-Dockerfile
-.dockerignore
 node_modules
+Dockerfile
+docker-compose.*
+.dockerignore
+.gitignore
 npm-debug.log
-README.md
+README.*
+LICENSE.*
 .next
 .git
 .husky
