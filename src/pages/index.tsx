@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic'
-import { GetServerSideProps } from 'next'
+import { type GetServerSideProps } from 'next'
 import { getServerAuthSession } from '@/server/auth'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
