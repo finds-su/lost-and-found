@@ -7,7 +7,7 @@ const LandingCanvas = dynamic(() => import('@/components/landing/landing-canvas'
 
 export default function Landing() {
   return (
-    <div className='relative h-screen w-screen bg-gradient-to-t from-gray-200'>
+    <div className='relative h-screen w-screen bg-gradient-to-t from-gray-300'>
       <LandingCanvas />
       <div className='absolute left-3 top-10 md:left-20'>
         <Link className='flex items-center space-x-4 text-lg' href='/'>
