@@ -149,7 +149,7 @@ export default function LandingCanvas() {
             width={100}
             height={100}
             blur={1.25}
-            far={75}
+            far={25}
           />
         </group>
       </Suspense>
