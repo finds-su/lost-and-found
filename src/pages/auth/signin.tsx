@@ -38,51 +38,47 @@ export default function SignIn() {
         <div className='flex min-h-full'>
           <div className='flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24'>
             <div className='mx-auto w-full max-w-sm lg:w-96'>
-              <div>
+              <div className='flex items-center space-x-4 text-lg'>
                 <Image
-                  className='h-12 w-auto'
+                  priority
+                  className='h-10 w-10'
                   src='/assets/ninja-logo-black.svg'
-                  alt='Логотип Mirea Ninja'
+                  alt='Mirea Ninja'
                   width={100}
                   height={100}
                   aria-hidden='true'
                 />
-                <h2 className='mt-6 text-3xl font-bold tracking-tight text-gray-900'>
-                  Войти в Бюро находок
-                </h2>
+                <span className='text-gray-600'>/</span>
+                <span className='font-semibold'>Бюро находок</span>
               </div>
-
+              <h2 className='mt-6 text-3xl font-bold tracking-tight text-gray-900'>Войти</h2>
               <div className='mt-8'>
-                <div>
-                  <div>
-                    <p className='text-sm font-medium text-gray-700'>Войти через</p>
+                <p className='text-sm font-medium text-gray-700'>Войти через</p>
 
-                    <div className='mt-1'>
-                      {providers.map((item) => (
-                        <div key={item.name}>
-                          <button
-                            onClick={() => void signIn(item.id, { callbackUrl })}
-                            className='my-1 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50'
-                          >
-                            <Image
-                              src={item.image}
-                              alt=''
-                              width={100}
-                              height={100}
-                              className='h-5 w-5'
-                            />
-                            <span className='ml-2'>{item.name}</span>
-                          </button>
-                        </div>
-                      ))}
+                <div className='mt-1'>
+                  {providers.map((item) => (
+                    <div key={item.name}>
+                      <button
+                        onClick={() => void signIn(item.id, { callbackUrl })}
+                        className='my-1 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50'
+                      >
+                        <Image
+                          src={item.image}
+                          alt=''
+                          width={100}
+                          height={100}
+                          className='h-5 w-5'
+                        />
+                        <span className='ml-2'>{item.name}</span>
+                      </button>
                     </div>
-                    {error && (
-                      <p className='mt-1 text-sm text-red-600'>
-                        Ошибка авторизации. Воспользуйтесь другим способом
-                      </p>
-                    )}
-                  </div>
+                  ))}
                 </div>
+                {error && (
+                  <p className='mt-1 text-sm text-red-600'>
+                    Ошибка авторизации. Воспользуйтесь другим способом
+                  </p>
+                )}
               </div>
             </div>
           </div>
