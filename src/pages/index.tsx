@@ -17,7 +17,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 }
 
-const Landing = dynamic(() => import('@/components/landing/landing'), { ssr: false })
+const Landing = dynamic(() => import('@/components/landing/landing'), { ssr: true })
 
 export default function LandingPage() {
   return <Landing />
