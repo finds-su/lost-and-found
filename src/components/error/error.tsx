@@ -4,6 +4,7 @@ import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import Head from 'next/head'
 import { type ErrorProps } from '@/lib/types/error-props'
 import Link from 'next/link'
+import Logo from '@/components/logo'
 
 const recommendationLinks = [
   {
@@ -27,18 +28,11 @@ export default function Error(props: ErrorProps) {
         <title>{props.name}</title>
       </Head>
       <div className='h-full min-h-screen bg-white'>
-        <main className='mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8'>
-          <div className='flex-shrink-0 pt-16'>
-            <Image
-              className='mx-auto h-12 w-auto transform transition duration-1000 hover:scale-105'
-              src='/assets/ninja-logo-black.svg'
-              alt='Mirea Ninja'
-              width={10}
-              height={10}
-              aria-hidden='true'
-            />
+        <main className='mx-auto flex w-full max-w-7xl flex-col items-center px-4 sm:px-6 lg:px-8'>
+          <div className='pt-16'>
+            <Logo />
           </div>
-          <div className='mx-auto max-w-xl py-16 sm:py-24'>
+          <div className='mx-auto max-w-xl py-10 sm:py-24'>
             <div className='text-center'>
               {props.code && <p className='text-base font-semibold text-blue-700'>{props.code}</p>}
               <h1 className='mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl'>

@@ -92,7 +92,6 @@ export default function Layout(props: LayoutProps) {
           ],
         }}
       />
-      <Head>{!props.hideTitle && <title>{props.pageName}</title>}</Head>
       <div className='min-h-screen'>
         <Disclosure as='nav' className='bg-gray-800'>
           {({ open }) => (

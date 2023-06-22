@@ -2,6 +2,7 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import Image from 'next/image'
 import { signIn } from 'next-auth/react'
+import Logo from '@/components/logo'
 
 const LandingCanvas = dynamic(() => import('@/components/landing/landing-canvas'), { ssr: false })
 
@@ -10,18 +11,7 @@ export default function Landing() {
     <div className='relative h-screen w-screen bg-gradient-to-t from-gray-300'>
       <LandingCanvas />
       <div className='absolute left-3 top-10 md:left-20'>
-        <Link className='flex items-center space-x-4 text-lg' href='/'>
-          <Image
-            priority
-            className='h-8 w-8'
-            src='/assets/ninja-logo-black.svg'
-            alt='Бюро находок Mirea Ninja'
-            width={10}
-            height={10}
-          />
-          <span className='text-gray-600'>/</span>
-          <span className='font-semibold'>Бюро находок</span>
-        </Link>
+        <Logo />
       </div>
       <div className='absolute right-3 top-10 md:right-20'>
         <button
