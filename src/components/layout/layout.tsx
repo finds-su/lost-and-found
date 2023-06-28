@@ -5,13 +5,11 @@ import Image from 'next/image'
 import { signIn, signOut } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import Head from 'next/head'
 import classNames from 'classnames/dedupe'
 import DynamicMobileLayoutMenu from '@/components/layout/dynamic-mobile-layout-menu'
 import DynamicLayoutUser from '@/components/layout/dynamic-layout-user'
 import DynamicLayoutFooter from '@/components/layout/footer/dynamic-layout-footer'
 import { NextSeo } from 'next-seo'
-import { env } from '@/env.mjs'
 import { type Session } from 'next-auth'
 
 export type Navigation = { name: string; href: string }[]
@@ -21,7 +19,7 @@ export const navigation: Navigation = [
 ]
 
 export interface LayoutProps {
-  pageName: string
+  title: string
   hideTitle?: boolean
   children: React.ReactNode
   session: Session | null
@@ -74,24 +72,7 @@ export default function Layout(props: LayoutProps) {
 
   return (
     <>
-      <NextSeo
-        title={!props.hideTitle ? props.pageName : 'Бюро находок Mirea Ninja'}
-        description='Приложение для поиска потерянных и размещения найденных вещей'
-        canonical='https://finds.mirea.ninja/'
-        openGraph={{
-          url: env.NEXT_PUBLIC_NEXTAUTH_URL,
-          title: 'Бюро находок Mirea Ninja',
-          description: 'Приложение для поиска потерянных и размещения найденных вещей',
-          images: [
-            {
-              url: '/logo-icons/apple-touch-icon-precomposed.png',
-              width: 300,
-              height: 300,
-              alt: `Логотип Mirea Ninja`,
-            },
-          ],
-        }}
-      />
+      {props.hideTitle || <NextSeo title={props.title} />}
       <div className='min-h-screen'>
         <Disclosure as='nav' className='bg-gray-800'>
           {({ open }) => (
@@ -165,7 +146,7 @@ export default function Layout(props: LayoutProps) {
 
         <header className='bg-white shadow-sm'>
           <div className='mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8'>
-            <h1 className='text-lg font-semibold leading-6 text-gray-900'>{props.pageName}</h1>
+            <h1 className='text-lg font-semibold leading-6 text-gray-900'>{props.title}</h1>
           </div>
         </header>
         <div className='mx-4 flex max-w-7xl flex-col py-4 sm:px-6 md:mx-auto lg:px-8'>

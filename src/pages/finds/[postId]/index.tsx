@@ -7,6 +7,9 @@ import DynamicError from '@/components/error/dynamic-error'
 import { PostItemReason } from '@prisma/client'
 import { prisma } from '@/server/db'
 import { type ErrorProps } from '@/lib/types/error-props'
+import DefaultSeo from '@/components/seo/default-seo'
+
+const title = 'Находка'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)
@@ -31,7 +34,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 }
 
 const Post: NextPageWithLayout = () => {
-  return <DynamicOverviewPost reason={PostItemReason.FOUND} />
+  return (
+    <>
+      <DefaultSeo title={title} />
+      <DynamicOverviewPost reason={PostItemReason.FOUND} />
+    </>
+  )
 }
 
 Post.getLayout = function getLayout(page: JSX.Element, options: NextPageOptions) {
@@ -39,7 +47,7 @@ Post.getLayout = function getLayout(page: JSX.Element, options: NextPageOptions)
     return <DynamicError {...options.error} />
   }
   return (
-    <DynamicLayout session={options.session} pageName='Находка'>
+    <DynamicLayout session={options.session} title={title}>
       {page}
     </DynamicLayout>
   )

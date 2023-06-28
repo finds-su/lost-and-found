@@ -5,7 +5,7 @@ interface DocsNextSeoProps {
   description: string
 }
 
-export default function DocsNextSeo(props: DocsNextSeoProps) {
+export default function DocsSeo(props: DocsNextSeoProps) {
   return (
     <NextSeo
       title={props.title}

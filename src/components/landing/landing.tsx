@@ -1,6 +1,5 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import Image from 'next/image'
 import { signIn } from 'next-auth/react'
 import Logo from '@/components/logo'
 

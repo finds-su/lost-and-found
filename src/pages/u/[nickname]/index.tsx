@@ -8,9 +8,8 @@ import DynamicError from '@/components/error/dynamic-error'
 import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
 import DynamicProfileBody from '@/components/profile/profile-body/dynamic-profile-body'
 import { type ErrorProps } from '@/lib/types/error-props'
-import { NextSeo } from 'next-seo'
-import { env } from '@/env.mjs'
 import { type SeoUser } from '@/lib/types/seo-user'
+import UserSeo from '@/components/seo/user-seo'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)
@@ -57,24 +56,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 const Profile: NextPageWithLayout = ({ user }: { user: SeoUser }) => {
   return (
     <>
-      <NextSeo
-        title={user.name ?? undefined}
-        openGraph={{
-          url: `${env.NEXT_PUBLIC_NEXTAUTH_URL}/u/${user.nickname}`,
-          title: user.name ?? undefined,
-          description: `@${user.nickname}`,
-          ...(user.image && {
-            images: [
-              {
-                url: user.image,
-                width: 300,
-                height: 300,
-                alt: user.nickname,
-              },
-            ],
-          }),
-        }}
-      />
+      <UserSeo user={user} />
       <DynamicProfileBody />
     </>
   )
@@ -85,7 +67,7 @@ Profile.getLayout = function getLayout(page: ReactElement, options: NextPageOpti
     return <DynamicError {...options.error} />
   }
   return (
-    <DynamicLayout pageName='Профиль' session={options.session} hideTitle>
+    <DynamicLayout title='Профиль' session={options.session} hideTitle>
       {page}
     </DynamicLayout>
   )
