@@ -3,6 +3,7 @@ import { getServerAuthSession } from '@/server/auth'
 import { type GetServerSideProps } from 'next'
 import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
 import DefaultSeo from '@/components/seo/default-seo'
+import MyPostsList from '@/components/posts/my-posts-list/my-posts-list'
 
 const title = 'Ваши пропажи'
 
@@ -23,7 +24,7 @@ const MyLosses: NextPageWithLayout = () => {
   return (
     <>
       <DefaultSeo title={title} />
-      <div className='px-4 py-4 sm:px-0'>{title}</div>
+      <MyPostsList reason='LOST' />
     </>
   )
 }
