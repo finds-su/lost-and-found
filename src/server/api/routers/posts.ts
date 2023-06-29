@@ -116,4 +116,13 @@ export const postsRouter = createTRPCRouter({
         message: 'Пост не найден.',
       })
     }),
+
+  getMyPosts: protectedProcedure
+    .input(z.object({ reason: z.nativeEnum(PostItemReason) }))
+    .query(({ ctx, input }) => {
+      const myPosts = prisma.lostAndFoundItem.findMany({
+        where: { userId: ctx.session.user.id, reason: input.reason },
+      })
+      return myPosts
+    }),
 })
