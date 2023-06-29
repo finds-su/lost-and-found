@@ -19,6 +19,12 @@
   <img width="300" src="https://github.com/mirea-ninja/lost-and-found/assets/70258211/ac9b01d1-9334-411a-b095-effd736e8ee7">
 </p>
 
+<p float="left">
+  <img width="450" src="https://github.com/mirea-ninja/lost-and-found/assets/70258211/2ed96812-5b25-4aaf-ac70-acf95e2d6b71">
+  <img width="450" src="https://github.com/mirea-ninja/lost-and-found/assets/70258211/77606c5a-dfa6-4fc2-b501-0e36b97b6862">
+  <img width="450" src="https://github.com/mirea-ninja/lost-and-found/assets/70258211/304e0594-943c-48c6-9e12-50de71f8a746">
+</p>
+
 ## Сборка проекта
 
 ### В режиме разработки
