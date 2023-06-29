@@ -2,7 +2,7 @@ import DynamicLayout from '@/components/layout/dynamic-layout'
 import { getServerAuthSession } from '@/server/auth'
 import { type GetServerSideProps } from 'next'
 import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
-import DynamicCreatePost from '@/components/posts/create/dynamic-create-post'
+import DynamicCreatePost from '@/components/posts/create-post/dynamic-create-post'
 import { PostItemReason } from '@prisma/client'
 import DefaultSeo from '@/components/seo/default-seo'
 
