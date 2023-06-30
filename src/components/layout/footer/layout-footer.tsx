@@ -18,7 +18,7 @@ export default function LayoutFooter() {
             <a
               key={item.name}
               href={item.href}
-              className='flex flex-row align-baseline text-gray-400 hover:text-gray-500'
+              className='flex flex-row align-baseline text-gray-400 hover:text-gray-500 hover:underline'
               target='_blank'
               rel='noreferrer'
             >
