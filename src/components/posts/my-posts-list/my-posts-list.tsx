@@ -127,6 +127,7 @@ export default function MyPostsList({ reason }: MyPostsListProps) {
                 <p className='text-sm text-gray-700'>
                   <span className='font-medium'>{page * pageSize + 1}</span>–
                   <span className='font-medium'>{page * pageSize + myPosts.length}</span> из{' '}
+                  <span className='font-medium'>{countPost}</span>
                 </p>
               </div>
               <div className='flex flex-1 justify-between sm:justify-end'>
