@@ -9,7 +9,7 @@ import { Campus } from '@/lib/campus'
 import Image from 'next/image'
 import classNames from 'classnames/dedupe'
 
-const pageSize = 5
+const pageSize = 25
 
 interface MyPostsListProps {
   reason: PostItemReason
