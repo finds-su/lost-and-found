@@ -118,11 +118,64 @@ export const postsRouter = createTRPCRouter({
     }),
 
   getMyPosts: protectedProcedure
-    .input(z.object({ reason: z.nativeEnum(PostItemReason) }))
-    .query(({ ctx, input }) => {
-      const myPosts = prisma.lostAndFoundItem.findMany({
-        where: { userId: ctx.session.user.id, reason: input.reason },
+    .input(
+      z.object({
+        cursor: z.string().nullish(), // cursor is required for infinite query
+        limit: z.number().min(1).max(25),
+        reason: z.nativeEnum(PostItemReason),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { cursor, limit, reason } = input
+      const items = await prisma.lostAndFoundItem.findMany({
+        where: {
+          userId: ctx.session.user.id,
+          reason,
+        },
+        orderBy: {
+          created: 'desc',
+        },
+        take: limit + 1,
+        cursor: cursor ? { id: cursor } : undefined,
       })
-      return myPosts
+      const previousCursor = (
+        await prisma.lostAndFoundItem.findFirst({
+          select: {
+            id: true,
+          },
+          where: {
+            userId: ctx.session.user.id,
+            reason,
+          },
+          orderBy: {
+            created: 'desc',
+          },
+          take: -limit,
+          cursor: cursor ? { id: cursor } : undefined,
+        })
+      )?.id
+      let nextCursor: typeof cursor | undefined = undefined
+      if (items.length > limit) {
+        const nextItem = items.pop()
+        nextCursor = nextItem?.id
+      }
+      return { items, nextCursor, previousCursor, hasMore: nextCursor !== undefined }
+    }),
+
+  countMyPosts: protectedProcedure
+    .input(
+      z.object({
+        reason: z.nativeEnum(PostItemReason),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      const { reason } = input
+      const countMyPosts = prisma.lostAndFoundItem.count({
+        where: {
+          userId: ctx.session.user.id,
+          reason,
+        },
+      })
+      return countMyPosts
     }),
 })
