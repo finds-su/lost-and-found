@@ -4,7 +4,8 @@ import classNames from 'classnames/dedupe'
 import { type Session } from 'next-auth'
 import { useRouter } from 'next/router'
 import Avatar from '@/components/avatar/avatar'
-import { BellIcon } from '@heroicons/react/24/outline'
+import { BellIcon, BriefcaseIcon } from '@heroicons/react/24/outline'
+import { isModeratorOrAdmin } from '@/lib/is-moderator-or-admin'
 
 interface MobileLayoutMenuProps {
   navigation: Navigation
@@ -38,10 +39,10 @@ export default function MobileLayoutDropdown(props: MobileLayoutMenuProps) {
       </div>
       {session && (
         <div className='border-t border-gray-700 pb-3 pt-4'>
-          <div className='flex items-center px-5'>
+          <div className='flex items-center justify-between px-5'>
             <Disclosure.Button
               as='a'
-              className='flex items-center'
+              className='flex items-center justify-between'
               href={`/u/${session.user.nickname}`}
             >
               <Avatar size='sm' src={session.user.image} rounded resolution={50} />
@@ -54,15 +55,28 @@ export default function MobileLayoutDropdown(props: MobileLayoutMenuProps) {
                 </div>
               </div>
             </Disclosure.Button>
-            <Disclosure.Button
-              as='a'
-              href='/notifications'
-              type='button'
-              className='ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'
-            >
-              <span className='sr-only'>Просмотреть уведомления</span>
-              <BellIcon className='h-6 w-6' aria-hidden='true' />
-            </Disclosure.Button>
+            <div>
+              {session && isModeratorOrAdmin(session) && (
+                <Disclosure.Button
+                  as='a'
+                  href='/admin'
+                  type='button'
+                  className='ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'
+                >
+                  <span className='sr-only'>Просмотреть меню администратора</span>
+                  <BriefcaseIcon className='h-6 w-6' aria-hidden='true' />
+                </Disclosure.Button>
+              )}
+              <Disclosure.Button
+                as='a'
+                href='/notifications'
+                type='button'
+                className='ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'
+              >
+                <span className='sr-only'>Просмотреть уведомления</span>
+                <BellIcon className='h-6 w-6' aria-hidden='true' />
+              </Disclosure.Button>
+            </div>
           </div>
           <div className='mt-3 space-y-1 px-2'>
             {[...props.userNavigation.create, ...props.userNavigation.profile]
