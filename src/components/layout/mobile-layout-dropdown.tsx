@@ -42,7 +42,7 @@ export default function MobileLayoutDropdown(props: MobileLayoutMenuProps) {
           <div className='flex items-center justify-between px-5'>
             <Disclosure.Button
               as='a'
-              className='flex items-center justify-between'
+              className='flex items-center'
               href={`/u/${session.user.nickname}`}
             >
               <Avatar size='sm' src={session.user.image} rounded resolution={50} />
