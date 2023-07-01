@@ -55,7 +55,7 @@ export default function MobileLayoutDropdown(props: MobileLayoutMenuProps) {
                 </div>
               </div>
             </Disclosure.Button>
-            <div>
+            <div className='flex flex-row'>
               {session && isModeratorOrAdmin(session) && (
                 <Disclosure.Button
                   as='a'
