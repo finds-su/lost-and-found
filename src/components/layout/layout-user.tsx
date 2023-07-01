@@ -48,11 +48,11 @@ export default function LayoutUser(props: LayoutUserProps) {
 
   return (
     <div className='hidden md:block'>
-      <div className='ml-4 flex items-center space-x-3 md:ml-6'>
+      <div className='flex items-center space-x-3'>
         {session && isModeratorOrAdmin(session) && (
           <Link
             href='/admin'
-            className='ml-3 flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'
+            className='rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'
           >
             <span className='sr-only'>Открыть меню администратора</span>
             <BriefcaseIcon className='h-6 w-6' aria-hidden='true' />
@@ -60,7 +60,7 @@ export default function LayoutUser(props: LayoutUserProps) {
         )}
         <Link
           href='/notifications'
-          className='ml-3 flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'
+          className='rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'
         >
           <span className='sr-only'>Открыть уведомления</span>
           <BellIcon className='h-6 w-6' aria-hidden='true' />
