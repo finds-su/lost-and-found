@@ -1,8 +1,44 @@
 export default function OverviewPostSkeleton() {
   return (
     <div role='status' className='animate-pulse'>
-      <div className='h-[45rem] w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:h-[40rem]' />
-      <span className='sr-only'>Загрузка...</span>
+      <div>
+        <div className='flex flex-row items-center space-x-4'>
+          <div className='mb-4 h-8 w-48 rounded-full bg-gray-200 dark:bg-gray-700' />
+        </div>
+        <div className='mt-4'>
+          <div className='mb-2.5 h-2 max-w-[360px] rounded-full bg-gray-200 dark:bg-gray-700' />
+          <div className='mb-2.5 h-2 max-w-[380px] rounded-full bg-gray-200 dark:bg-gray-700' />
+          <div className='mb-2.5 h-2 max-w-[330px] rounded-full bg-gray-200 dark:bg-gray-700' />
+          <div className='mb-2.5 h-2 max-w-[300px] rounded-full bg-gray-200 dark:bg-gray-700' />
+          <div className='dar h-2 max-w-[360px] rounded-full bg-gray-200' />
+        </div>
+        <dl className='mt-16 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 sm:gap-y-16 lg:gap-x-8'>
+          {Array.from(Array(4).keys()).map((key) => (
+            <div key={key} className='border-t border-gray-200 pt-4'>
+              <div className='mb-4 h-2.5 w-32 rounded-full bg-gray-200 dark:bg-gray-700' />
+              <div className='mb-4 h-2 w-48 rounded-full bg-gray-200 dark:bg-gray-700' />
+            </div>
+          ))}
+        </dl>
+      </div>
+      <div className='grid grid-cols-2 grid-rows-2 gap-4 sm:gap-6 lg:gap-8'>
+        {Array.from(Array(4).keys()).map((key) => (
+          <div
+            key={key}
+            className='flex h-48 w-full items-center justify-center rounded bg-gray-300 dark:bg-gray-700 sm:w-60'
+          >
+            <svg
+              className='h-12 w-12 text-gray-200'
+              xmlns='http://www.w3.org/2000/svg'
+              aria-hidden='true'
+              fill='currentColor'
+              viewBox='0 0 640 512'
+            >
+              <path d='M480 80C480 35.82 515.8 0 560 0C604.2 0 640 35.82 640 80C640 124.2 604.2 160 560 160C515.8 160 480 124.2 480 80zM0 456.1C0 445.6 2.964 435.3 8.551 426.4L225.3 81.01C231.9 70.42 243.5 64 256 64C268.5 64 280.1 70.42 286.8 81.01L412.7 281.7L460.9 202.7C464.1 196.1 472.2 192 480 192C487.8 192 495 196.1 499.1 202.7L631.1 419.1C636.9 428.6 640 439.7 640 450.9C640 484.6 612.6 512 578.9 512H55.91C25.03 512 .0006 486.1 .0006 456.1L0 456.1z' />
+            </svg>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

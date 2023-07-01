@@ -8,6 +8,8 @@ import { useState } from 'react'
 import errorToast from '@/components/toasts/error-toast'
 import DynamicOverviewPostImage from '@/components/posts/overview/overview-post-image/dynamic-overview-post-image'
 import PostStatusBadge from '@/components/posts/post-status-badge/post-status-badge'
+import OverviewPostSkeleton from '@/components/posts/overview/overview-post/overview-post-skeleton'
+import Image from 'next/image'
 
 interface OverviewPostProps {
   reason: PostItemReason
@@ -58,7 +60,9 @@ export default function OverviewPost(props: OverviewPostProps) {
   return (
     <Window>
       <div className='mx-auto grid max-w-2xl grid-cols-1 items-center gap-x-8 gap-y-16 px-4 py-24 sm:px-6 sm:py-32 lg:max-w-7xl lg:grid-cols-2 lg:px-8'>
-        {post && (
+        {postQuery.isLoading ? (
+          <OverviewPostSkeleton />
+        ) : post ? (
           <>
             <div>
               <div className='flex flex-row items-center space-x-4'>
@@ -83,6 +87,17 @@ export default function OverviewPost(props: OverviewPostProps) {
               ))}
             </div>
           </>
+        ) : (
+          <div className='flex h-110 flex-col items-center justify-center text-center font-medium text-gray-700 lg:h-130'>
+            <Image
+              src='/assets/illustrations/basket.png'
+              alt=''
+              width={200}
+              height={200}
+              priority={false}
+            />
+            Пост не найден
+          </div>
         )}
       </div>
     </Window>

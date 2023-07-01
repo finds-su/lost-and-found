@@ -5,7 +5,6 @@ const DynamicOverviewPost = dynamic(
   () => import('@/components/posts/overview/overview-post/overview-post'),
   {
     ssr: false,
-    loading: () => <OverviewPostSkeleton />,
   },
 )
 
