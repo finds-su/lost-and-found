@@ -1,4 +1,4 @@
-import { BellIcon, PlusIcon } from '@heroicons/react/24/outline'
+import { BellIcon, PlusIcon, BriefcaseIcon } from '@heroicons/react/24/outline'
 import React from 'react'
 import { type UserNavigation } from '@/components/layout/layout'
 import Link from 'next/link'
@@ -6,6 +6,7 @@ import LayoutDropdown, { type LayoutDropdownProps } from '@/components/layout/la
 import Avatar from '@/components/avatar/avatar'
 import { Menu } from '@headlessui/react'
 import useSessionStore from '@/lib/hooks/store/session-store'
+import { isModeratorOrAdmin } from '@/lib/is-moderator-or-admin'
 
 export interface LayoutUserProps {
   userNavigation: UserNavigation
@@ -48,9 +49,18 @@ export default function LayoutUser(props: LayoutUserProps) {
   return (
     <div className='hidden md:block'>
       <div className='ml-4 flex items-center space-x-3 md:ml-6'>
+        {session && isModeratorOrAdmin(session) && (
+          <Link
+            href='/admin'
+            className='ml-3 flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'
+          >
+            <span className='sr-only'>Открыть меню администратора</span>
+            <BriefcaseIcon className='h-6 w-6' aria-hidden='true' />
+          </Link>
+        )}
         <Link
           href='/notifications'
-          className='flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'
+          className='ml-3 flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'
         >
           <span className='sr-only'>Открыть уведомления</span>
           <BellIcon className='h-6 w-6' aria-hidden='true' />
