@@ -6,7 +6,7 @@ import { SortOption } from '@/lib/types/sort-option'
 import { TRPCError } from '@trpc/server'
 
 export const postsRouter = createTRPCRouter({
-  infiniteItems: publicProcedure
+  infinitePosts: publicProcedure
     .input(
       z.object({
         limit: z.number().min(1).max(16, 'Превышен лимит запроса').nullish(),
@@ -97,6 +97,7 @@ export const postsRouter = createTRPCRouter({
           description: true,
           campus: true,
           images: true,
+          status: true,
           created: true,
           expires: true,
           user: {

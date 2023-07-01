@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { Campus } from '@/lib/campus'
 import Image from 'next/image'
 import classNames from 'classnames/dedupe'
+import PostStatusBadge from '@/components/posts/post-status-badge/post-status-badge'
 
 const pageSize = 25
 
@@ -101,7 +102,10 @@ export default function MyPostsList({ reason }: MyPostsListProps) {
               <Link href={myPost.id} key={index}>
                 <li className='flex justify-between gap-x-6 py-5'>
                   <div className='min-w-0'>
-                    <p className='text-sm font-semibold leading-6 text-gray-900'>{myPost.name}</p>
+                    <div className='flex flex-row items-center space-x-2'>
+                      <p className='text-sm font-semibold leading-6 text-gray-900'>{myPost.name}</p>
+                      <PostStatusBadge status={myPost.status} />
+                    </div>
                     <p className='mt-1 truncate text-xs leading-5 text-gray-500'>
                       {myPost.description}
                     </p>

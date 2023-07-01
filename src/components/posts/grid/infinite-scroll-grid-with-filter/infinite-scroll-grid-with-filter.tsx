@@ -15,7 +15,7 @@ export default function InfiniteScrollGridWithFilter(props: {
   endMessage: ReactNode
 }) {
   const { enabledSortOption, checkedFilters } = useScrollGridStore((state) => state[props.reason])
-  const postsQuery = api.posts.infiniteItems.useInfiniteQuery(
+  const postsQuery = api.posts.infinitePosts.useInfiniteQuery(
     {
       limit: 12,
       reason: props.reason,
