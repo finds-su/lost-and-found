@@ -3,9 +3,8 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import Image from 'next/image'
 import { type PostItemReason } from '@prisma/client'
 import { Campus } from '@/lib/campus'
-import { api } from '@/lib/api'
+import { api, type RouterOutputs } from '@/lib/api'
 import { humanReadableDate } from '@/lib/human-readable-date'
-import { type LostAndFoundPostInGrid } from '@/lib/types/lost-and-found-post-in-grid'
 import GridFilter from '@/components/posts/grid/grid-filter'
 import { SpinnerInfinity } from 'spinners-react'
 import useScrollGridStore from '@/lib/hooks/store/scroll-grids-store'
@@ -24,7 +23,7 @@ export default function InfiniteScrollGridWithFilter(props: {
     },
     { getNextPageParam: (lastPage) => lastPage.nextCursor },
   )
-  const [posts, setPosts] = useState<LostAndFoundPostInGrid[]>([])
+  const [posts, setPosts] = useState<RouterOutputs['posts']['infinitePosts']['items']>([])
   const [hasMore, setHasMore] = useState(true)
 
   useEffect(() => {
