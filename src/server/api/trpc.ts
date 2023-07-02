@@ -72,6 +72,7 @@ import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
 import { ZodError } from 'zod'
 import { aIRateLimitPerDay } from '@/lib/constants'
+import { isModeratorOrAdmin } from '@/lib/is-moderator-or-admin'
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
@@ -125,8 +126,19 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
   })
 })
 
+/** Reusable middleware that enforces moderators or admins are logged in before running the procedure. */
+const enforceMoredatorOrAdminIsAuthed = t.middleware(({ ctx, next }) => {
+  if (!ctx.session || !ctx.session.user || !isModeratorOrAdmin(ctx.session)) {
+    throw new TRPCError({
+      code: 'UNAUTHORIZED',
+      message: 'Пользователь не является модератором или администратором',
+    })
+  }
+  return next()
+})
+
 /** Reusable function that check user API usage limit is not exhausted before running the procedure. */
-export async function AIrateLimiter(userId: string) {
+export async function aIRateLimiter(userId: string) {
   const ratelimit = new Ratelimit({
     redis: Redis.fromEnv(),
     limiter: Ratelimit.slidingWindow(aIRateLimitPerDay, '1 d'),
@@ -151,3 +163,12 @@ export async function AIrateLimiter(userId: string) {
  * @see https://trpc.io/docs/procedures
  */
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed)
+
+/**
+ * Moderator or admin procedure
+ *
+ * If you want a query or mutation to ONLY be accessible to users with moderator or admin role, use this.
+ *
+ * @see https://trpc.io/docs/procedures
+ */
+export const moderatorOrAdminProcedure = protectedProcedure.use(enforceMoredatorOrAdminIsAuthed)

@@ -2,7 +2,7 @@ import { z } from 'zod'
 import {
   createTRPCRouter,
   protectedProcedure,
-  AIrateLimiter,
+  aIRateLimiter,
   publicProcedure,
 } from '@/server/api/trpc'
 import { TRPCError } from '@trpc/server'
@@ -154,7 +154,7 @@ export const usersRouter = createTRPCRouter({
       if (input.prompt === undefined) {
         return null
       }
-      await AIrateLimiter(ctx.session.user.id)
+      await aIRateLimiter(ctx.session.user.id)
       const url = await generateAvatar(input.prompt)
       if (url) {
         const response = await axios.get(url, {
