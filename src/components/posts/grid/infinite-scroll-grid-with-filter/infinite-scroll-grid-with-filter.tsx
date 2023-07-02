@@ -6,8 +6,8 @@ import { Campus } from '@/lib/campus'
 import { api, type RouterOutputs } from '@/lib/api'
 import { humanReadableDate } from '@/lib/human-readable-date'
 import GridFilter from '@/components/posts/grid/grid-filter'
-import { SpinnerInfinity } from 'spinners-react'
 import useScrollGridStore from '@/lib/hooks/store/scroll-grids-store'
+import Spinner from '@/components/spinner'
 
 export default function InfiniteScrollGridWithFilter(props: {
   reason: PostItemReason
@@ -50,14 +50,7 @@ export default function InfiniteScrollGridWithFilter(props: {
         hasMore={hasMore}
         loader={
           <p className='col-span-2 flex justify-center py-5 text-center md:col-span-4'>
-            <SpinnerInfinity
-              size={50}
-              thickness={100}
-              speed={100}
-              color='rgba(14, 165, 233, 1)'
-              secondaryColor='rgba(203, 213, 225, 1)'
-              aria-hidden='true'
-            />
+            <Spinner />
             <span className='sr-only'>Загрузка...</span>
           </p>
         }
