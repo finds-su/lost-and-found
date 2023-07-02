@@ -49,4 +49,5 @@ jobs:
         run: |
           cd ${{ secrets.PRODUCTION_FOLDER }}
           docker compose --env-file .env.local pull
+          docker compose stop
           docker compose --env-file .env.local up -d
