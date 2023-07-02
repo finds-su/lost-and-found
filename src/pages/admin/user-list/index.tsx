@@ -3,7 +3,7 @@ import { getServerAuthSession } from '@/server/auth'
 import { type GetServerSideProps } from 'next'
 import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
 import { isModeratorOrAdmin } from '@/lib/is-moderator-or-admin'
-import UserList from '@/components/admin/user-list/user-list'
+import DynamicUserList from '@/components/admin/user-list/dynamic-user-list'
 
 const title = 'Список пользователей'
 
@@ -21,7 +21,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 }
 
 const Users: NextPageWithLayout = () => {
-  return <UserList />
+  return <DynamicUserList />
 }
 
 Users.getLayout = function getLayout(page: JSX.Element, options: NextPageOptions) {
