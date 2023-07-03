@@ -5,6 +5,9 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { useRouter } from 'next/router'
+import { type SocialNetwork as PrismaSocialNetwork } from '@prisma/client'
+import { SocialNetwork } from '@/lib/social-network'
 
 const columnHelper = createColumnHelper<RouterOutputs['adminMenu']['getUsers'][number]>()
 
@@ -56,11 +59,16 @@ interface UserListTableProps {
 }
 
 export default function UserListTable({ users }: UserListTableProps) {
+  const router = useRouter()
   const table = useReactTable({
     data: users,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
+
+  const handleRowClick = (nickname: string) => {
+    return () => void router.push(`/u/${nickname}`)
+  }
 
   return (
     <table className='min-w-full divide-y divide-gray-300'>
@@ -84,7 +92,11 @@ export default function UserListTable({ users }: UserListTableProps) {
       </thead>
       <tbody className='divide-y divide-gray-200 bg-white'>
         {table.getRowModel().rows.map((row) => (
-          <tr key={row.id}>
+          <tr
+            key={row.id}
+            onClick={handleRowClick(row.original.nickname)}
+            className='cursor-pointer hover:bg-gray-50'
+          >
             {row.getVisibleCells().map((cell) => (
               <td key={cell.id} className='whitespace-nowrap px-3 py-4 text-gray-900'>
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}

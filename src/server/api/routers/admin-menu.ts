@@ -14,6 +14,12 @@ export const adminMenuRouter = createTRPCRouter({
         role: true,
         isBlocked: true,
         blockReason: true,
+        socialNetworks: {
+          select: {
+            socialNetwork: true,
+            link: true,
+          },
+        },
       },
     })
     return users
