@@ -41,6 +41,20 @@ const columns = [
       columnHelper.accessor('userInfo', {
         header: () => 'Обо мне',
       }),
+      columnHelper.accessor('socialNetworks', {
+        header: () => 'Соц. сети',
+        cell: (cell) => (
+          <div>
+            {(cell.getValue() as { socialNetwork: PrismaSocialNetwork; link: string }[]).map(
+              (socialNetwork, index) => (
+                <div key={index}>
+                  {SocialNetwork[socialNetwork.socialNetwork]}: {socialNetwork.link}
+                </div>
+              ),
+            )}
+          </div>
+        ),
+      }),
       columnHelper.accessor('role', {
         header: () => 'Роль',
       }),
