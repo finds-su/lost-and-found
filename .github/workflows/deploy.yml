@@ -48,5 +48,6 @@ jobs:
       - name: Deploy
         run: |
           cd ${{ secrets.PRODUCTION_FOLDER }}
-          docker compose --env-file .env.local pull
-          docker compose --env-file .env.local up -d
+          wget https://raw.githubusercontent.com/mirea-ninja/lost-and-found/main/docker-compose.prod.yml
+          docker compose -f docker-compose.prod.yml --env-file .env.local pull
+          docker compose -f docker-compose.prod.yml --env-file .env.local up -d
