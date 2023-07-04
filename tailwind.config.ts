@@ -9,6 +9,7 @@ export default {
         sans: ['var(--font-inter)'],
       },
       height: {
+        '80': '20rem',
         '110': '26rem',
         '130': '30rem',
       },
