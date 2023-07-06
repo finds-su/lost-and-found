@@ -130,8 +130,10 @@ export default function MyPostsList({ reason }: MyPostsListProps) {
               <div className='hidden sm:block'>
                 <p className='text-sm text-gray-700'>
                   <span className='font-medium'>{page * pageSize + 1}</span>–
-                  <span className='font-medium'>{page * pageSize + myPosts.length}</span> из{' '}
-                  <span className='font-medium'>{countPost}</span>
+                  <span className='font-medium'>{page * pageSize + myPosts.length}</span>
+                  {countMyPostsQuery.isSuccess && (
+                    <span className='font-medium'> из {countPost}</span>
+                  )}
                 </p>
               </div>
               <div className='flex flex-1 justify-between sm:justify-end'>
