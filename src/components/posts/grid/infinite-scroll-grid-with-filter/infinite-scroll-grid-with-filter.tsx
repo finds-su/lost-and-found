@@ -9,10 +9,7 @@ import GridFilter from '@/components/posts/grid/grid-filter'
 import useScrollGridStore from '@/lib/hooks/store/scroll-grids-store'
 import Spinner from '@/components/spinner'
 
-export default function InfiniteScrollGridWithFilter(props: {
-  reason: PostItemReason
-  endMessage: ReactNode
-}) {
+export default function InfiniteScrollGridWithFilter(props: { reason: PostItemReason }) {
   const { enabledSortOption, checkedFilters } = useScrollGridStore((state) => state[props.reason])
   const postsQuery = api.posts.infinitePosts.useInfiniteQuery(
     {
@@ -55,8 +52,15 @@ export default function InfiniteScrollGridWithFilter(props: {
           </p>
         }
         endMessage={
-          <div className='col-span-2 flex justify-center text-center font-medium text-gray-700 md:col-span-4'>
-            {props.endMessage}
+          <div className='col-span-2 flex flex-col items-center text-sm text-gray-600 md:col-span-4'>
+            <Image
+              src='/assets/illustrations/box.png'
+              alt=''
+              width={200}
+              height={200}
+              priority={false}
+            />
+            Объявлений больше не найдено
           </div>
         }
         className='grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 md:gap-y-1 lg:gap-x-8'

@@ -27,7 +27,7 @@ const CreateLoss: NextPageWithLayout = () => {
       <DefaultSeo title={title} />
       <DynamicCreatePost
         name='Пропажа'
-        description='Опишите вещь, которую потеряли, чтобы нашедший смог определить ее принадлежность'
+        description='Опишите пропажу, чтобы можно было определить, что она Ваша'
         postItemReason={PostItemReason.LOST}
         routePushOnExit='/losses'
       />

@@ -14,8 +14,8 @@ import { type Session } from 'next-auth'
 
 export type Navigation = { name: string; href: string }[]
 export const navigation: Navigation = [
-  { name: 'Найденные вещи', href: '/finds' },
-  { name: 'Потерянные вещи', href: '/losses' },
+  { name: 'Находки', href: '/finds' },
+  { name: 'Пропажи', href: '/losses' },
 ]
 
 export interface LayoutProps {

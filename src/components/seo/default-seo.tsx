@@ -8,14 +8,12 @@ export default function DefaultSeo(props: DefaultSeoProps) {
   return (
     <NextSeo
       title={props.title ?? 'Бюро находок Mirea Ninja'}
-      description={
-        props.description ?? 'Приложение для поиска потерянных и размещения найденных вещей'
-      }
+      description={props.description ?? 'Приложение для агрегации находок и объявлений пропаж'}
       canonical='https://finds.mirea.ninja/'
       openGraph={{
         url: env.NEXT_PUBLIC_NEXTAUTH_URL,
         title: 'Бюро находок Mirea Ninja',
-        description: 'Приложение для поиска потерянных и размещения найденных вещей',
+        description: 'Приложение для агрегации находок и объявлений пропаж',
         images: [
           {
             url: '/logo-icons/apple-touch-icon-precomposed.png',

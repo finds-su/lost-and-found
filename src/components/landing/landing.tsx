@@ -27,14 +27,14 @@ export default function Landing() {
           type='button'
           className='mb-2 mr-2 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-l focus:outline-none focus:ring-4 focus:ring-purple-200 dark:focus:ring-purple-800'
         >
-          Найденные вещи
+          Находки
         </Link>
         <Link
           href='/losses'
           type='button'
           className='mb-2 mr-2 rounded-lg bg-gradient-to-br from-pink-500 to-orange-400 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gradient-to-bl focus:outline-none focus:ring-4 focus:ring-pink-200 dark:focus:ring-pink-800'
         >
-          Потерянные вещи
+          Пропажи
         </Link>
       </div>
     </div>

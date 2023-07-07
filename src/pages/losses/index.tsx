@@ -17,21 +17,7 @@ const Losses: NextPageWithLayout = () => {
   return (
     <>
       <DefaultSeo title={title} />
-      <DynamicInfiniteScrollGridWithFilter
-        reason='LOST'
-        endMessage={
-          <div>
-            <Image
-              src='/assets/illustrations/gift.png'
-              alt=''
-              width={200}
-              height={200}
-              priority={false}
-            />
-            Пропаж больше нет
-          </div>
-        }
-      />
+      <DynamicInfiniteScrollGridWithFilter reason='LOST' />
     </>
   )
 }

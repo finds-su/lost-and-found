@@ -45,7 +45,7 @@ export default function GridFilter(props: GridFilterProps) {
       <div className='mb-4'>
         <section aria-labelledby='filter-heading'>
           <h2 id='filter-heading' className='sr-only'>
-            Фильтры вещей
+            Фильтры объявлений
           </h2>
 
           <div className='flex items-center justify-between'>

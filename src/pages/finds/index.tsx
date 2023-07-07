@@ -17,21 +17,7 @@ const Finds: NextPageWithLayout = () => {
   return (
     <>
       <DefaultSeo title={title} />
-      <DynamicInfiniteScrollGridWithFilter
-        reason='FOUND'
-        endMessage={
-          <div>
-            <Image
-              src='/assets/illustrations/box.png'
-              alt=''
-              width={200}
-              height={200}
-              priority={false}
-            />
-            Вещей больше не найдено
-          </div>
-        }
-      />
+      <DynamicInfiniteScrollGridWithFilter reason='FOUND' />
     </>
   )
 }

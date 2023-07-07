@@ -27,7 +27,7 @@ const CreateFind: NextPageWithLayout = () => {
       <DefaultSeo />
       <DynamicCreatePost
         name='Находка'
-        description='Опишите найденную вещь, чтобы хозяин смог легко ее узнать'
+        description='Опишите находку, чтобы хозяин смог легко ее узнать'
         postItemReason={PostItemReason.FOUND}
         routePushOnExit='/finds'
       />
