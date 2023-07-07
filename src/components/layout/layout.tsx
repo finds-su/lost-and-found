@@ -90,7 +90,7 @@ export default function Layout(props: LayoutProps) {
                       )}
                     </Disclosure.Button>
                   </div>
-                  <div className='flex basis-1/3 items-center justify-center md:basis-2/3 md:justify-start'>
+                  <div className='flex basis-1/3 items-center justify-center md:basis-1/2 md:justify-start'>
                     <Link className='flex-shrink-0' href='/'>
                       <Image
                         priority
@@ -121,7 +121,7 @@ export default function Layout(props: LayoutProps) {
                       </div>
                     </div>
                   </div>
-                  <div className='flex basis-1/3 justify-end'>
+                  <div className='flex basis-1/3 justify-end md:basis-1/2'>
                     {session ? (
                       <DynamicLayoutUser userNavigation={userNavigation} />
                     ) : (
