@@ -1,7 +1,7 @@
 # lost-and-found
 
 > **Warning**
-> 
+>
 > Development in progress
 
 Бюро находок Mirea Ninja.
@@ -31,14 +31,18 @@
 
 ```shell
 npm run dev
-# OR
+```
+
+OR
+
+```shell
 docker compose up --build
 ```
 
-### На проде
+### С прокси
 
 ```shell
-docker compose up
+docker compose -f docker-compose.prod.yml -d up
 ```
 
 ## S3
@@ -47,15 +51,15 @@ docker compose up
 
 #### Временные файлы (временный аватар, сгенерированнная картинка)
 
-Префикс tmp
-Тип Expiration
-Срабатывание через 1 день
+- Префикс tmp
+- Тип Expiration
+- Срабатывание через 1 день
 
 #### Файлы, загружаемые к постам
 
-Префикс posts
-Тип Expiration
-Срабатывание через 90 дней
+- Префикс posts
+- Тип Expiration
+- Срабатывание через 90 дней
 
 ## Лицензия
 
