@@ -54,6 +54,8 @@ RUN \
 FROM base AS runner
 WORKDIR /app
 
+RUN npm i -g prisma
+
 ENV NODE_ENV production
 
 ENV NEXT_TELEMETRY_DISABLED 1
