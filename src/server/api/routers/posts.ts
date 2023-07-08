@@ -1,7 +1,7 @@
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '@/server/api/trpc'
 import { z } from 'zod'
 import { prisma } from '@/server/db'
-import { Campus, PostItemReason } from '@prisma/client'
+import { Campus, LostAndFoundItemStatus, PostItemReason } from '@prisma/client'
 import { SortOption } from '@/lib/types/sort-option'
 import { TRPCError } from '@trpc/server'
 
@@ -179,4 +179,38 @@ export const postsRouter = createTRPCRouter({
       })
       return countMyPosts
     }),
+
+  searchPosts: publicProcedure.input(z.object({ query: z.string() })).query(async ({ input }) => {
+    const { query } = input
+    const result = []
+    const finds = await searchPosts(query, PostItemReason.FOUND)
+    if (finds.length > 0) {
+      result.push({ name: 'Находки', reason: PostItemReason.FOUND, posts: finds })
+    }
+    const losses = await searchPosts(query, PostItemReason.LOST)
+    if (losses.length > 0) {
+      result.push({ name: 'Пропажи', reason: PostItemReason.LOST, posts: losses })
+    }
+    return result
+  }),
 })
+
+async function searchPosts(query: string, reason: PostItemReason) {
+  return prisma.lostAndFoundItem.findMany({
+    select: {
+      id: true,
+      name: true,
+    },
+    where: {
+      status: LostAndFoundItemStatus.ACTIVE,
+      reason,
+      OR: [
+        { name: { contains: query, mode: 'insensitive' } },
+        { description: { contains: query, mode: 'insensitive' } },
+      ],
+    },
+    orderBy: {
+      created: 'desc',
+    },
+  })
+}

@@ -1,6 +1,6 @@
 import { Disclosure } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import React from 'react'
+import { Bars3Icon, MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import React, { useState } from 'react'
 import Image from 'next/image'
 import { signIn, signOut } from 'next-auth/react'
 import { useRouter } from 'next/router'
@@ -11,6 +11,9 @@ import DynamicLayoutUser from '@/components/layout/dynamic-layout-user'
 import DynamicLayoutFooter from '@/components/layout/footer/dynamic-layout-footer'
 import { NextSeo } from 'next-seo'
 import { type Session } from 'next-auth'
+import CommandPalette from '@/components/layout/command-palette'
+import SidebarSearchInput from '@/components/form/sidebar-search-input'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 export type Navigation = { name: string; href: string }[]
 export const navigation: Navigation = [
@@ -32,6 +35,9 @@ export type UserNavigation = Record<'profile' | 'create', UserNavigationDropdown
 export default function Layout(props: LayoutProps) {
   const router = useRouter()
   const session = props.session
+  const [openCommandPalette, setOpenCommandPalette] = useState(false)
+  useHotkeys('/', () => setOpenCommandPalette(true), { scopes: ['app'] })
+  useHotkeys('Esc', () => setOpenCommandPalette(false), { scopes: ['app'] })
 
   const userNavigation: UserNavigation = {
     create: [
@@ -121,13 +127,29 @@ export default function Layout(props: LayoutProps) {
                       </div>
                     </div>
                   </div>
-                  <div className='flex basis-1/3 justify-end md:basis-1/2'>
+                  <div className='flex basis-1/3 items-center justify-end md:basis-1/2'>
+                    <div className='pr-3'>
+                      <button
+                        type='button'
+                        onClick={() => setOpenCommandPalette(true)}
+                        className='rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 lg:hidden'
+                      >
+                        <span className='sr-only'>Быстрый поиск</span>
+                        <MagnifyingGlassIcon className='h-6 w-6' aria-hidden='true' />
+                      </button>
+                      <SidebarSearchInput setOpenCommandPalette={setOpenCommandPalette} />
+                    </div>
                     {session ? (
-                      <DynamicLayoutUser userNavigation={userNavigation} />
+                      <DynamicLayoutUser
+                        userNavigation={userNavigation}
+                        openCommandPalette={openCommandPalette}
+                        setOpenCommandPalette={setOpenCommandPalette}
+                      />
                     ) : (
                       <button
                         onClick={() => void signIn()}
-                        className='rounded-md border px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white'
+                        type='button'
+                        className='h-8 rounded-md border px-3 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white'
                       >
                         Войти
                       </button>
@@ -154,6 +176,7 @@ export default function Layout(props: LayoutProps) {
           <DynamicLayoutFooter />
         </div>
       </div>
+      <CommandPalette open={openCommandPalette} setOpen={setOpenCommandPalette} />
     </>
   )
 }

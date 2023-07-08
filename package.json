@@ -54,6 +54,7 @@
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.44.2",
     "react-hot-toast": "^2.4.0",
+    "react-hotkeys-hook": "^4.4.1",
     "react-infinite-scroll-component": "^6.1.0",
     "react-medium-image-zoom": "^5.1.6",
     "sharp": "^0.32.0",

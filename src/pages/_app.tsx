@@ -1,6 +1,5 @@
 import { type AppProps, type AppType } from 'next/app'
 import { type Session } from 'next-auth'
-import { SessionProvider } from 'next-auth/react'
 import { Inter } from 'next/font/google'
 
 import { api } from '@/lib/api'
@@ -13,6 +12,7 @@ import Head from 'next/head'
 import NextNProgress from 'nextjs-progressbar'
 import useSessionStore from '@/lib/hooks/store/session-store'
 import { type ErrorProps } from '@/lib/types/error-props'
+import Providers from '@/components/providers'
 
 const inter = Inter({
   subsets: ['latin', 'cyrillic', 'cyrillic-ext'],
@@ -43,7 +43,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
 
   const getLayout = Component.getLayout
   return (
-    <SessionProvider session={session}>
+    <Providers session={session}>
       <Head>
         <meta charSet='utf-8' />
         <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
@@ -75,7 +75,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
         )}
         <Toaster position='bottom-left' reverseOrder={false} />
       </main>
-    </SessionProvider>
+    </Providers>
   )
 }
 
