@@ -16,9 +16,6 @@
  */
 import { type CreateNextContextOptions } from '@trpc/server/adapters/next'
 import { type Session } from 'next-auth'
-import { Ratelimit } from '@upstash/ratelimit'
-import { Redis } from '@upstash/redis'
-import { env } from '@/env.mjs'
 
 import { getServerAuthSession } from '@/server/auth'
 import { prisma } from '@/server/db'
@@ -71,8 +68,8 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
 import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
 import { ZodError } from 'zod'
-import { aIRateLimitPerDay } from '@/lib/constants'
 import { isModeratorOrAdmin } from '@/lib/is-moderator-or-admin'
+import { redisRateLimiter } from '@/server/redis'
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
@@ -139,13 +136,7 @@ const enforceMoredatorOrAdminIsAuthed = t.middleware(({ ctx, next }) => {
 
 /** Reusable function that check user API usage limit is not exhausted before running the procedure. */
 export async function aIRateLimiter(userId: string) {
-  const ratelimit = new Ratelimit({
-    redis: Redis.fromEnv(),
-    limiter: Ratelimit.slidingWindow(aIRateLimitPerDay, '1 d'),
-    analytics: env.NODE_ENV === 'development',
-    prefix: 'ai',
-  })
-  const { success } = await ratelimit.limit(userId)
+  const { success } = await redisRateLimiter(userId, 'ai')
   if (!success) {
     throw new TRPCError({
       code: 'FORBIDDEN',

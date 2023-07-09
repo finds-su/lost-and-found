@@ -30,6 +30,32 @@ services:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
 
+  redis:
+    image: 'bitnami/redis:latest'
+    volumes:
+      - app-redis-data:/bitnami/redis/data
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    networks:
+      - application
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redisinsight:
+    image: redislabs/redisinsight:latest
+    volumes:
+      - redisinsight-data:/db
+    depends_on:
+      redis:
+        condition: service_healthy
+    ports:
+      - '8001:8001'
+    networks:
+      - application
+
   app:
     build:
       context: .
@@ -39,6 +65,8 @@ services:
         NEXT_PUBLIC_NEXTAUTH_URL: ${NEXT_PUBLIC_NEXTAUTH_URL}
     depends_on:
       db:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     ports:
       - 3000:3000
@@ -56,8 +84,7 @@ services:
       S3_UPLOAD_REGION: ${S3_UPLOAD_REGION}
       NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS: ${NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS}
       OPENAI_API_KEY: ${OPENAI_API_KEY}
-      UPSTASH_REDIS_REST_URL: ${UPSTASH_REDIS_REST_URL}
-      UPSTASH_REDIS_REST_TOKEN: ${UPSTASH_REDIS_REST_TOKEN}
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379/${REDIS_DB}
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
       NEXTAUTH_URL: ${NEXTAUTH_URL}
       NEXT_PUBLIC_NEXTAUTH_URL: ${NEXT_PUBLIC_NEXTAUTH_URL}
@@ -73,3 +100,5 @@ networks:
 
 volumes:
   app-db-data:
+  app-redis-data:
+  redisinsight-data:
