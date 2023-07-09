@@ -1,9 +1,9 @@
-FROM node:lts-bullseye-slim AS base
+FROM node:18-alpine AS base
 
 ##### DEPENDENCIES
 
 FROM base AS deps
-RUN apt-get update && apt-get install -y libc6 libssl1.1
+RUN apk add --no-cache libc6-compat openssl1.1-compat
 WORKDIR /app
 
 # Install Prisma Client - remove if not using Prisma
