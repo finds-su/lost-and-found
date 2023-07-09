@@ -54,7 +54,7 @@ RUN \
 FROM base AS runner
 WORKDIR /app
 
-RUN npm i -g prisma
+RUN npm i -g prisma npm@latest
 
 ENV NODE_ENV production
 
