@@ -200,6 +200,7 @@ async function searchPosts(query: string, reason: PostItemReason) {
     select: {
       id: true,
       name: true,
+      reason: true,
     },
     where: {
       status: LostAndFoundItemStatus.ACTIVE,

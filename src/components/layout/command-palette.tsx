@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { type ChangeEvent, Fragment, type KeyboardEventHandler, useState } from 'react'
 import { Combobox, Dialog, Transition } from '@headlessui/react'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { FaceFrownIcon, GlobeAmericasIcon } from '@heroicons/react/24/outline'
@@ -35,6 +35,21 @@ export default function CommandPalette({ open, setOpen }: CommandPaletteProps) {
 
   const closePalette = () => setOpen(false)
 
+  const onSearchInputChange = (event: ChangeEvent<HTMLInputElement>) => setQuery(event.target.value)
+
+  const onSelectedOptionEnter = (
+    open: boolean,
+    selectedOption: { id: string; reason: PostItemReason } | null,
+  ) => {
+    return (event: KeyboardEventHandler<HTMLInputElement>) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      if (open && selectedOption && event.key === 'Enter') {
+        fetchPost(selectedOption.id, selectedOption.reason)()
+      }
+    }
+  }
+
   return (
     <Transition.Root show={open} as={Fragment} afterLeave={() => setQuery('')} appear>
       <Dialog as='div' className='relative z-10' onClose={setOpen}>
@@ -62,76 +77,89 @@ export default function CommandPalette({ open, setOpen }: CommandPaletteProps) {
           >
             <Dialog.Panel className='mx-auto max-w-2xl transform divide-y divide-gray-100 overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition-all'>
               <Combobox>
-                <div className='relative'>
-                  <MagnifyingGlassIcon
-                    className='pointer-events-none absolute left-4 top-3.5 h-5 w-5 text-gray-400'
-                    aria-hidden='true'
-                  />
-                  <Combobox.Input
-                    className='h-12 w-full border-0 bg-transparent pl-11 pr-12 text-gray-800 placeholder-gray-400 focus:ring-0 sm:text-sm'
-                    placeholder='Поиск...'
-                    onChange={(event) => setQuery(event.target.value)}
-                  />
-                  <kbd
-                    onClick={closePalette}
-                    className='absolute right-4 top-3.5 rounded-md border border-gray-200 p-1 text-[0.5rem] text-gray-800 hover:border-gray-300 hover:shadow-sm'
-                  >
-                    ESC
-                  </kbd>
-                </div>
-                {query === '' && (
-                  <div className='border-t border-gray-100 px-6 py-14 text-center text-sm sm:px-14'>
-                    <GlobeAmericasIcon
-                      className='mx-auto h-6 w-6 text-gray-400'
-                      aria-hidden='true'
-                    />
-                    <p className='mt-4 font-semibold text-gray-900'>
-                      Поиск объявлений о находках и пропажах
-                    </p>
-                    <p className='mt-2 text-gray-500'>Быстрый доступ к активным объявлениям.</p>
-                  </div>
-                )}
+                {({ open, activeOption }) => (
+                  <>
+                    <div className='relative'>
+                      <MagnifyingGlassIcon
+                        className='pointer-events-none absolute left-4 top-3.5 h-5 w-5 text-gray-400'
+                        aria-hidden='true'
+                      />
+                      <Combobox.Input
+                        className='h-12 w-full border-0 bg-transparent pl-11 pr-12 text-gray-800 placeholder-gray-400 focus:ring-0 sm:text-sm'
+                        placeholder='Поиск...'
+                        onChange={onSearchInputChange}
+                        onKeyDown={(e: any) =>
+                          onSelectedOptionEnter(
+                            open,
+                            activeOption as { id: string; reason: PostItemReason } | null,
+                            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                          )(e)
+                        }
+                      />
+                      <kbd
+                        onClick={closePalette}
+                        className='absolute right-4 top-3.5 rounded-md border border-gray-200 p-1 text-[0.5rem] text-gray-800 hover:border-gray-300 hover:shadow-sm'
+                      >
+                        ESC
+                      </kbd>
+                    </div>
+                    {query === '' && (
+                      <div className='border-t border-gray-100 px-6 py-14 text-center text-sm sm:px-14'>
+                        <GlobeAmericasIcon
+                          className='mx-auto h-6 w-6 text-gray-400'
+                          aria-hidden='true'
+                        />
+                        <p className='mt-4 font-semibold text-gray-900'>
+                          Поиск объявлений о находках и пропажах
+                        </p>
+                        <p className='mt-2 text-gray-500'>Быстрый доступ к активным объявлениям.</p>
+                      </div>
+                    )}
+                    {querySearch.data && querySearch.data.length > 0 && (
+                      <Combobox.Options
+                        static
+                        className='max-h-80 scroll-pb-2 scroll-pt-11 space-y-2 overflow-y-auto pb-2'
+                      >
+                        {querySearch.data.map((category) => (
+                          <li key={category.name}>
+                            <h2 className='bg-gray-100 px-4 py-2.5 text-xs font-semibold text-gray-900'>
+                              {category.name}
+                            </h2>
+                            <ul className='mt-2 text-sm text-gray-800'>
+                              {category.posts.map((item) => (
+                                <Combobox.Option
+                                  key={item.id}
+                                  value={item}
+                                  onClick={fetchPost(item.id, item.reason)}
+                                  className={({ active }) =>
+                                    classNames(
+                                      'cursor-default select-none px-4 py-2',
+                                      active && 'bg-blue-600 text-white',
+                                    )
+                                  }
+                                >
+                                  {item.name}
+                                </Combobox.Option>
+                              ))}
+                            </ul>
+                          </li>
+                        ))}
+                      </Combobox.Options>
+                    )}
 
-                {querySearch.data && querySearch.data.length > 0 && (
-                  <Combobox.Options
-                    static
-                    className='max-h-80 scroll-pb-2 scroll-pt-11 space-y-2 overflow-y-auto pb-2'
-                  >
-                    {querySearch.data.map((category) => (
-                      <li key={category.name}>
-                        <h2 className='bg-gray-100 px-4 py-2.5 text-xs font-semibold text-gray-900'>
-                          {category.name}
-                        </h2>
-                        <ul className='mt-2 text-sm text-gray-800'>
-                          {category.posts.map((item) => (
-                            <Combobox.Option
-                              key={item.id}
-                              value={item}
-                              onClick={fetchPost(item.id, category.reason)}
-                              className={({ active }) =>
-                                classNames(
-                                  'cursor-default select-none px-4 py-2',
-                                  active && 'bg-indigo-600 text-white',
-                                )
-                              }
-                            >
-                              {item.name}
-                            </Combobox.Option>
-                          ))}
-                        </ul>
-                      </li>
-                    ))}
-                  </Combobox.Options>
-                )}
-
-                {query !== '' && querySearch.data && querySearch.data.length === 0 && (
-                  <div className='border-t border-gray-100 px-6 py-14 text-center text-sm sm:px-14'>
-                    <FaceFrownIcon className='mx-auto h-6 w-6 text-gray-400' aria-hidden='true' />
-                    <p className='mt-4 font-semibold text-gray-900'>Результатов не найдено</p>
-                    <p className='mt-2 text-gray-500'>
-                      Мы не смогли найти ничего по этому запросу.
-                    </p>
-                  </div>
+                    {query !== '' && querySearch.data && querySearch.data.length === 0 && (
+                      <div className='border-t border-gray-100 px-6 py-14 text-center text-sm sm:px-14'>
+                        <FaceFrownIcon
+                          className='mx-auto h-6 w-6 text-gray-400'
+                          aria-hidden='true'
+                        />
+                        <p className='mt-4 font-semibold text-gray-900'>Результатов не найдено</p>
+                        <p className='mt-2 text-gray-500'>
+                          Мы не смогли найти ничего по этому запросу.
+                        </p>
+                      </div>
+                    )}
+                  </>
                 )}
               </Combobox>
             </Dialog.Panel>
