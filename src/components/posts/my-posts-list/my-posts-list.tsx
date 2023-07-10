@@ -100,27 +100,31 @@ export default function MyPostsList({ reason }: MyPostsListProps) {
           <>
             {myPosts.map((myPost, index) => (
               <Link href={myPost.id} key={index}>
-                <li className='flex justify-between gap-x-6 py-5'>
-                  <div className='min-w-0'>
-                    <div className='flex flex-row items-center space-x-2'>
-                      <p className='text-sm font-semibold leading-6 text-gray-900'>{myPost.name}</p>
-                      <PostStatusBadge status={myPost.status} />
-                    </div>
-                    <p className='mt-1 truncate text-xs leading-5 text-gray-500'>
-                      {myPost.description}
-                    </p>
-                  </div>
-                  <div className='hidden sm:flex sm:flex-row sm:items-center sm:gap-x-4'>
-                    <div className='flex flex-col items-end'>
-                      <p className='text-sm leading-6 text-gray-900'>{Campus[myPost.campus]}</p>
-                      <p className='mt-1 text-xs leading-5 text-gray-500'>
-                        Дата создания: {formatDate(myPost.created.toString())}, истекает:{' '}
-                        {formatDate(myPost.expires.toString())}
+                <div className='rounded hover:bg-gray-50'>
+                  <li className='flex justify-between gap-x-6 py-5'>
+                    <div className='min-w-0'>
+                      <div className='flex flex-row items-center space-x-2'>
+                        <p className='text-sm font-semibold leading-6 text-gray-900'>
+                          {myPost.name}
+                        </p>
+                        <PostStatusBadge status={myPost.status} />
+                      </div>
+                      <p className='mt-1 truncate text-xs leading-5 text-gray-500'>
+                        {myPost.description}
                       </p>
                     </div>
-                    <ChevronRightIcon className='h-5 w-5 text-gray-500' />
-                  </div>
-                </li>
+                    <div className='hidden sm:flex sm:flex-row sm:items-center sm:gap-x-4'>
+                      <div className='flex flex-col items-end'>
+                        <p className='text-sm leading-6 text-gray-900'>{Campus[myPost.campus]}</p>
+                        <p className='mt-1 text-xs leading-5 text-gray-500'>
+                          Дата создания: {formatDate(myPost.created.toString())}, истекает:{' '}
+                          {formatDate(myPost.expires.toString())}
+                        </p>
+                      </div>
+                      <ChevronRightIcon className='h-5 w-5 text-gray-500' />
+                    </div>
+                  </li>
+                </div>
               </Link>
             ))}
             <nav
