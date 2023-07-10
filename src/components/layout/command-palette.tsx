@@ -98,7 +98,7 @@ export default function CommandPalette({ open, setOpen }: CommandPaletteProps) {
                       />
                       <kbd
                         onClick={closePalette}
-                        className='absolute right-4 top-3.5 rounded-md border border-gray-200 p-1 text-[0.5rem] text-gray-800 hover:border-gray-300 hover:shadow-sm'
+                        className='absolute right-4 top-3.5 cursor-pointer rounded-md border border-gray-200 p-1 text-[0.5rem] text-gray-800 hover:border-gray-300 hover:shadow-sm'
                       >
                         ESC
                       </kbd>
