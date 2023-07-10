@@ -33,6 +33,8 @@ export default function CommandPalette({ open, setOpen }: CommandPaletteProps) {
     }
   }
 
+  const closePalette = () => setOpen(false)
+
   return (
     <Transition.Root show={open} as={Fragment} afterLeave={() => setQuery('')} appear>
       <Dialog as='div' className='relative z-10' onClose={setOpen}>
@@ -66,10 +68,16 @@ export default function CommandPalette({ open, setOpen }: CommandPaletteProps) {
                     aria-hidden='true'
                   />
                   <Combobox.Input
-                    className='h-12 w-full border-0 bg-transparent pl-11 pr-4 text-gray-800 placeholder-gray-400 focus:ring-0 sm:text-sm'
+                    className='h-12 w-full border-0 bg-transparent pl-11 pr-12 text-gray-800 placeholder-gray-400 focus:ring-0 sm:text-sm'
                     placeholder='Поиск...'
                     onChange={(event) => setQuery(event.target.value)}
                   />
+                  <kbd
+                    onClick={closePalette}
+                    className='absolute right-4 top-3.5 rounded-md border border-gray-200 p-1 text-[0.5rem] text-gray-800 hover:border-gray-300 hover:shadow-sm'
+                  >
+                    ESC
+                  </kbd>
                 </div>
                 {query === '' && (
                   <div className='border-t border-gray-100 px-6 py-14 text-center text-sm sm:px-14'>
