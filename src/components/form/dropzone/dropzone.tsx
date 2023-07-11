@@ -37,7 +37,7 @@ export default function Dropzone(props: DropzoneProps) {
   return (
     <div
       {...getRootProps()}
-      className='flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pb-6 pt-5'
+      className='flex cursor-copy justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pb-6 pt-5'
     >
       <div className='space-y-1 text-center'>
         <svg
@@ -57,7 +57,7 @@ export default function Dropzone(props: DropzoneProps) {
         <div className='flex text-sm text-gray-600'>
           <label
             htmlFor='file-upload'
-            className='relative cursor-pointer rounded-md bg-white font-medium text-blue-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 hover:text-blue-500'
+            className='relative cursor-copy rounded-md bg-white font-medium text-blue-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 hover:text-blue-500'
           >
             <span>Загрузите фотографии</span>
             <input

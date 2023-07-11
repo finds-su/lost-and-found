@@ -19,7 +19,7 @@ export default function SidebarSearchInput({
           type='text'
           name='search'
           id='search'
-          className='block h-7 w-full rounded-md border-gray-400 bg-transparent pl-8 pr-12 placeholder-gray-500 caret-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
+          className='block h-7 w-full cursor-pointer rounded-md border-gray-400 bg-transparent pl-8 pr-12 placeholder-gray-500 caret-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
           placeholder='Быстрый поиск'
           disabled
         />

@@ -101,7 +101,7 @@ export default function MyPostsList({ reason }: MyPostsListProps) {
             {myPosts.map((myPost, index) => (
               <Link href={myPost.id} key={index}>
                 <div className='rounded hover:bg-gray-50'>
-                  <li className='flex justify-between gap-x-6 py-5'>
+                  <li className='mx-3 flex justify-between gap-x-6 py-5'>
                     <div className='min-w-0'>
                       <div className='flex flex-row items-center space-x-2'>
                         <p className='text-sm font-semibold leading-6 text-gray-900'>
