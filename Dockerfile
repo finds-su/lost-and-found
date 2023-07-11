@@ -42,6 +42,9 @@ COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED 1
 
+# Prisma telemetry disabled
+ENV CHECKPOINT_DISABLE 1
+
 RUN \
  if [ -f yarn.lock ]; then SKIP_ENV_VALIDATION=1 yarn build; \
  elif [ -f package-lock.json ]; then SKIP_ENV_VALIDATION=1 npm run build; \
@@ -59,6 +62,9 @@ RUN npm i -g prisma npm@latest
 ENV NODE_ENV production
 
 ENV NEXT_TELEMETRY_DISABLED 1
+
+# Prisma telemetry disabled
+ENV CHECKPOINT_DISABLE 1
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
