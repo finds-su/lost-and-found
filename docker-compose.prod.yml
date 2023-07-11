@@ -44,6 +44,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     networks:
       - application
+      - db
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U postgres']
       interval: 5s
@@ -58,7 +59,7 @@ services:
     ports:
       - 5050:80 # port should be blocked on firewall
     networks:
-      - application
+      - db
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
@@ -89,6 +90,7 @@ services:
       REDIS_PASSWORD: ${REDIS_PASSWORD}
     networks:
       - application
+      - redis
     healthcheck:
       test: ['CMD', 'redis-cli', 'ping']
       interval: 5s
@@ -105,7 +107,7 @@ services:
     ports:
       - '8001:8001' # port should be blocked on firewall
     networks:
-      - application
+      - redis
 
   app:
     image: cr.yandex/crpi1cf1kcv47hpc0aq7/lost-and-found:latest
@@ -166,6 +168,8 @@ services:
 networks:
   gateway:
   application:
+  db:
+  redis:
 
 volumes:
   app-db-data:
