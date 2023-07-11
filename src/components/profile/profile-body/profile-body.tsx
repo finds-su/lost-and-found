@@ -38,17 +38,22 @@ export default function ProfileBody() {
         { name: 'Роль', value: user.role },
         ...(user.isBlocked ? [{ name: 'Заблокирован', value: user.isBlocked ? 'да' : 'нет' }] : []),
         { name: 'Обо мне', value: user.userInfo },
-        ...Object.values(PrismaSocialNetwork).map((prismaSocialNetwork) => ({
-          name: SocialNetwork[prismaSocialNetwork],
-          value: user.socialNetworks?.filter(
-            (network) => prismaSocialNetwork === network.socialNetwork,
-          )[0]?.link,
-        })),
       ]
     : []
 
   if (!user || !profileQuery.data) {
     return <div />
+  }
+
+  if (isOwner) {
+    profileInfo.push(
+      ...Object.values(PrismaSocialNetwork).map((prismaSocialNetwork) => ({
+        name: SocialNetwork[prismaSocialNetwork],
+        value: user.socialNetworks?.filter(
+          (network) => prismaSocialNetwork === network.socialNetwork,
+        )[0]?.link,
+      })),
+    )
   }
 
   return (
