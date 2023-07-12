@@ -51,4 +51,4 @@ jobs:
           cd ${{ secrets.PRODUCTION_FOLDER }}
           curl -O ${{ env.DOCKER_COMPOSE_FILE_URL }}
           docker compose -f docker-compose.prod.yml --env-file .env.local pull
-          docker compose -f docker-compose.prod.yml --env-file .env.local up -d
+          docker stack deploy -c<(docker compose -f docker-compose.prod.yml --env-file .env.local up -d) lost-and-found
