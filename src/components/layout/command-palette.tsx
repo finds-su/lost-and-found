@@ -1,9 +1,9 @@
-import { type ChangeEvent, Fragment, type KeyboardEventHandler, useState } from 'react'
+import { type ChangeEvent, Fragment, type KeyboardEventHandler, useCallback, useState } from 'react'
 import { Combobox, Dialog, Transition } from '@headlessui/react'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { FaceFrownIcon, GlobeAmericasIcon } from '@heroicons/react/24/outline'
 import classNames from 'classnames/dedupe'
-import { api } from '@/lib/api'
+import { api, type RouterOutputs } from '@/lib/api'
 import errorToast from '@/components/toasts/error-toast'
 import { useRouter } from 'next/router'
 import { PostItemReason } from '@prisma/client'
@@ -32,9 +32,19 @@ function SearchHighlighter(props: {
 export default function CommandPalette({ open, setOpen }: CommandPaletteProps) {
   const router = useRouter()
   const [query, setQuery] = useState('')
-  const querySearch = api.posts.searchPosts.useQuery(
+  const [queryData, setQueryData] = useState<RouterOutputs['posts']['searchPosts'] | undefined>(
+    undefined,
+  )
+
+  const setResults = useCallback(
+    (data: RouterOutputs['posts']['searchPosts']) => setQueryData(data),
+    [],
+  )
+
+  api.posts.searchPosts.useQuery(
     { query },
     {
+      onSuccess: (data) => setResults(data),
       onError: (error) => {
         errorToast(error.message)
       },
@@ -119,7 +129,7 @@ export default function CommandPalette({ open, setOpen }: CommandPaletteProps) {
                         ESC
                       </kbd>
                     </div>
-                    {query === '' && (
+                    {query === '' && queryData === undefined && (
                       <div className='border-t border-gray-100 px-6 py-14 text-center text-sm sm:px-14'>
                         <GlobeAmericasIcon
                           className='mx-auto h-6 w-6 text-gray-400'
@@ -131,12 +141,12 @@ export default function CommandPalette({ open, setOpen }: CommandPaletteProps) {
                         <p className='mt-2 text-gray-500'>Быстрый доступ к активным объявлениям.</p>
                       </div>
                     )}
-                    {querySearch.data && querySearch.data.length > 0 && (
+                    {queryData && queryData.length > 0 && (
                       <Combobox.Options
                         static
                         className='max-h-80 scroll-pb-2 scroll-pt-11 space-y-2 overflow-y-auto pb-2'
                       >
-                        {querySearch.data.map((category) => (
+                        {queryData.map((category) => (
                           <li key={category.name}>
                             <h2 className='bg-gray-100 px-4 py-2.5 text-xs font-semibold text-gray-900'>
                               {category.name}
@@ -178,7 +188,7 @@ export default function CommandPalette({ open, setOpen }: CommandPaletteProps) {
                       </Combobox.Options>
                     )}
 
-                    {query !== '' && querySearch.data && querySearch.data.length === 0 && (
+                    {query !== '' && queryData && queryData.length === 0 && (
                       <div className='border-t border-gray-100 px-6 py-14 text-center text-sm sm:px-14'>
                         <FaceFrownIcon
                           className='mx-auto h-6 w-6 text-gray-400'

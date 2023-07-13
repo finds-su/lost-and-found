@@ -25,6 +25,8 @@ RUN \
 
 FROM base AS builder
 
+ENV NODE_ENV production
+
 ENV ANALYZE=false
 ENV DISABLE_PWA=false
 
