@@ -22,7 +22,7 @@ function SearchHighlighter(props: {
   return (
     <Highlighter
       highlightClassName={classNames(props.isActiveOption ? 'bg-yellow-300' : 'bg-yellow-200')}
-      searchWords={[props.query]}
+      searchWords={props.query.split(' ')}
       autoEscape={true}
       textToHighlight={props.textToHighlight}
     />

@@ -209,6 +209,8 @@ async function searchPosts(query: string, reason: PostItemReason) {
       OR: [
         { name: { contains: query, mode: 'insensitive' } },
         { description: { contains: query, mode: 'insensitive' } },
+        { name: { search: query } },
+        { description: { search: query } },
       ],
     },
     take: 20,
