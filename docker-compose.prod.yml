@@ -22,9 +22,9 @@ services:
       # - --api.insecure=true
     restart: unless-stopped
     ports:
-      - 80:80
-      - 443:443
-      # - 8080:8080 # port should be blocked on firewall
+      - '80:80'
+      - '443:443'
+      # - '8080:8080' # port should be blocked on firewall
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./data/letsencrypt:/letsencrypt
@@ -57,7 +57,7 @@ services:
       db:
         condition: service_healthy
     ports:
-      - 5050:80 # port should be blocked on firewall
+      - '5050:80' # port should be blocked on firewall
     networks:
       - db
     environment:

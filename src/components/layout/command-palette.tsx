@@ -7,10 +7,26 @@ import { api } from '@/lib/api'
 import errorToast from '@/components/toasts/error-toast'
 import { useRouter } from 'next/router'
 import { PostItemReason } from '@prisma/client'
+import Highlighter from 'react-highlight-words'
 
 interface CommandPaletteProps {
   open: boolean
   setOpen: (state: boolean) => void
+}
+
+function SearchHighlighter(props: {
+  textToHighlight: string
+  query: string
+  isActiveOption: boolean
+}) {
+  return (
+    <Highlighter
+      highlightClassName={classNames(props.isActiveOption ? 'bg-yellow-300' : 'bg-yellow-200')}
+      searchWords={[props.query]}
+      autoEscape={true}
+      textToHighlight={props.textToHighlight}
+    />
+  )
 }
 
 export default function CommandPalette({ open, setOpen }: CommandPaletteProps) {
@@ -138,7 +154,22 @@ export default function CommandPalette({ open, setOpen }: CommandPaletteProps) {
                                     )
                                   }
                                 >
-                                  {item.name}
+                                  {({ active }) => (
+                                    <>
+                                      <SearchHighlighter
+                                        textToHighlight={item.name}
+                                        query={query}
+                                        isActiveOption={active}
+                                      />
+                                      <div className='text-xs'>
+                                        <SearchHighlighter
+                                          textToHighlight={item.description}
+                                          query={query}
+                                          isActiveOption={active}
+                                        />
+                                      </div>
+                                    </>
+                                  )}
                                 </Combobox.Option>
                               ))}
                             </ul>

@@ -200,6 +200,7 @@ async function searchPosts(query: string, reason: PostItemReason) {
     select: {
       id: true,
       name: true,
+      description: true,
       reason: true,
     },
     where: {
@@ -210,6 +211,7 @@ async function searchPosts(query: string, reason: PostItemReason) {
         { description: { contains: query, mode: 'insensitive' } },
       ],
     },
+    take: 20,
     orderBy: {
       created: 'desc',
     },

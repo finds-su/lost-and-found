@@ -24,7 +24,7 @@ services:
       db:
         condition: service_healthy
     ports:
-      - 5050:80
+      - '5050:80'
     networks:
       - db
     environment:
@@ -71,7 +71,7 @@ services:
       redis:
         condition: service_healthy
     ports:
-      - 3000:3000
+      - '3000:3000'
     networks:
       - application
     environment:
