@@ -196,26 +196,58 @@ export const postsRouter = createTRPCRouter({
 })
 
 async function searchPosts(query: string, reason: PostItemReason) {
-  return prisma.lostAndFoundItem.findMany({
-    select: {
-      id: true,
-      name: true,
-      description: true,
-      reason: true,
-    },
-    where: {
-      status: LostAndFoundItemStatus.ACTIVE,
-      reason,
-      OR: [
-        { name: { contains: query, mode: 'insensitive' } },
-        { description: { contains: query, mode: 'insensitive' } },
-        { name: { search: query } },
-        { description: { search: query } },
-      ],
-    },
-    take: 20,
-    orderBy: {
-      created: 'desc',
-    },
-  })
+  const status = LostAndFoundItemStatus.ACTIVE
+  const limit = 20
+  const orderByCreated = 'desc'
+  let posts
+
+  // if query contains space, full text search throws error
+  if (query.includes(' ')) {
+    // no full text search
+    posts = prisma.lostAndFoundItem.findMany({
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        reason: true,
+      },
+      where: {
+        status,
+        reason,
+        OR: [
+          { name: { contains: query, mode: 'insensitive' } },
+          { description: { contains: query, mode: 'insensitive' } },
+        ],
+      },
+      take: limit,
+      orderBy: {
+        created: orderByCreated,
+      },
+    })
+  } else {
+    // with full text search
+    posts = prisma.lostAndFoundItem.findMany({
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        reason: true,
+      },
+      where: {
+        status,
+        reason,
+        OR: [
+          { name: { contains: query, mode: 'insensitive' } },
+          { description: { contains: query, mode: 'insensitive' } },
+          { name: { search: query } },
+          { description: { search: query } },
+        ],
+      },
+      take: limit,
+      orderBy: {
+        created: orderByCreated,
+      },
+    })
+  }
+  return posts
 }
