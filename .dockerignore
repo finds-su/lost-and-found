@@ -12,6 +12,7 @@ LICENSE.*
 .git
 .husky
 .github
+logging
 
 # PWA
 /public/service-worker.js
