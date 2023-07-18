@@ -171,13 +171,12 @@ export const postsRouter = createTRPCRouter({
     )
     .query(({ ctx, input }) => {
       const { reason } = input
-      const countMyPosts = prisma.lostAndFoundItem.count({
+      return prisma.lostAndFoundItem.count({
         where: {
           userId: ctx.session.user.id,
           reason,
         },
       })
-      return countMyPosts
     }),
 
   searchPosts: publicProcedure.input(z.object({ query: z.string() })).query(async ({ input }) => {
