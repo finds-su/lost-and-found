@@ -13,7 +13,7 @@ const months: { [name: number]: string } = {
   12: 'дек.',
 }
 
-export function formatDate(rawDate: string) {
+export function formatDate(rawDate: string | Date) {
   const date = new Date(rawDate)
   const day = date.getDate()
   const month = months[date.getMonth() + 1]
@@ -23,5 +23,12 @@ export function formatDate(rawDate: string) {
   // const hour = date.getHours()
   // const minute = date.getMinutes()
   // const second = date.getSeconds()
-  return `${day} ${month ?? ''} ${year === nowYear ? '' : year}`
+  let formattedDate = day.toString()
+  if (month) {
+    formattedDate += ` ${month ?? ''}`
+  }
+  if (year !== nowYear) {
+    formattedDate += ` ${year}`
+  }
+  return formattedDate
 }
