@@ -29,7 +29,7 @@
     "@tanstack/react-query": "^4.28.0",
     "@tanstack/react-table": "^8.9.3",
     "@trpc/client": "^10.18.0",
-    "@trpc/next": "^10.18.0",
+    "@trpc/next": "^10.33.0",
     "@trpc/react-query": "^10.18.0",
     "@trpc/server": "^10.18.0",
     "aws-sdk": "^2.1408.0",
