@@ -19,5 +19,5 @@ jobs:
           credentials: ${{ secrets.DRIVE_CREDENTIALS }}
           filename: course-work/course-work.pdf
           folderId: ${{ secrets.DRIVE_FOLDER_ID }}
-          name: ${{ steps.date.outputs.date }}.pdf
+          name: ${{ github.event.repository.updated_at}}.pdf
           overwrite: "true"
