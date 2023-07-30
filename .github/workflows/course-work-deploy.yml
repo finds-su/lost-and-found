@@ -8,9 +8,16 @@ on:
         - '.github/workflows/course-work-deploy.yml'
 
 jobs:
+
   course-work-deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Get current time
+        uses: josStorer/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYYMMDD-HH
+          utcOffset: "+03:00"
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Upload to gdrive
@@ -19,5 +26,5 @@ jobs:
           credentials: ${{ secrets.DRIVE_CREDENTIALS }}
           filename: course-work/course-work.pdf
           folderId: ${{ secrets.DRIVE_FOLDER_ID }}
-          name: ${{ github.event.repository.updated_at }}${{ github.event.head_commit.message }}.pdf
+          name: ${{ steps.current-time.outputs.time }}${{ github.sha }}.pdf
           overwrite: "true"
