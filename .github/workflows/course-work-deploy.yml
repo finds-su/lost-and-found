@@ -5,6 +5,7 @@ on:
         - main
     paths:
         - 'course-work/**'
+        - '.github/workflows/course-work-deploy.yml'
 
 jobs:
   course-work-deploy:
@@ -16,6 +17,5 @@ jobs:
         uses: adityak74/google-drive-upload-git-action@main
         with:
           credentials: ${{ secrets.DRIVE_CREDENTIALS }}
-          filename: course-work/course-work.pdf
+          filename: ./course-work/course-work.pdf
           folderId: ${{ secrets.DRIVE_FOLDER_ID }}
-          name: $(date '+%Y-%m-%d-%H-%M')
