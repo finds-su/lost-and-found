@@ -3,7 +3,11 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - main
+        - main
+    paths-ignore:
+        - 'course-work/**'
+        - 'README.md'
+        - 'LICENSE.txt'
 
 env:
   JOB_STARTED_AT: ${{ github.event.created_at }}
