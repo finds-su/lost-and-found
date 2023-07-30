@@ -8,10 +8,12 @@ on:
         - '.github/workflows/course-work-deploy.yml'
 
 jobs:
-
   course-work-deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Set outputs
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
       - name: Get current time
         uses: josStorer/get-current-time@v2
         id: current-time
@@ -26,5 +28,5 @@ jobs:
           credentials: ${{ secrets.DRIVE_CREDENTIALS }}
           filename: course-work/course-work.pdf
           folderId: ${{ secrets.DRIVE_FOLDER_ID }}
-          name: ${{ steps.current-time.outputs.time }}${{ github.sha }}.pdf
+          name: ${{ steps.current-time.outputs.time }}-sha-${{ steps.vars.outputs.sha_short }}.pdf
           overwrite: "true"
