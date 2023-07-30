@@ -1,0 +1,21 @@
+name: Course Work Deploy
+on:
+  push:
+    branches:
+        - main
+    paths:
+        - 'course-work/**'
+
+jobs:
+  course-work-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Upload to gdrive
+        uses: adityak74/google-drive-upload-git-action@main
+        with:
+          credentials: ${{ secrets.DRIVE_CREDENTIALS }}
+          filename: course-work/course-work.pdf
+          folderId: ${{ secrets.DRIVE_FOLDER_ID }}
+          name: $(date '+%Y-%m-%d-%H-%M')
