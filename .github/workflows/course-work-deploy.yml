@@ -19,5 +19,5 @@ jobs:
           credentials: ${{ secrets.DRIVE_CREDENTIALS }}
           filename: course-work/course-work.pdf
           folderId: ${{ secrets.DRIVE_FOLDER_ID }}
-          name: $(date '+%Y-%m-%d-%H-%M').pdf
+          name: ${{ steps.date.outputs.date }}.pdf
           overwrite: "true"
