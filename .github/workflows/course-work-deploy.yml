@@ -11,12 +11,16 @@ jobs:
   course-work-deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Set timezone
+        uses: szenius/set-timezone@v1.2
+        with: 
+           timezoneLinux: "Europe/Moscow"
       - name: Get current time
         uses: josStorer/get-current-time@v2
         id: current-time
         with:
           format: YYYYMMDD-HH
-          utcOffset: "+06:00"
+          utcOffset: "+03:00"
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Upload to gdrive
