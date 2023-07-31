@@ -7,9 +7,6 @@ on:
         - 'course-work/**'
         - '.github/workflows/course-work-deploy.yml'
 
-env:
-  TZ: Europe/Moscow
-
 jobs:
   course-work-deploy:
     runs-on: ubuntu-latest
@@ -18,7 +15,7 @@ jobs:
         uses: josStorer/get-current-time@v2
         id: current-time
         with:
-          format: YYYYMMDD-HH
+          format: YYYY-MM-DD-HH:mm
           utcOffset: "+03:00"
           timezone: "Europe/Moscow"
       - name: Checkout code
@@ -29,5 +26,5 @@ jobs:
           credentials: ${{ secrets.DRIVE_CREDENTIALS }}
           filename: course-work/course-work.pdf
           folderId: ${{ secrets.DRIVE_FOLDER_ID }}
-          name: ${{ steps.current-time.outputs.time }}-sha-${{ github.sha }}.pdf
+          name: ${{ steps.current-time.outputs.formattedTime }}-sha-${{ github.sha }}.pdf
           overwrite: "true"
