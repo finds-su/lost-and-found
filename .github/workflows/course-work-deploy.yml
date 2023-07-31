@@ -7,6 +7,9 @@ on:
         - 'course-work/**'
         - '.github/workflows/course-work-deploy.yml'
 
+env:
+  TZ: Europe/Moscow
+
 jobs:
   course-work-deploy:
     runs-on: ubuntu-latest
