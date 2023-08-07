@@ -16,11 +16,11 @@ interface OverviewPostProps {
 }
 
 export default function OverviewPost(props: OverviewPostProps) {
-  const postId = useRouter().query.postId as string
-  const [post, setPost] = useState<RouterOutputs['posts']['getPost']>()
+  const slug = useRouter().query.slug as string
+  const [post, setPost] = useState<RouterOutputs['posts']['getPostBySlug']>()
 
-  const postQuery = api.posts.getPost.useQuery(
-    { postId: postId, reason: props.reason },
+  const postQuery = api.posts.getPostBySlug.useQuery(
+    { slug: slug, reason: props.reason },
     {
       onSuccess: (data) => {
         if (data) {

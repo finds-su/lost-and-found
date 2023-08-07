@@ -73,6 +73,33 @@ const useScrollGridStore = create<ScrollGridsState>()(
             }
           }),
       },
+      ANY: {
+        enabledSortOption: SortOption.newFirst,
+        checkedFilters: Object.values(PrismaCampus),
+        setSortOption: (option) =>
+          set((state) => {
+            return { ...state, ANY: { ...state.ANY, enabledSortOption: option } }
+          }),
+        addFilter: (filter) =>
+          set((state) => {
+            return {
+              ...state,
+              ANY: { ...state.ANY, checkedFilters: [...state.ANY.checkedFilters, filter] },
+            }
+          }),
+        deleteFilter: (filterToDelete) =>
+          set((state) => {
+            return {
+              ...state,
+              ANY: {
+                ...state.ANY,
+                checkedFilters: state.ANY.checkedFilters.filter(
+                  (value) => value !== filterToDelete,
+                ),
+              },
+            }
+          }),
+      },
     }),
     {
       name: 'scroll-grids-storage',

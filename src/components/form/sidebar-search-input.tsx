@@ -19,12 +19,12 @@ export default function SidebarSearchInput({
           type='text'
           name='search'
           id='search'
-          className='block h-7 w-full cursor-pointer rounded-md border-gray-400 bg-transparent pl-8 pr-12 placeholder-gray-500 caret-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
+          className='block w-full cursor-pointer rounded-md border-gray-400 bg-transparent py-2 pl-8 pr-12 placeholder-gray-500 caret-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
           placeholder='Быстрый поиск'
           disabled
         />
-        <div className='absolute inset-y-0 right-0 flex py-1 pr-1.5'>
-          <kbd className='inline-flex items-center rounded border border-gray-400 px-1 font-sans text-sm font-medium'>
+        <div className='absolute inset-y-0 right-0 flex items-center pr-1.5'>
+          <kbd className='inline-flex max-h-6 items-center rounded border border-gray-400 px-1.5 font-sans text-sm font-medium'>
             /
           </kbd>
         </div>

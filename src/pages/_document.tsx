@@ -2,7 +2,7 @@ import { Html, Main, NextScript, Head } from 'next/document'
 
 export default function Document() {
   return (
-    <Html className='h-full bg-gray-100' lang='ru'>
+    <Html className='h-full bg-white' lang='ru'>
       <Head />
       {/*<Head>*/}
       {/*  <Script type='module' src='https://cdn.jsdelivr.net/npm/@headlessui/react@1.7.14/+esm' />*/}

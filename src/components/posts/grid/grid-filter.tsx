@@ -51,12 +51,9 @@ export default function GridFilter(props: GridFilterProps) {
           <div className='flex items-center justify-between'>
             <Menu as='div' className='relative inline-block text-left'>
               <div>
-                <Menu.Button className='group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900'>
+                <Menu.Button className='inline-flex rounded-lg px-2 py-0.5 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none'>
                   Сортировать
-                  <ChevronDownIcon
-                    className='-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500'
-                    aria-hidden='true'
-                  />
+                  <ChevronDownIcon className='-mr-1 ml-2 mt-0.5 h-5 w-5' aria-hidden='true' />
                 </Menu.Button>
               </div>
 
@@ -115,7 +112,7 @@ export default function GridFilter(props: GridFilterProps) {
                   className='relative inline-block text-left'
                 >
                   <div>
-                    <Popover.Button className='group inline-flex items-center justify-center text-sm font-medium text-gray-700 hover:text-gray-900'>
+                    <Popover.Button className='group inline-flex items-center justify-center rounded-lg bg-accent px-2 py-0.5 text-sm font-medium text-white focus:outline-none'>
                       <span>{section.name}</span>
                       {sectionIdx === 0 ? (
                         <span className='ml-1.5 rounded bg-gray-200 px-1.5 py-0.5 text-xs font-semibold tabular-nums text-gray-700'>

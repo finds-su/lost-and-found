@@ -13,9 +13,9 @@ const title = 'Пропажа'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)
-  const postId = context.params?.postId as string
+  const slug = context.params?.slug as string
   const post = await prisma.lostAndFoundItem.findFirst({
-    where: { id: postId, reason: PostItemReason.LOST },
+    where: { slug: slug, reason: PostItemReason.LOST },
     select: { id: true },
   })
   if (post === null) {

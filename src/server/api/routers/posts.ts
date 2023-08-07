@@ -4,14 +4,15 @@ import { prisma } from '@/server/db'
 import { Campus, LostAndFoundItemStatus, PostItemReason } from '@prisma/client'
 import { SortOption } from '@/lib/types/sort-option'
 import { TRPCError } from '@trpc/server'
+import generateSlug from '@/lib/slug'
 
 export const postsRouter = createTRPCRouter({
   infinitePosts: publicProcedure
     .input(
       z.object({
         limit: z.number().min(1).max(16, 'Превышен лимит запроса').nullish(),
-        cursor: z.string().nullish(), // <-- "cursor" needs to exist, but can be any type
-        reason: z.nativeEnum(PostItemReason),
+        cursor: z.bigint().nullish(), // <-- "cursor" needs to exist, but can be any type
+        reason: z.nativeEnum(PostItemReason).or(z.literal('ANY')), // if ANY, then we don't filter by reason
         orderByCreationDate: z.nativeEnum(SortOption),
         filters: z.array(z.string()).max(30),
       }),
@@ -36,14 +37,14 @@ export const postsRouter = createTRPCRouter({
               image: true,
             },
           },
+          slug: true,
+          reason: true,
         },
         take: limit + 1, // get an extra item at the end which we'll use as next cursor
-        where: {
-          reason,
-          campus: {
-            in: campusFilters,
-          },
-        },
+        where:
+          reason !== PostItemReason.LOST && reason !== PostItemReason.FOUND
+            ? { campus: { in: campusFilters } }
+            : { reason, campus: { in: campusFilters } },
         cursor: cursor ? { id: cursor } : undefined,
         orderBy: {
           created: input.orderByCreationDate,
@@ -74,7 +75,7 @@ export const postsRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      await prisma.lostAndFoundItem.create({
+      const newPost = await prisma.lostAndFoundItem.create({
         data: {
           name: input.name,
           description: input.description,
@@ -84,10 +85,19 @@ export const postsRouter = createTRPCRouter({
           userId: ctx.session.user.id,
         },
       })
+
+      await prisma.lostAndFoundItem.update({
+        where: {
+          id: newPost.id,
+        },
+        data: {
+          slug: `${generateSlug(newPost.name)}.${newPost.id}`,
+        },
+      })
     }),
 
   getPost: publicProcedure
-    .input(z.object({ postId: z.string(), reason: z.nativeEnum(PostItemReason) }))
+    .input(z.object({ postId: z.bigint(), reason: z.nativeEnum(PostItemReason) }))
     .query(async ({ input }) => {
       const post = await prisma.lostAndFoundItem.findFirst({
         where: { id: input.postId, reason: input.reason },
@@ -107,6 +117,40 @@ export const postsRouter = createTRPCRouter({
               image: true,
             },
           },
+          slug: true,
+        },
+      })
+      if (post) {
+        return post
+      }
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: 'Пост не найден.',
+      })
+    }),
+
+  getPostBySlug: publicProcedure
+    .input(z.object({ slug: z.string(), reason: z.nativeEnum(PostItemReason) }))
+    .query(async ({ input }) => {
+      const post = await prisma.lostAndFoundItem.findFirst({
+        where: { slug: input.slug, reason: input.reason },
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          campus: true,
+          images: true,
+          status: true,
+          created: true,
+          expires: true,
+          user: {
+            select: {
+              name: true,
+              nickname: true,
+              image: true,
+            },
+          },
+          slug: true,
         },
       })
       if (post) {
@@ -121,7 +165,7 @@ export const postsRouter = createTRPCRouter({
   getMyPosts: protectedProcedure
     .input(
       z.object({
-        cursor: z.string().nullish(), // cursor is required for infinite query
+        cursor: z.bigint().nullish(), // cursor is required for infinite query
         limit: z.number().min(1).max(25),
         reason: z.nativeEnum(PostItemReason),
       }),

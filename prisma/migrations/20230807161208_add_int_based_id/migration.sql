@@ -2,10 +2,16 @@
 CREATE TYPE "Role" AS ENUM ('USER', 'MODERATOR', 'ADMIN');
 
 -- CreateEnum
+CREATE TYPE "LostAndFoundItemStatus" AS ENUM ('ACTIVE', 'EXPIRED', 'BLOCKED');
+
+-- CreateEnum
 CREATE TYPE "PostItemReason" AS ENUM ('LOST', 'FOUND');
 
 -- CreateEnum
-CREATE TYPE "Campus" AS ENUM ('V78', 'V86', 'S20', 'MP1', 'SG22', 'SHP23', 'U7');
+CREATE TYPE "Campus" AS ENUM ('V78', 'S20', 'V86', 'MP1', 'SG22', 'SHP23', 'U7');
+
+-- CreateEnum
+CREATE TYPE "SocialNetwork" AS ENUM ('TELEGRAM', 'VK');
 
 -- CreateTable
 CREATE TABLE "Account" (
@@ -38,15 +44,14 @@ CREATE TABLE "Session" (
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
+    "name" TEXT,
     "nickname" TEXT NOT NULL,
-    "telegramLink" TEXT,
     "email" TEXT,
     "emailVerified" TIMESTAMP(3),
-    "userInfo" VARCHAR(280) NOT NULL DEFAULT '',
+    "userInfo" VARCHAR(280),
     "role" "Role" NOT NULL DEFAULT 'USER',
     "image" TEXT,
-    "isBlockedUntil" TIMESTAMP(3),
+    "isBlocked" BOOLEAN NOT NULL DEFAULT false,
     "blockReason" TEXT,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
@@ -60,18 +65,39 @@ CREATE TABLE "VerificationToken" (
 );
 
 -- CreateTable
-CREATE TABLE "LostAndFoundItem" (
+CREATE TABLE "UserSocialNetwork" (
     "id" TEXT NOT NULL,
+    "socialNetwork" "SocialNetwork" NOT NULL,
+    "link" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+
+    CONSTRAINT "UserSocialNetwork_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "LostAndFoundItem" (
+    "id" BIGSERIAL NOT NULL,
     "name" VARCHAR(100) NOT NULL,
     "description" VARCHAR(512) NOT NULL DEFAULT '',
     "campus" "Campus" NOT NULL,
     "reason" "PostItemReason" NOT NULL,
+    "status" "LostAndFoundItemStatus" NOT NULL DEFAULT 'ACTIVE',
     "images" TEXT[],
     "userId" TEXT NOT NULL,
     "created" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "expires" TIMESTAMP(3) NOT NULL DEFAULT NOW() + interval '1 week',
+    "slug" TEXT NOT NULL,
 
     CONSTRAINT "LostAndFoundItem_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "LostAndFoundItemSocialNetworks" (
+    "id" TEXT NOT NULL,
+    "lostAndFoundItemId" BIGINT NOT NULL,
+    "userSocialNetworkId" TEXT NOT NULL,
+
+    CONSTRAINT "LostAndFoundItemSocialNetworks_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -102,7 +128,19 @@ CREATE UNIQUE INDEX "VerificationToken_token_key" ON "VerificationToken"("token"
 CREATE UNIQUE INDEX "VerificationToken_identifier_token_key" ON "VerificationToken"("identifier", "token");
 
 -- CreateIndex
-CREATE INDEX "LostAndFoundItem_id_idx" ON "LostAndFoundItem" USING HASH ("id");
+CREATE INDEX "UserSocialNetwork_socialNetwork_userId_idx" ON "UserSocialNetwork"("socialNetwork", "userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "UserSocialNetwork_userId_socialNetwork_key" ON "UserSocialNetwork"("userId", "socialNetwork");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "LostAndFoundItem_slug_key" ON "LostAndFoundItem"("slug");
+
+-- CreateIndex
+CREATE INDEX "LostAndFoundItem_name_description_idx" ON "LostAndFoundItem" USING HASH ("name", "description");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "LostAndFoundItemSocialNetworks_lostAndFoundItemId_userSocia_key" ON "LostAndFoundItemSocialNetworks"("lostAndFoundItemId", "userSocialNetworkId");
 
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -111,4 +149,13 @@ ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId"
 ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "UserSocialNetwork" ADD CONSTRAINT "UserSocialNetwork_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "LostAndFoundItem" ADD CONSTRAINT "LostAndFoundItem_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "LostAndFoundItemSocialNetworks" ADD CONSTRAINT "LostAndFoundItemSocialNetworks_lostAndFoundItemId_fkey" FOREIGN KEY ("lostAndFoundItemId") REFERENCES "LostAndFoundItem"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "LostAndFoundItemSocialNetworks" ADD CONSTRAINT "LostAndFoundItemSocialNetworks_userSocialNetworkId_fkey" FOREIGN KEY ("userSocialNetworkId") REFERENCES "UserSocialNetwork"("id") ON DELETE CASCADE ON UPDATE CASCADE;

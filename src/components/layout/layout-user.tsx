@@ -56,7 +56,7 @@ export default function LayoutUser(props: LayoutUserProps) {
         {session && isModeratorOrAdmin(session) && (
           <Link
             href='/admin'
-            className='rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'
+            className='rounded-full p-1 text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800'
           >
             <span className='sr-only'>Открыть меню администратора</span>
             <BriefcaseIcon className='h-6 w-6' aria-hidden='true' />
@@ -64,7 +64,7 @@ export default function LayoutUser(props: LayoutUserProps) {
         )}
         <Link
           href='/notifications'
-          className='rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'
+          className='rounded-full p-1 text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800'
         >
           <span className='sr-only'>Открыть уведомления</span>
           <BellIcon className='h-6 w-6' aria-hidden='true' />
