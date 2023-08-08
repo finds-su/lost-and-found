@@ -171,7 +171,7 @@ export default function Layout(props: LayoutProps) {
             <h1 className='text-xl font-bold leading-tight text-gray-900'>{props.title}</h1>
           </div>
         </header>
-        <div className='mx-4 flex max-w-7xl flex-col py-4 sm:px-6 md:mx-auto lg:px-8'>
+        <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
           <div>{props.children}</div>
           <DynamicLayoutFooter />
         </div>

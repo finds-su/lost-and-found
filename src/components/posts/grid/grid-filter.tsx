@@ -1,5 +1,5 @@
 import { Menu, Popover, Transition } from '@headlessui/react'
-import { ChevronDownIcon } from '@heroicons/react/24/outline'
+import { ChevronDownIcon, ChevronUpDownIcon } from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
 import classNames from 'classnames/dedupe'
 import MobileFilterDialog from '@/components/posts/grid/mobile-filter-dialog'
@@ -20,7 +20,7 @@ export const filters: {
 }[] = [
   {
     id: 'campus',
-    name: 'Кампус',
+    name: 'Кампусы',
     options: (Object.keys(PrismaCampus) as Array<keyof typeof PrismaCampus>).map((key) => {
       return { value: key.toString(), label: Campus[key] }
     }),
@@ -52,8 +52,8 @@ export default function GridFilter(props: GridFilterProps) {
             <Menu as='div' className='relative inline-block text-left'>
               <div>
                 <Menu.Button className='inline-flex rounded-lg px-2 py-0.5 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none'>
-                  Сортировать
-                  <ChevronDownIcon className='-mr-1 ml-2 mt-0.5 h-5 w-5' aria-hidden='true' />
+                  {sortOptions.find((option) => option.id === enabledSortOption)?.name}
+                  <ChevronUpDownIcon className='-mr-1 ml-2 mt-0.5 h-5 w-5' aria-hidden='true' />
                 </Menu.Button>
               </div>
 
@@ -97,10 +97,11 @@ export default function GridFilter(props: GridFilterProps) {
 
             <button
               type='button'
-              className='inline-block text-sm font-medium text-gray-700 hover:text-gray-900 sm:hidden'
+              className='inline-flex items-center rounded-lg border border-transparent bg-accent px-2.5 py-1.5 text-xs font-medium text-white focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 sm:hidden'
               onClick={() => setMobileFiltersOpen(true)}
             >
-              Фильтры
+              Кампусы
+              <ChevronDownIcon className='ml-1 h-4 w-4' aria-hidden='true' />
             </button>
 
             <Popover.Group className='hidden sm:flex sm:items-baseline sm:space-x-8'>
@@ -123,7 +124,7 @@ export default function GridFilter(props: GridFilterProps) {
                           }
                         </span>
                       ) : null}
-                      <ChevronDownIcon
+                      <ChevronUpDownIcon
                         className='-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500'
                         aria-hidden='true'
                       />

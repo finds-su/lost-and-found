@@ -11,7 +11,7 @@ interface PostCardProps {
 
 export const PostCard: React.FC<PostCardProps> = ({ post, displayReasonLabel = false }) => {
   return (
-    <div className='overflow-hidden rounded-2xl border border-gray-200 transition duration-150 ease-in-out hover:border-gray-300'>
+    <div className='overflow-hidden rounded-2xl border border-gray-200 transition duration-150 ease-in-out hover:border-gray-300 '>
       <div className='aspect-w-1 aspect-h-1'>
         <Image
           src={post.images[0] ?? '/assets/placeholder.svg'}
@@ -23,7 +23,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, displayReasonLabel = f
           aria-hidden='true'
         />
       </div>
-      <div className='flex flex-col justify-between px-2 pb-4 pt-1'>
+      <div className='flex flex-col justify-between px-2 pb-2 pt-1'>
         <h3 className='mt-2 overflow-hidden text-ellipsis text-sm font-semibold text-gray-900'>
           <a href={`${post.reason === 'LOST' ? 'losses' : 'finds'}/${post.slug}`}>
             <span className='absolute inset-0' />
@@ -32,7 +32,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, displayReasonLabel = f
         </h3>
 
         <p className='mt-1 text-sm font-medium text-gray-700'>{Campus[post.campus]}</p>
-        <div className='flex flex-row items-center pt-2'>
+        <div className='flex flex-row pt-2'>
           {displayReasonLabel && (
             <span
               className={classNames('mr-3 h-6 rounded-full px-2 py-1 text-xs', {

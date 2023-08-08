@@ -77,7 +77,7 @@ export default function InfiniteScrollGridWithFilter({
           hasMore={hasMore}
           loader={<ScrollGridLoader />}
           endMessage={ScrollGridEndMessage()}
-          className='grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 md:gap-y-1 lg:gap-x-8'
+          className='grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-4'
         >
           {posts.map((post) => (
             <div key={post.id.toString()} className='relative'>
