@@ -30,4 +30,4 @@ jobs:
         username: ${{ secrets.USERNAME }}
         port: ${{ secrets.PORT }}
         password: ${{ secrets.PASSWORD }}
-        script: cd lost-and-found && docker compose -f docker-compose.prod.yml up --build
+        script: cd lost-and-found && docker compose -f docker-compose.prod.yml up --build -d
