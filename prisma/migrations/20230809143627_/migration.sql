@@ -5,7 +5,7 @@ CREATE TYPE "Role" AS ENUM ('USER', 'MODERATOR', 'ADMIN');
 CREATE TYPE "LostAndFoundItemStatus" AS ENUM ('ACTIVE', 'EXPIRED', 'BLOCKED');
 
 -- CreateEnum
-CREATE TYPE "PostItemReason" AS ENUM ('LOST', 'FOUND');
+CREATE TYPE "PostItemReason" AS ENUM ('LOST', 'FOUND', 'ANY');
 
 -- CreateEnum
 CREATE TYPE "Campus" AS ENUM ('V78', 'S20', 'V86', 'MP1', 'SG22', 'SHP23', 'U7');
@@ -76,7 +76,7 @@ CREATE TABLE "UserSocialNetwork" (
 
 -- CreateTable
 CREATE TABLE "LostAndFoundItem" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "name" VARCHAR(100) NOT NULL,
     "description" VARCHAR(512) NOT NULL DEFAULT '',
     "campus" "Campus" NOT NULL,
@@ -94,7 +94,7 @@ CREATE TABLE "LostAndFoundItem" (
 -- CreateTable
 CREATE TABLE "LostAndFoundItemSocialNetworks" (
     "id" TEXT NOT NULL,
-    "lostAndFoundItemId" BIGINT NOT NULL,
+    "lostAndFoundItemId" INTEGER NOT NULL,
     "userSocialNetworkId" TEXT NOT NULL,
 
     CONSTRAINT "LostAndFoundItemSocialNetworks_pkey" PRIMARY KEY ("id")
@@ -137,7 +137,7 @@ CREATE UNIQUE INDEX "UserSocialNetwork_userId_socialNetwork_key" ON "UserSocialN
 CREATE UNIQUE INDEX "LostAndFoundItem_slug_key" ON "LostAndFoundItem"("slug");
 
 -- CreateIndex
-CREATE INDEX "LostAndFoundItem_name_description_idx" ON "LostAndFoundItem" USING HASH ("name", "description");
+CREATE INDEX "LostAndFoundItem_name_idx" ON "LostAndFoundItem" USING HASH ("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "LostAndFoundItemSocialNetworks_lostAndFoundItemId_userSocia_key" ON "LostAndFoundItemSocialNetworks"("lostAndFoundItemId", "userSocialNetworkId");

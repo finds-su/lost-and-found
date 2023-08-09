@@ -179,4 +179,23 @@ export const usersRouter = createTRPCRouter({
         message: 'Ошибка генерации аватара',
       })
     }),
+
+  getMe: protectedProcedure.query(async ({ ctx }) => {
+    const user = await ctx.prisma.user.findUnique({
+      where: {
+        id: ctx.session.user.id,
+      },
+      select: {
+        id: true,
+        name: true,
+        nickname: true,
+        image: true,
+        role: true,
+        email: true,
+        isBlocked: true,
+        blockReason: true,
+      },
+    })
+    return { user }
+  }),
 })

@@ -11,14 +11,14 @@ interface PostCardProps {
 
 export const PostCard: React.FC<PostCardProps> = ({ post, displayReasonLabel = false }) => {
   return (
-    <div className='overflow-hidden rounded-2xl border border-gray-200 transition duration-150 ease-in-out hover:border-gray-300 '>
+    <div className='overflow-hidden bg-white transition duration-150 ease-in-out hover:border-gray-300'>
       <div className='aspect-w-1 aspect-h-1'>
         <Image
           src={post.images[0] ?? '/assets/placeholder.svg'}
           alt=''
           width={800}
           height={800}
-          className='h-full w-full object-cover object-center'
+          className='h-56 w-full rounded-2xl object-cover object-center lg:h-72 xl:h-80'
           priority
           aria-hidden='true'
         />

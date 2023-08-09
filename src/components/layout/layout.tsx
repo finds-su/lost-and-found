@@ -149,7 +149,7 @@ export default function Layout(props: LayoutProps) {
                       <button
                         onClick={() => void signIn()}
                         type='button'
-                        className='rounded-md border bg-gray-700 px-5 py-2 text-sm font-medium text-gray-300 hover:bg-gray-800 focus:outline-none'
+                        className='rounded-xl border bg-gray-700 px-5 py-2 text-sm font-medium text-gray-300 hover:bg-gray-800 focus:outline-none'
                       >
                         Войти
                       </button>

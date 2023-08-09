@@ -70,24 +70,20 @@ export default function InfiniteScrollGridWithFilter({
   return (
     <>
       <GridFilter reason={reason} />
-      {posts.length > 0 ? (
-        <InfiniteScroll
-          dataLength={posts.length}
-          next={fetchMoreData}
-          hasMore={hasMore}
-          loader={<ScrollGridLoader />}
-          endMessage={ScrollGridEndMessage()}
-          className='grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-4'
-        >
-          {posts.map((post) => (
-            <div key={post.id.toString()} className='relative'>
-              <PostCard post={post} displayReasonLabel={reason === 'ANY'} />
-            </div>
-          ))}
-        </InfiniteScroll>
-      ) : (
-        ScrollGridEndMessage()
-      )}
+      <InfiniteScroll
+        dataLength={posts.length}
+        next={fetchMoreData}
+        hasMore={hasMore}
+        loader={<ScrollGridLoader />}
+        className='grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-4'
+      >
+        {posts.map((post) => (
+          <div key={post.id.toString()} className='relative'>
+            <PostCard post={post} displayReasonLabel={reason === PostItemReason.ANY} />
+          </div>
+        ))}
+      </InfiniteScroll>
+      {postsQuery.isFetched && posts.length === 0 && <ScrollGridEndMessage />}
     </>
   )
 }
