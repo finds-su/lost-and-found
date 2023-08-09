@@ -4,7 +4,7 @@ on:
     branches:
         - main
     paths:
-        - 'course-work/**'
+        - 'course-work/course-work.pdf'
         - '.github/workflows/course-work-deploy.yml'
 
 jobs:
