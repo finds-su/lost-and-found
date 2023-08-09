@@ -15,20 +15,19 @@ jobs:
     - uses: actions/checkout@v3
     - name: Transfer backend to VM
       uses: appleboy/scp-action@master
-      env:
-        HOST: ${{ secrets.HOST }}
-        USERNAME: ${{ secrets.USERNAME }}
-        PORT: ${{ secrets.PORT }}
-        PASSWORD: ${{ secrets.PASSWORD }}
       with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        port: ${{ secrets.PORT }}
+        password: ${{ secrets.PASSWORD }}
         source: "."
         target: "/root/lost-and-found"
 
     - name: Build and run project
       uses: appleboy/ssh-action@master
       with:
-        HOST: ${{ secrets.HOST }}
-        USERNAME: ${{ secrets.USERNAME }}
-        PORT: ${{ secrets.PORT }}
-        PASSWORD: ${{ secrets.PASSWORD }}
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        port: ${{ secrets.PORT }}
+        password: ${{ secrets.PASSWORD }}
         script: cd lost-and-found && docker compose -f docker-compose.prod.yml up --build
