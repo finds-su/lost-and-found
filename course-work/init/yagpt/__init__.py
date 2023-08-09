@@ -39,7 +39,7 @@ class TextGeneration:
         if response.status_code == 200:
             response_data = response.json()
             # Example:
-            # {'result': {'message': {'role': 'Ассистент', 'text': 'Привет! Чем я могу вам помочь?'}, 'num_tokens': '21'}}
+            # {'result': {'message': {'role': 'Ассистент', 'text': 'Text'}, 'num_tokens': '21'}}
             return response_data
         else:
             print("Request failed with status code:", response.status_code)
@@ -69,7 +69,7 @@ class TextGeneration:
         if response.status_code == 200:
             response_data = response.json()
             # Example:
-            # {'result': {'alternatives': [{'text': 'Здравствуйте! Я всегда готов помочь вам с любыми вопросами или задачами. Чем я могу вам помочь сегодня?', 'score': -0.491208016872406, 'num_tokens': '20'}], 'num_prompt_tokens': '8'}}
+            # {'result': {'alternatives': [{'text': 'Text', 'score': -0.491208016872406, 'num_tokens': '20'}], 'num_prompt_tokens': '8'}}
             return response_data
         else:
             print("Request failed with status code:", response.status_code)
@@ -95,7 +95,7 @@ class Tokenizer:
         if response.status_code == 200:
             response_data = response.json()
             # Example:
-            # {'tokens': [{'id': '0', 'text': '<s>', 'special': True}, {'id': '763', 'text': '▁как', 'special': False}, {'id': '1731', 'text': '▁дела', 'special': False}, {'id': '125917', 'text': '?', 'special': False}, {'id': '4', 'text': '[SEP]', 'special': True}]}
+            # {'tokens': [{'id': '0', 'text': 'm', 'special': True}]}
             return response_data
         else:
             print("Request failed with status code:", response.status_code)
