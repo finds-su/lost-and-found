@@ -22,7 +22,7 @@ jobs:
         PASSWORD: ${{ secrets.PASSWORD }}
       with:
         source: "."
-        target: "/root/lct-hack/backend"
+        target: "/root/lost-and-found"
 
     - name: Build and run project
       uses: appleboy/ssh-action@master
