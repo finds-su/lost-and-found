@@ -48,12 +48,12 @@ export default function OverviewPost(props: OverviewPostProps) {
           description: (
             <div>
               <p>{post.user.name}</p>
-              <a
+              <Link
                 href={`/u/${post.user.nickname}`}
                 className='font-medium text-blue-600 hover:underline dark:text-blue-500'
               >
                 @{post.user.nickname}
-              </a>
+              </Link>
             </div>
           ),
         },

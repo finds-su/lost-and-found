@@ -4,7 +4,6 @@ import { type GetServerSideProps } from 'next'
 import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
 import DynamicInfiniteScrollGridWithFilter from '@/components/posts/grid/infinite-scroll-grid-with-filter/dynamic-infinite-scroll-grid-with-filter'
 import DefaultSeo from '@/components/seo/default-seo'
-import { PostItemReason } from '@prisma/client'
 
 const title = 'Все объявления'
 

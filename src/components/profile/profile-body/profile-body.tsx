@@ -1,4 +1,4 @@
-import { type ReactNode, useState } from 'react'
+import { type ReactNode, useState, use, useEffect } from 'react'
 import Window from '@/components/form/window'
 import Avatar from '@/components/avatar/avatar'
 import useEditProfileStore from '@/lib/hooks/store/edit-profile-store'
@@ -19,6 +19,12 @@ export default function ProfileBody() {
     { onSuccess: (data) => setProfile(data) },
   )
   const editProfile = useEditProfileStore()
+
+  useEffect(() => {
+    if (router.query.open === 'socials') {
+      editProfile.open()
+    }
+  }, [router.query.open])
 
   const profileInfo: { name: string; value: ReactNode }[] = user
     ? [
@@ -51,7 +57,7 @@ export default function ProfileBody() {
         name: SocialNetwork[prismaSocialNetwork],
         value: user.socialNetworks?.filter(
           (network) => prismaSocialNetwork === network.socialNetwork,
-        )[0]?.link,
+        )[0]?.externalId,
       })),
     )
   }

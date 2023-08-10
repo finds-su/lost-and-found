@@ -16,6 +16,8 @@ import { CopyObjectCommand } from '@aws-sdk/client-s3'
 import { zodEditUserInput } from '@/lib/validation-types/users'
 import { prisma } from '@/server/db'
 import { SocialNetwork as PrismaSocialNetwork } from '@prisma/client'
+import VkApi from '@/server/messengers-api/vk'
+import TelegramApi from '@/server/messengers-api/telegram'
 
 export const usersRouter = createTRPCRouter({
   getUser: publicProcedure
@@ -39,7 +41,7 @@ export const usersRouter = createTRPCRouter({
             socialNetworks: {
               select: {
                 socialNetwork: true,
-                link: true,
+                externalId: true,
               },
             },
           }),
@@ -54,7 +56,7 @@ export const usersRouter = createTRPCRouter({
           (network) => !existingNetworks.includes(network),
         )
         user.socialNetworks.push(
-          ...notExistingNetworks.map((socialNetwork) => ({ socialNetwork, link: '' })),
+          ...notExistingNetworks.map((socialNetwork) => ({ socialNetwork, externalId: '' })),
         )
       }
       // ...Object.values(PrismaSocialNetwork).map((prismaSocialNetwork, index) => ({
@@ -123,12 +125,12 @@ export const usersRouter = createTRPCRouter({
               },
             },
             update: {
-              link: socialNetwork.link,
+              externalId: socialNetwork.externalId,
             },
             create: {
               userId: ctx.session.user.id,
               socialNetwork: socialNetwork.socialNetwork,
-              link: socialNetwork.link,
+              externalId: socialNetwork.externalId,
             },
           })
         })
@@ -194,8 +196,67 @@ export const usersRouter = createTRPCRouter({
         email: true,
         isBlocked: true,
         blockReason: true,
+        socialNetworks: {
+          select: {
+            socialNetwork: true,
+            externalId: true,
+          },
+        },
       },
     })
     return { user }
+  }),
+
+  getMySocialNetworks: protectedProcedure.query(async ({ ctx }) => {
+    const socialNetworks = await ctx.prisma.userSocialNetwork.findMany({
+      where: {
+        userId: ctx.session.user.id,
+      },
+      select: {
+        socialNetwork: true,
+        externalId: true,
+      },
+    })
+    return { socialNetworks }
+  }),
+
+  generateVkAuthLink: protectedProcedure.query(async ({ ctx }) => {
+    const user = await ctx.prisma.user.findUnique({
+      where: {
+        id: ctx.session.user.id,
+      },
+      select: {
+        secretSocialNetworksAuthPayload: true,
+      },
+    })
+    if (user === null) {
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'Несуществующий пользователь',
+      })
+    }
+
+    const authLink = await VkApi.generateDeepLink(user.secretSocialNetworksAuthPayload)
+    return { authLink }
+  }),
+
+  generateTgAuthLink: protectedProcedure.query(async ({ ctx }) => {
+    const user = await ctx.prisma.user.findUnique({
+      where: {
+        id: ctx.session.user.id,
+      },
+      select: {
+        secretSocialNetworksAuthPayload: true,
+      },
+    })
+    if (user === null) {
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'Несуществующий пользователь',
+      })
+    }
+
+    const authLink = await TelegramApi.generateDeepLink(user.secretSocialNetworksAuthPayload)
+    return { authLink }
   }),
 })

@@ -31,6 +31,16 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: z.string().min(1),
     GITHUB_CLIENT_ID: z.string().min(1),
     GITHUB_CLIENT_SECRET: z.string().min(1),
+
+    CALLBACK_URL: z.string().url(),
+    CALLBACK_SECRET_URL_STRING: z.string().min(1).max(32),
+    VK_BOT_TOKEN: z.string().min(1),
+    VK_GROUP_ID: z
+      .string()
+      .min(1)
+      .transform((value) => Number(value)),
+    TELEGRAM_BOT_TOKEN: z.string().min(1),
+    TELEGRAM_BOT_NAME: z.string().min(1),
   },
   /*
    * Environment variables available on the client (and server).
@@ -78,6 +88,13 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
     GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
+
+    CALLBACK_URL: process.env.CALLBACK_URL,
+    CALLBACK_SECRET_URL_STRING: process.env.CALLBACK_SECRET_URL_STRING,
+    VK_BOT_TOKEN: process.env.VK_BOT_TOKEN,
+    VK_GROUP_ID: process.env.VK_GROUP_ID,
+    TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
+    TELEGRAM_BOT_NAME: process.env.TELEGRAM_BOT_NAME,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

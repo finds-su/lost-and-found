@@ -3,6 +3,7 @@ import { Campus } from '@/lib/campus'
 import { type RouterOutputs } from '@/lib/api'
 import { humanReadableDate } from '@/lib/human-readable-date'
 import classNames from 'classnames'
+import Link from 'next/link'
 
 interface PostCardProps {
   post: RouterOutputs['posts']['infinitePosts']['items'][0]
@@ -25,10 +26,10 @@ export const PostCard: React.FC<PostCardProps> = ({ post, displayReasonLabel = f
       </div>
       <div className='flex flex-col justify-between px-2 pb-2 pt-1'>
         <h3 className='mt-2 overflow-hidden text-ellipsis text-sm font-semibold text-gray-900'>
-          <a href={`${post.reason === 'LOST' ? 'losses' : 'finds'}/${post.slug}`}>
+          <Link href={`${post.reason === 'LOST' ? 'losses' : 'finds'}/${post.slug}`}>
             <span className='absolute inset-0' />
             {post.name}
-          </a>
+          </Link>
         </h3>
 
         <p className='mt-1 text-sm font-medium text-gray-700'>{Campus[post.campus]}</p>

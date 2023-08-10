@@ -14,6 +14,7 @@ import { type Session } from 'next-auth'
 import CommandPalette from '@/components/layout/command-palette'
 import SidebarSearchInput from '@/components/form/sidebar-search-input'
 import { useHotkeys } from 'react-hotkeys-hook'
+import SocialNetworksConnectionBanner from '../banner/social-networks-connection-banner'
 
 export type Navigation = { name: string; href: string }[]
 export const navigation: Navigation = [
@@ -110,7 +111,7 @@ export default function Layout(props: LayoutProps) {
                     <div className='hidden md:block'>
                       <div className='ml-10 flex items-baseline space-x-4'>
                         {navigation.map((item) => (
-                          <a
+                          <Link
                             key={item.name}
                             href={item.href}
                             className={classNames(
@@ -122,7 +123,7 @@ export default function Layout(props: LayoutProps) {
                             aria-current={router.pathname === item.href ? 'page' : undefined}
                           >
                             {item.name}
-                          </a>
+                          </Link>
                         ))}
                       </div>
                     </div>
@@ -167,6 +168,7 @@ export default function Layout(props: LayoutProps) {
         </Disclosure>
 
         <header className='bg-white'>
+          {SocialNetworksConnectionBanner()}
           <div className='m:px-6 mx-auto max-w-7xl px-4 pb-4 pt-8 sm:px-6'>
             <h1 className='text-xl font-bold leading-tight text-gray-900'>{props.title}</h1>
           </div>

@@ -53,6 +53,7 @@ CREATE TABLE "User" (
     "image" TEXT,
     "isBlocked" BOOLEAN NOT NULL DEFAULT false,
     "blockReason" TEXT,
+    "secretSocialNetworksAuthPayload" TEXT NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -68,7 +69,8 @@ CREATE TABLE "VerificationToken" (
 CREATE TABLE "UserSocialNetwork" (
     "id" TEXT NOT NULL,
     "socialNetwork" "SocialNetwork" NOT NULL,
-    "link" TEXT NOT NULL,
+    "externalId" TEXT NOT NULL,
+    "username" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
 
     CONSTRAINT "UserSocialNetwork_pkey" PRIMARY KEY ("id")
@@ -114,6 +116,9 @@ CREATE UNIQUE INDEX "User_nickname_key" ON "User"("nickname");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_secretSocialNetworksAuthPayload_key" ON "User"("secretSocialNetworksAuthPayload");
 
 -- CreateIndex
 CREATE INDEX "User_id_idx" ON "User" USING HASH ("id");
