@@ -42,6 +42,7 @@ export const usersRouter = createTRPCRouter({
               select: {
                 socialNetwork: true,
                 externalId: true,
+                username: true,
               },
             },
           }),
@@ -200,6 +201,7 @@ export const usersRouter = createTRPCRouter({
           select: {
             socialNetwork: true,
             externalId: true,
+            userId: true,
           },
         },
       },
@@ -259,4 +261,20 @@ export const usersRouter = createTRPCRouter({
     const authLink = await TelegramApi.generateDeepLink(user.secretSocialNetworksAuthPayload)
     return { authLink }
   }),
+
+  unlinkSocialNetwork: protectedProcedure
+    .input(
+      z.object({
+        socialNetwork: z.enum(['VK', 'TELEGRAM']),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.userSocialNetwork.deleteMany({
+        where: {
+          userId: ctx.session.user.id,
+          socialNetwork: input.socialNetwork,
+        },
+      })
+      return null
+    }),
 })

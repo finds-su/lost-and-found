@@ -8,15 +8,14 @@ import Link from 'next/link'
 import { XMarkIcon, LinkIcon } from '@heroicons/react/24/outline'
 import { Dialog, Transition } from '@headlessui/react'
 import React from 'react'
+import successToast from '@/components/toasts/success-toast'
 
 const ConnectDialog = ({
   network,
-  user,
   open,
   setOpen,
 }: {
   network: string
-  user: RouterInputs['users']['editUser']
   open: boolean
   setOpen: (open: boolean) => void
 }) => {
@@ -130,13 +129,15 @@ const ConnectDialog = ({
                 </div>
                 {network === 'Telegram' ? (
                   <div className='bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6'>
-                    <button
+                    <Link
                       type='button'
                       className='inline-flex w-full justify-center rounded-md border border-transparent bg-green-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm'
                       onClick={() => setOpen(false)}
+                      target='_blank'
+                      href={generateTgAuthLink.data?.authLink || 'https://t.me/'}
                     >
                       Привязать
-                    </button>
+                    </Link>
                   </div>
                 ) : (
                   <div className='bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6'>
@@ -144,6 +145,7 @@ const ConnectDialog = ({
                       href={generateVkAuthLink.data?.authLink || 'https://vk.com/'}
                       className='inline-flex w-full justify-center rounded-md border border-transparent bg-green-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm'
                       onClick={() => setOpen(false)}
+                      target='_blank'
                     >
                       <LinkIcon className='-ml-1 mr-2 h-5 w-5' aria-hidden='true' />
                       Открыть бота
@@ -170,6 +172,8 @@ const SocialNetwork = ({
     (socialNetwork) => socialNetwork.socialNetwork === network,
   )
 
+  console.log('socialNetworks', user?.socialNetworks)
+
   const externalId = socialNetwork?.externalId || ''
   const username = socialNetwork?.username || ''
 
@@ -181,17 +185,27 @@ const SocialNetwork = ({
     setOpen(true)
   }
 
+  const unlinkSocialNetworkMutation = api.users.unlinkSocialNetwork.useMutation({
+    onSuccess: () => {
+      successToast(`Аккаунт ${network} успешно отвязан`)
+    },
+  })
+
   const handleUnlinkClick = () => {
-    // handle unlink click
+    if (confirm(`Вы уверены, что хотите отвязать аккаунт ${network}?`)) {
+      unlinkSocialNetworkMutation.mutate({
+        socialNetwork: network,
+      })
+    }
   }
 
-  const socialNetworkName = network === 'VK' ? 'ВКонтакте' : network
+  const socialNetworkName = network === 'VK' ? 'ВКонтакте' : 'Telegram'
   const socialNetworkUserUrl =
     network === 'VK' ? `https://vk.com/id${externalId}` : `https://t.me/${username}`
 
   return (
     <>
-      <ConnectDialog network={network} user={user} open={open} setOpen={setOpen} />
+      <ConnectDialog network={network} open={open} setOpen={setOpen} />
       <div className='flex flex-row items-center justify-between space-x-8 md:justify-start'>
         <div className='flex flex-row items-center space-x-2'>
           <Image src={`/icons/${network}.svg`} alt={network} width={24} height={24} color='blue' />
@@ -306,7 +320,7 @@ export default function EditProfileSlideOverBody({ user }: EditProfileSlideOverB
         </div>
         <div className='space-y-6 px-4 py-4 sm:px-6'>
           <div className='flex flex-col space-y-4'>
-            <SocialNetwork network='Telegram' user={user} />
+            <SocialNetwork network='TELEGRAM' user={user} />
             <SocialNetwork network='VK' user={user} />
           </div>
         </div>

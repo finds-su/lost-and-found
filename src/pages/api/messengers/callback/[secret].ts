@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import VkApi from '@/server/messengers-api/vk'
+import TelegramApi from '@/server/messengers-api/telegram'
 
 import { api } from '@/lib/api'
 import { prisma } from '@/server/db'
@@ -15,6 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(200).send(confirmation)
   }
 
+  // VK event
   if (req.headers['user-agent']?.includes('VKCallback')) {
     const { type, object } = req.body as Record<string, unknown>
 
@@ -27,8 +29,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
 
       const { message } = object as EventObject
-
-      console.log('VK Callback message', message)
 
       if (message.text.startsWith('/') && message.text.length > 1) {
         const user = await prisma.user.findFirst({
@@ -73,6 +73,65 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         await VkApi.sendMessage(
           message.from_id,
           'Ваш аккаунт ВКонтакте успешно подключен. Теперь вы можете получать уведомления о новых объявлениях.',
+        )
+      }
+    }
+  } else {
+    const { message } = req.body as Record<string, unknown>
+
+    if (message) {
+      const { text, from } = message as {
+        text: string
+        from: {
+          id: number
+          username: string
+        }
+      }
+
+      if (text.startsWith('/start ')) {
+        const user = await prisma.user.findFirst({
+          where: {
+            secretSocialNetworksAuthPayload: text.slice(7),
+          },
+        })
+
+        if (!user) {
+          await TelegramApi.sendMessage(
+            from.id.toString(),
+            'Не удалось подключить аккаунт. Попробуйте ещё раз.',
+          )
+          return res.status(200).send('ok')
+        }
+
+        const isAlreadyTelegramConnected =
+          (await prisma.userSocialNetwork.findFirst({
+            where: {
+              userId: user.id,
+              socialNetwork: 'TELEGRAM',
+            },
+          })) !== null
+
+        if (isAlreadyTelegramConnected) {
+          await TelegramApi.sendMessage(
+            from.id.toString(),
+            'Вы уже подключили свой аккаунт Telegram. Сперва отвяжите его в настройках профиля.',
+          )
+
+          return res.status(200).send('ok')
+        }
+
+        await prisma.userSocialNetwork.create({
+          data: {
+            userId: user.id,
+            username: from.username,
+            socialNetwork: 'TELEGRAM',
+            externalId: from.id.toString(),
+          },
+        })
+
+        await TelegramApi.sendMessage(
+          from.id.toString(),
+          'Ваш аккаунт Telegram успешно подключен. Теперь вы можете получать уведомления о новых объявлениях.',
         )
       }
     }
