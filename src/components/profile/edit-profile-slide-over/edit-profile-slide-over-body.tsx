@@ -106,7 +106,7 @@ const ConnectDialog = ({
                         Привязать {network === 'VK' ? 'ВКонтакте' : network}
                       </Dialog.Title>
                       <div className='mt-2'>
-                        {network === 'Telegram' ? (
+                        {network === 'TELEGRAM' ? (
                           <p className='text-sm text-gray-500'>
                             Перейдите по ссылке и откройте бота, чтобы привязать аккаунт Telegram.
                           </p>
@@ -127,7 +127,7 @@ const ConnectDialog = ({
                     </div>
                   </div>
                 </div>
-                {network === 'Telegram' ? (
+                {network === 'TELEGRAM' ? (
                   <div className='bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6'>
                     <Link
                       type='button'
@@ -171,8 +171,6 @@ const SocialNetwork = ({
   const socialNetwork = user?.socialNetworks?.find(
     (socialNetwork) => socialNetwork.socialNetwork === network,
   )
-
-  console.log('socialNetworks', user?.socialNetworks)
 
   const externalId = socialNetwork?.externalId || ''
   const username = socialNetwork?.username || ''
