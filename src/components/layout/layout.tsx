@@ -14,6 +14,7 @@ import { type Session } from 'next-auth'
 import CommandPalette from '@/components/layout/command-palette'
 import SidebarSearchInput from '@/components/form/sidebar-search-input'
 import { useHotkeys } from 'react-hotkeys-hook'
+import SocialNetworksConnectionBanner from '../banner/social-networks-connection-banner'
 
 export type Navigation = { name: string; href: string }[]
 export const navigation: Navigation = [
@@ -80,14 +81,14 @@ export default function Layout(props: LayoutProps) {
     <>
       {props.hideTitle || <NextSeo title={props.title} />}
       <div className='min-h-screen'>
-        <Disclosure as='nav' className='bg-gray-800'>
+        <Disclosure as='nav'>
           {({ open }) => (
             <>
               <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
                 <div className='flex h-16 items-center justify-between'>
                   <div className='flex basis-1/3 justify-start md:hidden md:basis-0'>
                     {/* Mobile menu button */}
-                    <Disclosure.Button className='inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'>
+                    <Disclosure.Button className='inline-flex items-center justify-center rounded-md p-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'>
                       <span className='sr-only'>Открыть главное меню</span>
                       {open ? (
                         <XMarkIcon className='block h-6 w-6' aria-hidden='true' />
@@ -101,7 +102,7 @@ export default function Layout(props: LayoutProps) {
                       <Image
                         priority
                         className='h-8 w-8'
-                        src='/assets/ninja-logo-white.svg'
+                        src='/assets/ninja-logo-black.svg'
                         alt='Mirea Ninja'
                         width={10}
                         height={10}
@@ -110,19 +111,19 @@ export default function Layout(props: LayoutProps) {
                     <div className='hidden md:block'>
                       <div className='ml-10 flex items-baseline space-x-4'>
                         {navigation.map((item) => (
-                          <a
+                          <Link
                             key={item.name}
                             href={item.href}
                             className={classNames(
                               router.pathname === item.href
-                                ? 'bg-gray-900 text-white'
-                                : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                                ? 'text-primary-900 hover:text-primary-700'
+                                : 'text-gray-400 hover:text-gray-800',
                               'rounded-md px-3 py-2 text-sm font-medium',
                             )}
                             aria-current={router.pathname === item.href ? 'page' : undefined}
                           >
                             {item.name}
-                          </a>
+                          </Link>
                         ))}
                       </div>
                     </div>
@@ -132,7 +133,7 @@ export default function Layout(props: LayoutProps) {
                       <button
                         type='button'
                         onClick={() => setOpenCommandPalette(true)}
-                        className='rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 lg:hidden'
+                        className='rounded-full p-1 text-gray-600 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 lg:hidden'
                       >
                         <span className='sr-only'>Быстрый поиск</span>
                         <MagnifyingGlassIcon className='h-6 w-6' aria-hidden='true' />
@@ -149,7 +150,7 @@ export default function Layout(props: LayoutProps) {
                       <button
                         onClick={() => void signIn()}
                         type='button'
-                        className='h-8 rounded-md border px-3 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white'
+                        className='rounded-xl border bg-gray-700 px-5 py-2 text-sm font-medium text-gray-300 hover:bg-gray-800 focus:outline-none'
                       >
                         Войти
                       </button>
@@ -166,12 +167,13 @@ export default function Layout(props: LayoutProps) {
           )}
         </Disclosure>
 
-        <header className='bg-white shadow-sm'>
-          <div className='mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8'>
-            <h1 className='text-lg font-semibold leading-6 text-gray-900'>{props.title}</h1>
+        <header className='bg-white'>
+          {SocialNetworksConnectionBanner()}
+          <div className='m:px-6 mx-auto max-w-7xl px-4 pb-4 pt-8 sm:px-6'>
+            <h1 className='text-xl font-bold leading-tight text-gray-900'>{props.title}</h1>
           </div>
         </header>
-        <div className='mx-4 flex max-w-7xl flex-col py-4 sm:px-6 md:mx-auto lg:px-8'>
+        <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
           <div>{props.children}</div>
           <DynamicLayoutFooter />
         </div>

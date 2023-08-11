@@ -1,30 +1,32 @@
-import dynamic from 'next/dynamic'
-import { type GetServerSideProps } from 'next'
+import DynamicLayout from '@/components/layout/dynamic-layout'
 import { getServerAuthSession } from '@/server/auth'
+import { type GetServerSideProps } from 'next'
+import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
+import DynamicInfiniteScrollGridWithFilter from '@/components/posts/grid/infinite-scroll-grid-with-filter/dynamic-infinite-scroll-grid-with-filter'
 import DefaultSeo from '@/components/seo/default-seo'
+
+const title = 'Все объявления'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)
-  if (!session) {
-    return {
-      props: {},
-    }
-  }
-  return {
-    redirect: {
-      destination: `/finds`,
-      permanent: false,
-    },
-  }
+  return { props: { session } }
 }
 
-const Landing = dynamic(() => import('@/components/landing/landing'), { ssr: true })
-
-export default function LandingPage() {
+const AllItems: NextPageWithLayout = () => {
   return (
     <>
-      <DefaultSeo />
-      <Landing />
+      <DefaultSeo title={title} />
+      <DynamicInfiniteScrollGridWithFilter reason='ANY' />
     </>
   )
 }
+
+AllItems.getLayout = function getLayout(page: JSX.Element, options: NextPageOptions) {
+  return (
+    <DynamicLayout session={options.session} title={title}>
+      {page}
+    </DynamicLayout>
+  )
+}
+
+export default AllItems

@@ -52,7 +52,7 @@ export default function CommandPalette({ open, setOpen }: CommandPaletteProps) {
     },
   )
 
-  const fetchPost = (postId: string, reason: PostItemReason) => {
+  const fetchPost = (postId: number, reason: PostItemReason) => {
     return () => {
       setOpen(false)
       void router.push(reason === PostItemReason.FOUND ? `/finds/${postId}` : `/losses/${postId}`)
@@ -65,7 +65,7 @@ export default function CommandPalette({ open, setOpen }: CommandPaletteProps) {
 
   const onSelectedOptionEnter = (
     open: boolean,
-    selectedOption: { id: string; reason: PostItemReason } | null,
+    selectedOption: { id: number; reason: PostItemReason } | null,
   ) => {
     return (event: KeyboardEventHandler<HTMLInputElement>) => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -117,7 +117,7 @@ export default function CommandPalette({ open, setOpen }: CommandPaletteProps) {
                         onKeyDown={(e: any) =>
                           onSelectedOptionEnter(
                             open,
-                            activeOption as { id: string; reason: PostItemReason } | null,
+                            activeOption as { id: number; reason: PostItemReason } | null,
                             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                           )(e)
                         }

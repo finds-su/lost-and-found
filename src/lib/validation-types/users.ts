@@ -63,6 +63,12 @@ export const zodEditUserInput = z.object({
     .optional()
     .transform((value) => (value?.length === 0 ? null : value)),
   socialNetworks: z
-    .array(z.object({ socialNetwork: z.nativeEnum(SocialNetwork), link: z.string() }))
+    .array(
+      z.object({
+        socialNetwork: z.nativeEnum(SocialNetwork),
+        externalId: z.string(),
+        username: z.string(),
+      }),
+    )
     .optional(),
 })

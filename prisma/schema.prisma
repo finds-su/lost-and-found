@@ -38,20 +38,21 @@ model Session {
 }
 
 model User {
-  id                String              @id @default(cuid())
-  name              String?
-  nickname          String              @unique
-  socialNetworks    UserSocialNetwork[]
-  email             String?             @unique
-  emailVerified     DateTime?
-  userInfo          String?             @db.VarChar(280)
-  role              Role                @default(USER)
-  image             String?
-  isBlocked         Boolean             @default(false)
-  blockReason       String?
-  accounts          Account[]
-  sessions          Session[]
-  lostAndFoundItems LostAndFoundItem[]
+  id                              String              @id @default(cuid())
+  name                            String?
+  nickname                        String              @unique
+  socialNetworks                  UserSocialNetwork[]
+  email                           String?             @unique
+  emailVerified                   DateTime?
+  userInfo                        String?             @db.VarChar(280)
+  role                            Role                @default(USER)
+  image                           String?
+  isBlocked                       Boolean             @default(false)
+  blockReason                     String?
+  accounts                        Account[]
+  sessions                        Session[]
+  lostAndFoundItems               LostAndFoundItem[]
+  secretSocialNetworksAuthPayload String              @unique @default(cuid())
 
   @@index([id], type: Hash)
   @@index([nickname], type: Hash)
@@ -68,7 +69,8 @@ model VerificationToken {
 model UserSocialNetwork {
   id                             String                           @id @default(cuid())
   socialNetwork                  SocialNetwork
-  link                           String
+  externalId                     String // If social network has integer id, then it will be converted to string
+  username                       String
   userId                         String
   user                           User                             @relation(fields: [userId], references: [id], onDelete: Cascade)
   lostAndFoundItemSocialNetworks LostAndFoundItemSocialNetworks[]
@@ -84,7 +86,7 @@ enum Role {
 }
 
 model LostAndFoundItem {
-  id             String                           @id @default(cuid())
+  id             Int                              @id @default(autoincrement())
   name           String                           @db.VarChar(100)
   description    String                           @default("") @db.VarChar(512)
   campus         Campus
@@ -96,19 +98,20 @@ model LostAndFoundItem {
   socialNetworks LostAndFoundItemSocialNetworks[]
   created        DateTime                         @default(now())
   expires        DateTime                         @default(dbgenerated("NOW() + interval '1 week'"))
+  slug           String                           @unique @default(cuid())
 
-  @@index([id], type: Hash)
+  @@index([name], type: Hash)
 }
 
 enum LostAndFoundItemStatus {
   ACTIVE
   EXPIRED
-  BLOCKED
+  BLOCKED // if moderator delete item
 }
 
 model LostAndFoundItemSocialNetworks {
   id                  String            @id @default(cuid())
-  lostAndFoundItemId  String
+  lostAndFoundItemId  Int
   lostAndFoundItem    LostAndFoundItem  @relation(fields: [lostAndFoundItemId], references: [id], onDelete: Cascade)
   userSocialNetworkId String
   userSocialNetwork   UserSocialNetwork @relation(fields: [userSocialNetworkId], references: [id], onDelete: Cascade)
@@ -119,6 +122,7 @@ model LostAndFoundItemSocialNetworks {
 enum PostItemReason {
   LOST
   FOUND
+  ANY
 }
 
 enum Campus {

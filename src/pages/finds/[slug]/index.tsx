@@ -9,13 +9,13 @@ import { prisma } from '@/server/db'
 import { type ErrorProps } from '@/lib/types/error-props'
 import DefaultSeo from '@/components/seo/default-seo'
 
-const title = 'Пропажа'
+const title = 'Находка'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)
-  const postId = context.params?.postId as string
+  const slug = context.params?.slug as string
   const post = await prisma.lostAndFoundItem.findFirst({
-    where: { id: postId, reason: PostItemReason.LOST },
+    where: { slug: slug, reason: PostItemReason.FOUND },
     select: { id: true },
   })
   if (post === null) {
@@ -29,6 +29,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     }
   }
+
   return { props: { session } }
 }
 
@@ -36,12 +37,12 @@ const Post: NextPageWithLayout = () => {
   return (
     <>
       <DefaultSeo title={title} />
-      <DynamicOverviewPost reason={PostItemReason.LOST} />
+      <DynamicOverviewPost reason={PostItemReason.FOUND} />
     </>
   )
 }
 
-Post.getLayout = (page: JSX.Element, options: NextPageOptions) => {
+Post.getLayout = function getLayout(page: JSX.Element, options: NextPageOptions) {
   if (options.error) {
     return <DynamicError {...options.error} />
   }

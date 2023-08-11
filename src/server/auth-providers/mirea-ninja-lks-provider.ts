@@ -25,17 +25,17 @@ export default function MireaNinjaLksProvider(options: MireaNinjaLKSProviderConf
     name: 'Mirea',
     type: 'oauth',
     version: '2.0',
-    accessTokenUrl: 'https://lks.mirea.ninja/oauth/token',
-    requestTokenUrl: 'https://lks.mirea.ninja/oauth/token',
+    accessTokenUrl: 'https://auth-app.mirea.ru/oauth/token',
+    requestTokenUrl: 'https://auth-app.mirea.ru/oauth/token',
     authorization: {
-      url: 'https://lks.mirea.ninja/oauth/authorize',
+      url: 'https://auth-app.mirea.ru/oauth/authorize',
       params: { scope: 'profile' },
     },
     token: {
-      url: 'https://lks.mirea.ninja/oauth/token',
+      url: 'https://auth-app.mirea.ru/oauth/token',
     },
     userinfo: {
-      url: 'https://lks.mirea.ninja/api/?action=getData&url=https://lk.mirea.ru/profile/',
+      url: 'https://auth-app.mirea.ru/api/?action=getData&url=https://lk.mirea.ru/profile/',
     },
     checks: ['state'],
     async profile(profile: MireaProfile) {

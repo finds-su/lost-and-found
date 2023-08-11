@@ -2,20 +2,19 @@ import DynamicLayout from '@/components/layout/dynamic-layout'
 import { getServerAuthSession } from '@/server/auth'
 import { type GetServerSideProps } from 'next'
 import { type NextPageOptions, type NextPageWithLayout } from '@/pages/_app'
-import DynamicOverviewPost from '@/components/posts/overview/overview-post/dynamic-overview-post'
 import DynamicError from '@/components/error/dynamic-error'
-import { PostItemReason } from '@prisma/client'
 import { prisma } from '@/server/db'
 import { type ErrorProps } from '@/lib/types/error-props'
 import DefaultSeo from '@/components/seo/default-seo'
+import DynamicEditPost from '@/components/posts/edit/dynamic-edit-post'
 
-const title = 'Находка'
+const title = 'Редактирование публикации'
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context)
-  const postId = context.params?.postId as string
+  const id = Number(context.params?.id)
   const post = await prisma.lostAndFoundItem.findFirst({
-    where: { id: postId, reason: PostItemReason.FOUND },
+    where: { id: id },
     select: { id: true },
   })
   if (post === null) {
@@ -23,7 +22,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       props: {
         error: {
           code: 404,
-          name: 'Пост о находке не найден',
+          name: 'Пост не найден',
           description: `Этот пост никогда не существовал или был удален.`,
         } as ErrorProps,
       },
@@ -33,16 +32,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return { props: { session } }
 }
 
-const Post: NextPageWithLayout = () => {
+const EditPost: NextPageWithLayout = () => {
   return (
     <>
       <DefaultSeo title={title} />
-      <DynamicOverviewPost reason={PostItemReason.FOUND} />
+      <DynamicEditPost />
     </>
   )
 }
 
-Post.getLayout = function getLayout(page: JSX.Element, options: NextPageOptions) {
+EditPost.getLayout = function getLayout(page: JSX.Element, options: NextPageOptions) {
   if (options.error) {
     return <DynamicError {...options.error} />
   }
@@ -53,4 +52,4 @@ Post.getLayout = function getLayout(page: JSX.Element, options: NextPageOptions)
   )
 }
 
-export default Post
+export default EditPost

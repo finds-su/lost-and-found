@@ -23,7 +23,7 @@ export default function LayoutUser(props: LayoutUserProps) {
           navigation: props.userNavigation.create,
           name: 'Открыть меню создания постов',
           head: (
-            <div className='flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'>
+            <div className='flex-shrink-0 rounded-full bg-gray-800 p-1 text-white hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'>
               <span className='sr-only'>Открыть меню создания постов</span>
               <PlusIcon className='h-6 w-6' aria-hidden='true' />
             </div>
@@ -52,11 +52,11 @@ export default function LayoutUser(props: LayoutUserProps) {
   return (
     <div className='hidden md:block'>
       <div className='flex items-center space-x-3'>
-        <div className='h-5 w-[0.05rem] bg-gray-400' />
+        <div className='h-5 w-[0.05rem] bg-gray-300' />
         {session && isModeratorOrAdmin(session) && (
           <Link
             href='/admin'
-            className='rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'
+            className='rounded-full p-1 text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800'
           >
             <span className='sr-only'>Открыть меню администратора</span>
             <BriefcaseIcon className='h-6 w-6' aria-hidden='true' />
@@ -64,7 +64,7 @@ export default function LayoutUser(props: LayoutUserProps) {
         )}
         <Link
           href='/notifications'
-          className='rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'
+          className='rounded-full p-1 text-gray-600 hover:text-gray-900 focus:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800'
         >
           <span className='sr-only'>Открыть уведомления</span>
           <BellIcon className='h-6 w-6' aria-hidden='true' />

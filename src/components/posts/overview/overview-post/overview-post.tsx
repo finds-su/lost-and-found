@@ -10,17 +10,19 @@ import DynamicOverviewPostImage from '@/components/posts/overview/overview-post-
 import PostStatusBadge from '@/components/posts/post-status-badge/post-status-badge'
 import OverviewPostSkeleton from '@/components/posts/overview/overview-post/overview-post-skeleton'
 import Image from 'next/image'
+import Link from 'next/link'
+import useSessionStore from '@/lib/hooks/store/session-store'
 
 interface OverviewPostProps {
   reason: PostItemReason
 }
 
 export default function OverviewPost(props: OverviewPostProps) {
-  const postId = useRouter().query.postId as string
-  const [post, setPost] = useState<RouterOutputs['posts']['getPost']>()
-
-  const postQuery = api.posts.getPost.useQuery(
-    { postId: postId, reason: props.reason },
+  const slug = useRouter().query.slug as string
+  const { session } = useSessionStore()
+  const [post, setPost] = useState<RouterOutputs['posts']['getPostBySlug']>()
+  const postQuery = api.posts.getPostBySlug.useQuery(
+    { slug: slug, reason: props.reason },
     {
       onSuccess: (data) => {
         if (data) {
@@ -32,11 +34,12 @@ export default function OverviewPost(props: OverviewPostProps) {
       },
     },
   )
+
   const features = post
     ? [
         { name: 'Дата создания', description: formatDate(post.created.toString()) },
         {
-          name: 'Истекает',
+          name: 'Опубликовано до',
           description: formatDate(post.expires.toString()),
         },
         { name: 'Кампус', description: Campus[post.campus] },
@@ -45,31 +48,58 @@ export default function OverviewPost(props: OverviewPostProps) {
           description: (
             <div>
               <p>{post.user.name}</p>
-              <a
+              <Link
                 href={`/u/${post.user.nickname}`}
                 className='font-medium text-blue-600 hover:underline dark:text-blue-500'
               >
                 @{post.user.nickname}
-              </a>
+              </Link>
             </div>
           ),
         },
       ]
     : []
 
+  const getLinkForSocialNetwork = (socialNetwork: string, externalId: string, username: string) => {
+    switch (socialNetwork) {
+      case 'VK':
+        return `https://vk.com/id${externalId}`
+      case 'TELEGRAM':
+        return `https://t.me/${username}`
+      default:
+        return ''
+    }
+  }
+
+  const findSocialNetworkByName = (network: string, socialNetworks: Record<string, any>[]) => {
+    return socialNetworks.find(
+      (socialNetwork) => socialNetwork.socialNetwork === network,
+    ) as Record<string, string>
+  }
+
   return (
     <Window>
-      <div className='mx-auto grid max-w-2xl grid-cols-1 items-center gap-x-8 gap-y-16 px-4 py-24 sm:px-6 sm:py-32 lg:max-w-7xl lg:grid-cols-2 lg:px-8'>
+      <div className='grid-cols-1 md:flex md:flex-col md:space-y-6 md:p-6'>
         {postQuery.isLoading ? (
           <OverviewPostSkeleton />
         ) : post ? (
           <>
             <div>
-              <div className='flex flex-row items-center space-x-4'>
-                <h2 className='text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
-                  {post.name}
-                </h2>
-                <PostStatusBadge status={post.status} />
+              <div className='flex flex-col md:flex-row md:items-center md:justify-between'>
+                <div className='flex items-center md:flex-row'>
+                  <h2 className='pr-4 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl'>
+                    {post.name}
+                  </h2>
+                  <PostStatusBadge status={post.status} />
+                </div>
+                {post.user.id === session?.user.id && (
+                  <Link
+                    className='text-sm font-medium text-blue-600 hover:underline dark:text-blue-500'
+                    href={`/edit/${post.id}`}
+                  >
+                    Редактировать
+                  </Link>
+                )}
               </div>
               <p className='mt-4 overflow-hidden text-ellipsis text-gray-500'>{post.description}</p>
               <dl className='mt-16 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 sm:gap-y-16 lg:gap-x-8'>
@@ -85,6 +115,54 @@ export default function OverviewPost(props: OverviewPostProps) {
               {post?.images.map((image, index) => (
                 <DynamicOverviewPostImage key={index} src={image} />
               ))}
+            </div>
+
+            <div className='mt-6 flex flex-col space-y-2'>
+              <h3 className='text-xl font-medium text-gray-900'>Связаться</h3>
+              <div className='flex space-x-2'>
+                {findSocialNetworkByName('VK', post.user.socialNetworks) && (
+                  <Link
+                    className='flex items-center space-x-2 rounded-md bg-blue-600 px-4 py-2 pl-1 pr-2 text-white hover:bg-blue-700'
+                    href={getLinkForSocialNetwork(
+                      'VK',
+                      findSocialNetworkByName('VK', post.user.socialNetworks).externalId || '',
+                      findSocialNetworkByName('VK', post.user.socialNetworks).username || '',
+                    )}
+                  >
+                    <Image
+                      src='/icons/vk.svg'
+                      alt=''
+                      width={20}
+                      height={20}
+                      className='mr-2'
+                      style={{ filter: 'invert(1)' }}
+                    />
+                    ВКонтакте
+                  </Link>
+                )}
+
+                {findSocialNetworkByName('TELEGRAM', post.user.socialNetworks) && (
+                  <Link
+                    className='flex items-center space-x-2 rounded-md bg-blue-600 px-4 py-2 pl-1 pr-2 text-white hover:bg-blue-700'
+                    href={getLinkForSocialNetwork(
+                      'TELEGRAM',
+                      findSocialNetworkByName('TELEGRAM', post.user.socialNetworks).externalId ||
+                        '',
+                      findSocialNetworkByName('TELEGRAM', post.user.socialNetworks).username || '',
+                    )}
+                  >
+                    <Image
+                      src='/icons/telegram.svg'
+                      alt=''
+                      width={20}
+                      height={20}
+                      className='mr-2'
+                      style={{ filter: 'invert(1)' }}
+                    />
+                    Telegram
+                  </Link>
+                )}
+              </div>
             </div>
           </>
         ) : (

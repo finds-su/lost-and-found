@@ -1,10 +1,10 @@
 export default function InfiniteScrollGridWithFilterSkeleton() {
   return (
     <div role='status' className='animate-pulse'>
-      <div className='mt-10 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 md:grid-cols-4 md:gap-y-1 lg:gap-x-8'>
+      <div className='mt-10 grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-4'>
         {[...Array(12).keys()].map((key) => (
           <div key={key} className='flex flex-col space-y-2'>
-            <div className='mb-2 flex h-56 w-full items-center justify-center bg-gray-300 lg:h-72 xl:h-80'>
+            <div className='mb-2 flex h-56 w-full items-center justify-center rounded-2xl bg-gray-300 object-cover object-center lg:h-72 xl:h-80'>
               <svg
                 className='h-12 w-12 text-gray-200'
                 xmlns='http://www.w3.org/2000/svg'

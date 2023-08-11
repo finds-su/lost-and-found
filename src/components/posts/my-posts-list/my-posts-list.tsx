@@ -124,7 +124,7 @@ export default function MyPostsList({ reason }: MyPostsListProps) {
         <>
           <div className='grid grid-cols-1 divide-y rounded border'>
             {myPosts.map((myPost, index) => (
-              <Link href={myPost.id} key={index}>
+              <Link href={myPost.slug} key={index}>
                 <div className='rounded hover:bg-gray-50'>
                   <li className='mx-3 flex justify-between gap-x-6 py-1.5'>
                     <div className='min-w-0'>
