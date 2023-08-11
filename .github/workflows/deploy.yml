@@ -13,7 +13,7 @@ env:
   JOB_STARTED_AT: ${{ github.event.created_at }}
   CR_REGISTRY: ${{ secrets.CR_REGISTRY }}
   CR_IMAGE_FRONTEND: ${{ secrets.CR_IMAGE_FRONTEND }}
-  DOCKER_COMPOSE_FILE_URL: https://raw.githubusercontent.com/mirea-ninja/lost-and-found/main/docker-compose.prod.yml
+  DOCKER_COMPOSE_FILE_URL: https://raw.githubusercontent.com/finds-su/lost-and-found/main/docker-compose.prod.yml
 
 jobs:
   build:
