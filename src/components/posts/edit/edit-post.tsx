@@ -2,7 +2,7 @@ import Window from '@/components/form/window'
 import { Campus } from '@/lib/campus'
 import { api } from '@/lib/api'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import successToast from '@/components/toasts/success-toast'
 import errorToast from '@/components/toasts/error-toast'
 import { LostAndFoundItem, PostItemReason } from '@prisma/client'
@@ -52,6 +52,12 @@ export default function EditPost() {
     },
     onError: (error) => errorToast(error.message),
   })
+
+  useEffect(() => {
+    if (post) {
+      setImages(post.images)
+    }
+  }, [post])
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -164,7 +170,7 @@ export default function EditPost() {
                     />
                     <div className='mt-6 flow-root'>
                       <div className='mt-6 grid grid-cols-4 gap-4'>
-                        {post.images.map((url, index) => (
+                        {images.map((url, index) => (
                           <div className='relative' key={index}>
                             <Image
                               className='h-56 w-full rounded-lg border border-gray-300 bg-gray-100 object-cover object-center lg:h-72 xl:h-80'
