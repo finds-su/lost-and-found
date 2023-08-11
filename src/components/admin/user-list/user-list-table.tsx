@@ -45,10 +45,10 @@ const columns = [
         header: () => 'Соц. сети',
         cell: (cell) => (
           <div>
-            {(cell.getValue() as { socialNetwork: PrismaSocialNetwork; link: string }[]).map(
+            {(cell.getValue() as { socialNetwork: PrismaSocialNetwork; username: string }[]).map(
               (socialNetwork, index) => (
                 <div key={index}>
-                  {SocialNetwork[socialNetwork.socialNetwork]}: {socialNetwork.link}
+                  {SocialNetwork[socialNetwork.socialNetwork]}: {socialNetwork.username}
                 </div>
               ),
             )}
