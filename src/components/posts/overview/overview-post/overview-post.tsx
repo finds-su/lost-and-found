@@ -60,6 +60,23 @@ export default function OverviewPost(props: OverviewPostProps) {
       ]
     : []
 
+  const getLinkForSocialNetwork = (socialNetwork: string, externalId: string, username: string) => {
+    switch (socialNetwork) {
+      case 'VK':
+        return `https://vk.com/id${externalId}`
+      case 'TELEGRAM':
+        return `https://t.me/${username}`
+      default:
+        return ''
+    }
+  }
+
+  const findSocialNetworkByName = (network: string, socialNetworks: Record<string, any>[]) => {
+    return socialNetworks.find(
+      (socialNetwork) => socialNetwork.socialNetwork === network,
+    ) as Record<string, string>
+  }
+
   return (
     <Window>
       <div className='grid-cols-1 md:flex md:flex-col md:space-y-6 md:p-6'>
@@ -98,6 +115,54 @@ export default function OverviewPost(props: OverviewPostProps) {
               {post?.images.map((image, index) => (
                 <DynamicOverviewPostImage key={index} src={image} />
               ))}
+            </div>
+
+            <div className='mt-6 flex flex-col space-y-2'>
+              <h3 className='text-xl font-medium text-gray-900'>Связаться</h3>
+              <div className='flex space-x-2'>
+                {findSocialNetworkByName('VK', post.user.socialNetworks) && (
+                  <Link
+                    className='flex items-center space-x-2 rounded-md bg-blue-600 px-4 py-2 pl-1 pr-2 text-white hover:bg-blue-700'
+                    href={getLinkForSocialNetwork(
+                      'VK',
+                      findSocialNetworkByName('VK', post.user.socialNetworks).externalId || '',
+                      findSocialNetworkByName('VK', post.user.socialNetworks).username || '',
+                    )}
+                  >
+                    <Image
+                      src='/icons/vk.svg'
+                      alt=''
+                      width={20}
+                      height={20}
+                      className='mr-2'
+                      style={{ filter: 'invert(1)' }}
+                    />
+                    ВКонтакте
+                  </Link>
+                )}
+
+                {findSocialNetworkByName('TELEGRAM', post.user.socialNetworks) && (
+                  <Link
+                    className='flex items-center space-x-2 rounded-md bg-blue-600 px-4 py-2 pl-1 pr-2 text-white hover:bg-blue-700'
+                    href={getLinkForSocialNetwork(
+                      'TELEGRAM',
+                      findSocialNetworkByName('TELEGRAM', post.user.socialNetworks).externalId ||
+                        '',
+                      findSocialNetworkByName('TELEGRAM', post.user.socialNetworks).username || '',
+                    )}
+                  >
+                    <Image
+                      src='/icons/telegram.svg'
+                      alt=''
+                      width={20}
+                      height={20}
+                      className='mr-2'
+                      style={{ filter: 'invert(1)' }}
+                    />
+                    Telegram
+                  </Link>
+                )}
+              </div>
             </div>
           </>
         ) : (

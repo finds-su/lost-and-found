@@ -57,7 +57,11 @@ export const usersRouter = createTRPCRouter({
           (network) => !existingNetworks.includes(network),
         )
         user.socialNetworks.push(
-          ...notExistingNetworks.map((socialNetwork) => ({ socialNetwork, externalId: '' })),
+          ...notExistingNetworks.map((socialNetwork) => ({
+            socialNetwork,
+            externalId: '',
+            username: '',
+          })),
         )
       }
       // ...Object.values(PrismaSocialNetwork).map((prismaSocialNetwork, index) => ({
@@ -132,6 +136,7 @@ export const usersRouter = createTRPCRouter({
               userId: ctx.session.user.id,
               socialNetwork: socialNetwork.socialNetwork,
               externalId: socialNetwork.externalId,
+              username: socialNetwork.username,
             },
           })
         })

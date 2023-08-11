@@ -149,6 +149,7 @@ export const postsRouter = createTRPCRouter({
               name: true,
               nickname: true,
               image: true,
+              socialNetworks: true,
             },
           },
           slug: true,
