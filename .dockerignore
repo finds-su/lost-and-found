@@ -19,3 +19,6 @@ logging
 /public/service-worker.js.map
 /public/workbox-*.js
 /public/workbox-*.js.map
+
+# Course work
+course-work

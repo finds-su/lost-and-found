@@ -5,29 +5,56 @@ on:
     branches:
         - main
     paths-ignore:
+        - 'course-work/**'
         - 'README.md'
         - 'LICENSE.txt'
+
+env:
+  JOB_STARTED_AT: ${{ github.event.created_at }}
+  CR_REGISTRY: ${{ secrets.CR_REGISTRY }}
+  CR_IMAGE_FRONTEND: ${{ secrets.CR_IMAGE_FRONTEND }}
+  DOCKER_COMPOSE_FILE_URL: https://raw.githubusercontent.com/mirea-ninja/lost-and-found/main/docker-compose.prod.yml
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Transfer backend to VM
-      uses: appleboy/scp-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        port: ${{ secrets.PORT }}
-        password: ${{ secrets.PASSWORD }}
-        source: "."
-        target: "/root/lost-and-found"
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Login to Registry
+        uses: yc-actions/yc-cr-login@v1
+        with:
+          yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
+      - name: Build and Push Image
+        run: |
+          docker build \
+          --build-arg NEXT_PUBLIC_CDN_ENDPOINT_URL=https://mn-lost-and-found.storage.yandexcloud.net \
+          --build-arg NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS=.png,.jpg,.jpeg,.gif,.webp \
+          --build-arg NEXT_PUBLIC_NEXTAUTH_URL=https://finds.mirea.ninja \
+          --pull \
+          --cache-from cr.yandex/${{ env.CR_REGISTRY }}/${{ env.CR_IMAGE_FRONTEND }}:latest \
+          --label "org.image.title=${{ github.repository }}" \
+          --label "org.image.url=${{ github.repositoryUrl }}" \
+          --label "org.image.created=${{ env.JOB_STARTED_AT }}" \
+          --label "org.image.revision=${{ github.ref_name }}" \
+          --label "org.image.version=${{ github.sha }}" \
+          --tag cr.yandex/${{ env.CR_REGISTRY }}/${{ env.CR_IMAGE_FRONTEND }}:${{ github.sha }} \
+          .
+          docker push cr.yandex/${{ env.CR_REGISTRY }}/${{ env.CR_IMAGE_FRONTEND }}:${{ github.sha }}
+          docker tag cr.yandex/${{ env.CR_REGISTRY }}/${{ env.CR_IMAGE_FRONTEND }}:${{ github.sha }} \
+            cr.yandex/${{ env.CR_REGISTRY }}/${{ env.CR_IMAGE_FRONTEND }}:latest
+          docker push cr.yandex/${{ env.CR_REGISTRY }}/${{ env.CR_IMAGE_FRONTEND }}:latest
+  deploy:
+    runs-on: self-hosted
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Deploy
+        run: |
+          cd ${{ secrets.PRODUCTION_FOLDER }}
+          curl -O ${{ env.DOCKER_COMPOSE_FILE_URL }}
+          docker compose -f docker-compose.prod.yml --env-file .env.local pull
+          docker compose -f docker-compose.prod.yml --env-file .env.local up -d
 
-    - name: Build and run project
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        port: ${{ secrets.PORT }}
-        password: ${{ secrets.PASSWORD }}
-        script: cd lost-and-found && docker compose -f docker-compose.prod.yml up --build -d
+#          nohup docker stack deploy -c<(docker compose -f docker-compose.prod.yml --env-file .env.local up) lost-and-found &
