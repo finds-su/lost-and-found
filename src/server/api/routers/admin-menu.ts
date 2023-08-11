@@ -17,7 +17,8 @@ export const adminMenuRouter = createTRPCRouter({
         socialNetworks: {
           select: {
             socialNetwork: true,
-            link: true,
+            username: true,
+            externalId: true,
           },
         },
       },

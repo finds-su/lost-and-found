@@ -22,7 +22,7 @@ declare module 'next-auth' {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface User extends PrismaUser {}
+  interface User extends Omit<PrismaUser, 'secretSocialNetworksAuthPayload'> {}
 }
 
 /**

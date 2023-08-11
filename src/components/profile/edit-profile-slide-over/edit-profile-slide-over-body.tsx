@@ -1,7 +1,7 @@
 import { useFormContext } from 'react-hook-form'
 import TextArea from '@/components/form/text-area'
 import Input from '@/components/form/input'
-import { SocialNetwork as PrismaSocialNetwork } from '@prisma/client'
+import { SocialNetwork as PrismaSocialNetwork, SocialNetwork } from '@prisma/client'
 import { api, type RouterOutputs, type RouterInputs } from '@/lib/api'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -161,7 +161,7 @@ const ConnectDialog = ({
   )
 }
 
-const SocialNetwork = ({
+const SocialNetworkDialog = ({
   network,
   user,
 }: {
@@ -192,7 +192,7 @@ const SocialNetwork = ({
   const handleUnlinkClick = () => {
     if (confirm(`Вы уверены, что хотите отвязать аккаунт ${network}?`)) {
       unlinkSocialNetworkMutation.mutate({
-        socialNetwork: network,
+        socialNetwork: SocialNetwork[network as keyof typeof SocialNetwork],
       })
     }
   }
@@ -318,8 +318,8 @@ export default function EditProfileSlideOverBody({ user }: EditProfileSlideOverB
         </div>
         <div className='space-y-6 px-4 py-4 sm:px-6'>
           <div className='flex flex-col space-y-4'>
-            <SocialNetwork network='TELEGRAM' user={user} />
-            <SocialNetwork network='VK' user={user} />
+            <SocialNetworkDialog network='TELEGRAM' user={user} />
+            <SocialNetworkDialog network='VK' user={user} />
           </div>
         </div>
       </div>
