@@ -30,7 +30,7 @@ jobs:
           docker build \
           --build-arg NEXT_PUBLIC_CDN_ENDPOINT_URL=https://mn-lost-and-found.storage.yandexcloud.net \
           --build-arg NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS=.png,.jpg,.jpeg,.gif,.webp \
-          --build-arg NEXT_PUBLIC_NEXTAUTH_URL=https://finds.mirea.ninja \
+          --build-arg NEXT_PUBLIC_NEXTAUTH_URL=https://finds.su \
           --pull \
           --cache-from cr.yandex/${{ env.CR_REGISTRY }}/${{ env.CR_IMAGE_FRONTEND }}:latest \
           --label "org.image.title=${{ github.repository }}" \
