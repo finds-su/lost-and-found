@@ -8,6 +8,8 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.10"
 jupyter = "^1.0.0"
+python-dotenv = "^1.0.0"
+toml = "^0.10.2"
 
 
 [build-system]
