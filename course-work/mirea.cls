@@ -34,16 +34,16 @@
 
 \linespread{1.3} % полуторный межстрочный интервал
 
-\RequirePackage{tocbibind} % Добавить раздел содержание в содержание
+%\RequirePackage{tocbibind} % Добавить раздел оглавление в оглавление
 
-% Настройка заголовка содержания
-\addto\captionsrussian{\renewcommand{\contentsname}{Содержание}}
+% Настройка заголовка оглавления
+\addto\captionsrussian{\renewcommand{\contentsname}{Оглавление}}
 
 \RequirePackage[normalem]{ulem} % underline some lines
 
 
 \RequirePackage{tocloft}
-% Формат содержания
+% Формат оглавления
 \renewcommand\cfttoctitlefont{\hfill\fontsize{16pt}{16pt}\selectfont\bfseries\MakeUppercase}
 \renewcommand\cftaftertoctitle{\hfill\hfill}
 
@@ -53,7 +53,7 @@
 %\setlength{\cftsubsecindent}{0pt} % Remove indent in toc for \subsection
 %\setlength{\cftsubsubsecindent}{0pt} % Remove indent in toc for \subsubsection
 
-\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}} % Добавить точки у разделов в содержании
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}} % Добавить точки у разделов в оглавлении
 
 \RequirePackage{placeins} % Команда \FloatBarrier для размещения плавающего окружения в пределах раздела, подраздела, пункта
 
@@ -103,7 +103,7 @@
 	Р\or С\or Т\or У\or Ф\or Х\or Ц\or 
 	Ш\or Э\or Ю\or Я\else\@ctrerr\fi}
 
-\patchcmd{\l@section}{#1}{\textnormal{\uppercase{#1}}}{}{} % Разделы в содержании без выделения жирным, в верхнем регистре
+\patchcmd{\l@section}{#1}{\textnormal{\uppercase{#1}}}{}{} % Разделы в оглавлении без выделения жирным, в верхнем регистре
 \patchcmd{\l@section}{#2}{\textnormal{#2}}{}{} % Страницы без выделения жирным
 
 \apptocmd{\appendix}{
@@ -138,7 +138,7 @@
 \addto\captionsrussian{\renewcommand{\refname}{СПИСОК ИСПОЛЬЗОВАННЫХ ИСТОЧНИКОВ}}
 
 \BeforeBeginEnvironment{thebibliography}{
-	\phantomsection % для корректной ссылки в содержании 
+	\phantomsection % для корректной ссылки в оглавлении 
 	\makeatletter
 	\renewcommand*{\@biblabel}[1]{#1.\hfill} % формат нумерации списка
 	\makeatother}
