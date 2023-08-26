@@ -50,7 +50,7 @@ class TextGeneration:
 
     @staticmethod
     def instruct(request_text: str,
-                 instruction: str,
+                 instruction: str = "",
                  temperature: float = 0.5,
                  max_tokens: int = 2000,
                  retries: int = 1):
