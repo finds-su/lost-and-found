@@ -33,56 +33,16 @@ export default function CreatePost(props: CreatePostProps) {
     images: [],
   })
 
+  const generateImageCaption = api.posts.generateImageCaption.useMutation({
+    onSuccess: (data) => {
+      if (data) {
+        setPost((current) => ({ ...current, name: data }))
+      }
+    },
+    onError: (error) => errorToast(error.message),
+  })
+
   const inputs: { name: string; className: string; input: React.ReactNode }[] = [
-    {
-      name: 'Название',
-      className: 'sm:col-span-3',
-      input: (
-        <input
-          maxLength={100}
-          value={post.name}
-          onChange={(e) => setPost((value) => ({ ...value, name: e.target.value }))}
-          type='text'
-          name='name'
-          id='name'
-          className='block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
-        />
-      ),
-    },
-    {
-      name: 'Описание',
-      className: 'sm:col-span-6',
-      input: (
-        <textarea
-          maxLength={512}
-          value={post.description}
-          onChange={(e) => setPost((value) => ({ ...value, description: e.target.value }))}
-          id='description'
-          name='description'
-          rows={3}
-          className='block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
-          placeholder='Место нахождения или контакнтая информация'
-        />
-      ),
-    },
-    {
-      name: 'Кампус',
-      className: 'sm:col-span-3',
-      input: (
-        <select
-          id='campus'
-          name='campus'
-          onChange={(e) => setPost({ ...post, campus: e.target.value as PrismaCamus })}
-          className='block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
-        >
-          {Object.values(PrismaCamus).map((value, index) => (
-            <option key={index} value={value}>
-              {Campus[value]}
-            </option>
-          ))}
-        </select>
-      ),
-    },
     {
       name: 'Фотографии',
       className: 'sm:col-span-6',
@@ -132,6 +92,86 @@ export default function CreatePost(props: CreatePostProps) {
             </ul>
           </div>
         </>
+      ),
+    },
+    {
+      name: 'Название',
+      className: 'sm:col-span-3',
+      input: (
+        <div className='flex flex-col sm:flex-row'>
+          <input
+            maxLength={100}
+            value={post.name}
+            onChange={(e) => setPost((value) => ({ ...value, name: e.target.value }))}
+            type='text'
+            name='name'
+            id='name'
+            className='w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
+          />
+          {post.images.length > 0 && (
+            <button
+              onClick={(e) => {
+                e.preventDefault()
+                void generateImageCaption.mutateAsync({ imageUrl: post.images[0] ?? '' })
+              }}
+              disabled={generateImageCaption.isLoading}
+              className={`mt-2 inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 sm:ml-3 sm:mt-0 ${
+                generateImageCaption.isLoading ? 'cursor-not-allowed' : ''
+              }`}
+            >
+              {generateImageCaption.isLoading ? (
+                <span>Загрузка...</span>
+              ) : (
+                <>
+                  <Image
+                    src='/icons/magic-icon.svg'
+                    alt=''
+                    width={10}
+                    height={10}
+                    className='mr-1 h-5 w-5'
+                    style={{ filter: 'invert(1)' }}
+                    aria-hidden='true'
+                  />
+                  Сгенерировать
+                </>
+              )}
+            </button>
+          )}
+        </div>
+      ),
+    },
+    {
+      name: 'Описание',
+      className: 'sm:col-span-6',
+      input: (
+        <textarea
+          maxLength={512}
+          value={post.description}
+          onChange={(e) => setPost((value) => ({ ...value, description: e.target.value }))}
+          id='description'
+          name='description'
+          rows={3}
+          className='block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
+          placeholder='Место нахождения или контактная информация'
+        />
+      ),
+    },
+    {
+      name: 'Кампус',
+      className: 'sm:col-span-3',
+      input: (
+        <select
+          id='campus'
+          name='campus'
+          onChange={(e) => setPost({ ...post, campus: e.target.value as PrismaCamus })}
+          className='block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
+        >
+          {Object.values(PrismaCamus).map((value, index) => (
+            <option key={index} value={value}>
+              {Campus[value]}
+            </option>
+          ))}
+        </select>
       ),
     },
   ]

@@ -51,7 +51,7 @@ export default function GridFilter(props: GridFilterProps) {
           <div className='flex items-center justify-between'>
             <Menu as='div' className='relative inline-block text-left'>
               <div>
-                <Menu.Button className='inline-flex rounded-lg px-2 py-0.5 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none'>
+                <Menu.Button className='inline-flex rounded-lg bg-gray-100 px-2 py-0.5 text-sm font-medium text-gray-700 hover:text-gray-500 focus:outline-none'>
                   {sortOptions.find((option) => option.id === enabledSortOption)?.name}
                   <ChevronUpDownIcon className='-mr-1 ml-2 mt-0.5 h-5 w-5' aria-hidden='true' />
                 </Menu.Button>

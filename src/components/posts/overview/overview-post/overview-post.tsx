@@ -111,59 +111,62 @@ export default function OverviewPost(props: OverviewPostProps) {
                 ))}
               </dl>
             </div>
-            <div className='grid grid-cols-2 grid-rows-2 gap-4 sm:gap-6 lg:gap-8'>
+            <div className='mt-6 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2 lg:grid-cols-3'>
               {post?.images.map((image, index) => (
                 <DynamicOverviewPostImage key={index} src={image} />
               ))}
             </div>
 
-            <div className='mt-6 flex flex-col space-y-2'>
-              <h3 className='text-xl font-medium text-gray-900'>Связаться</h3>
-              <div className='flex space-x-2'>
-                {findSocialNetworkByName('VK', post.user.socialNetworks) && (
-                  <Link
-                    className='flex items-center space-x-2 rounded-md bg-blue-600 px-4 py-2 pl-1 pr-2 text-white hover:bg-blue-700'
-                    href={getLinkForSocialNetwork(
-                      'VK',
-                      findSocialNetworkByName('VK', post.user.socialNetworks).externalId || '',
-                      findSocialNetworkByName('VK', post.user.socialNetworks).username || '',
-                    )}
-                  >
-                    <Image
-                      src='/icons/vk.svg'
-                      alt=''
-                      width={20}
-                      height={20}
-                      className='mr-2'
-                      style={{ filter: 'invert(1)' }}
-                    />
-                    ВКонтакте
-                  </Link>
-                )}
+            {post.user.socialNetworks.length > 0 && (
+              <div className='mt-6 flex flex-col space-y-2'>
+                <h3 className='text-xl font-medium text-gray-900'>Связаться</h3>
+                <div className='flex space-x-2'>
+                  {findSocialNetworkByName('VK', post.user.socialNetworks) && (
+                    <Link
+                      className='flex items-center space-x-2 rounded-md bg-blue-600 px-4 py-2 pl-1 pr-2 text-white hover:bg-blue-700'
+                      href={getLinkForSocialNetwork(
+                        'VK',
+                        findSocialNetworkByName('VK', post.user.socialNetworks).externalId || '',
+                        findSocialNetworkByName('VK', post.user.socialNetworks).username || '',
+                      )}
+                    >
+                      <Image
+                        src='/icons/vk.svg'
+                        alt=''
+                        width={20}
+                        height={20}
+                        className='mr-2'
+                        style={{ filter: 'invert(1)' }}
+                      />
+                      ВКонтакте
+                    </Link>
+                  )}
 
-                {findSocialNetworkByName('TELEGRAM', post.user.socialNetworks) && (
-                  <Link
-                    className='flex items-center space-x-2 rounded-md bg-blue-600 px-4 py-2 pl-1 pr-2 text-white hover:bg-blue-700'
-                    href={getLinkForSocialNetwork(
-                      'TELEGRAM',
-                      findSocialNetworkByName('TELEGRAM', post.user.socialNetworks).externalId ||
-                        '',
-                      findSocialNetworkByName('TELEGRAM', post.user.socialNetworks).username || '',
-                    )}
-                  >
-                    <Image
-                      src='/icons/telegram.svg'
-                      alt=''
-                      width={20}
-                      height={20}
-                      className='mr-2'
-                      style={{ filter: 'invert(1)' }}
-                    />
-                    Telegram
-                  </Link>
-                )}
+                  {findSocialNetworkByName('TELEGRAM', post.user.socialNetworks) && (
+                    <Link
+                      className='flex items-center space-x-2 rounded-md bg-blue-600 px-4 py-2 pl-1 pr-2 text-white hover:bg-blue-700'
+                      href={getLinkForSocialNetwork(
+                        'TELEGRAM',
+                        findSocialNetworkByName('TELEGRAM', post.user.socialNetworks).externalId ||
+                          '',
+                        findSocialNetworkByName('TELEGRAM', post.user.socialNetworks).username ||
+                          '',
+                      )}
+                    >
+                      <Image
+                        src='/icons/telegram.svg'
+                        alt=''
+                        width={20}
+                        height={20}
+                        className='mr-2'
+                        style={{ filter: 'invert(1)' }}
+                      />
+                      Telegram
+                    </Link>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </>
         ) : (
           <div className='flex h-110 flex-col items-center justify-center text-center font-medium text-gray-700 lg:h-130'>

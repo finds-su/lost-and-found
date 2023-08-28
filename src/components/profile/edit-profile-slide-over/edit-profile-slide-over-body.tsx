@@ -9,6 +9,7 @@ import { XMarkIcon, LinkIcon } from '@heroicons/react/24/outline'
 import { Dialog, Transition } from '@headlessui/react'
 import React from 'react'
 import successToast from '@/components/toasts/success-toast'
+import { useRouter } from 'next/router'
 
 const ConnectDialog = ({
   network,
@@ -21,18 +22,24 @@ const ConnectDialog = ({
 }) => {
   const generateVkAuthLink = api.users.generateVkAuthLink.useQuery<
     RouterOutputs['users']['generateVkAuthLink']
-  >(undefined, {})
+  >(undefined, {
+    refetchOnWindowFocus: false,
+  })
 
   const generateTgAuthLink = api.users.generateTgAuthLink.useQuery<
     RouterOutputs['users']['generateTgAuthLink']
-  >(undefined, {})
+  >(undefined, {
+    refetchOnWindowFocus: false,
+  })
+
+  const dialogButtonRef = React.useRef(null)
 
   return (
     <Transition.Root show={open} as={React.Fragment}>
       <Dialog
         as='div'
-        static
-        className='fixed inset-0 z-10 overflow-y-auto'
+        className='relative z-10'
+        initialFocus={dialogButtonRef}
         open={open}
         onClose={setOpen}
       >
@@ -146,6 +153,7 @@ const ConnectDialog = ({
                       className='inline-flex w-full justify-center rounded-md border border-transparent bg-green-500 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm'
                       onClick={() => setOpen(false)}
                       target='_blank'
+                      type='button'
                     >
                       <LinkIcon className='-ml-1 mr-2 h-5 w-5' aria-hidden='true' />
                       Открыть бота
@@ -161,7 +169,7 @@ const ConnectDialog = ({
   )
 }
 
-const SocialNetworkDialog = ({
+const SocialNetworkDialogButton = ({
   network,
   user,
 }: {
@@ -192,7 +200,7 @@ const SocialNetworkDialog = ({
   const handleUnlinkClick = () => {
     if (confirm(`Вы уверены, что хотите отвязать аккаунт ${network}?`)) {
       unlinkSocialNetworkMutation.mutate({
-        socialNetwork: SocialNetwork[network as keyof typeof SocialNetwork],
+        socialNetwork: network as PrismaSocialNetwork,
       })
     }
   }
@@ -211,10 +219,16 @@ const SocialNetworkDialog = ({
         </div>
         {isLinked ? (
           <>
-            <Link className='cursor-pointer text-blue-500 underline' href={socialNetworkUserUrl}>
+            <Link
+              className='cursor-pointer text-blue-500 underline'
+              href={socialNetworkUserUrl}
+              target='_blank'
+              type='button'
+            >
               {socialNetworkUserUrl}
             </Link>
             <button
+              type='button'
               className='rounded-xl bg-red-500 px-2 py-2 text-white'
               onClick={handleUnlinkClick}
             >
@@ -223,6 +237,7 @@ const SocialNetworkDialog = ({
           </>
         ) : (
           <button
+            type='button'
             className='rounded-xl bg-green-500 px-4 py-2 text-white'
             onClick={handleLinkClick}
           >
@@ -240,10 +255,7 @@ export interface EditProfileSlideOverBodyProps {
 
 export default function EditProfileSlideOverBody({ user }: EditProfileSlideOverBodyProps) {
   const editProfileForm = useFormContext<RouterInputs['users']['editUser']>()
-  // const editProfileSocialNetworks = useFieldArray({
-  //   control: editProfileForm.control,
-  //   name: 'socialNetworks',
-  // })
+
   const editableProfileAttributes: {
     name: string
     register: ReturnType<typeof editProfileForm.register>
@@ -275,8 +287,6 @@ export default function EditProfileSlideOverBody({ user }: EditProfileSlideOverB
       error: editProfileForm.formState.errors.userInfo?.message,
     },
   ]
-
-  console.log(user?.socialNetworks)
 
   return (
     <>
@@ -318,8 +328,8 @@ export default function EditProfileSlideOverBody({ user }: EditProfileSlideOverB
         </div>
         <div className='space-y-6 px-4 py-4 sm:px-6'>
           <div className='flex flex-col space-y-4'>
-            <SocialNetworkDialog network='TELEGRAM' user={user} />
-            <SocialNetworkDialog network='VK' user={user} />
+            <SocialNetworkDialogButton network='TELEGRAM' user={user} />
+            <SocialNetworkDialogButton network='VK' user={user} />
           </div>
         </div>
       </div>

@@ -167,10 +167,10 @@ export default function Layout(props: LayoutProps) {
           )}
         </Disclosure>
 
-        <header className='bg-white'>
+        <header>
           {SocialNetworksConnectionBanner()}
-          <div className='m:px-6 mx-auto max-w-7xl px-4 pb-4 pt-8 sm:px-6'>
-            <h1 className='text-xl font-bold leading-tight text-gray-900'>{props.title}</h1>
+          <div className='mx-auto max-w-7xl px-4 pb-4 pt-8 sm:px-8'>
+            <h1 className='text-2xl font-bold leading-tight text-gray-900'>{props.title}</h1>
           </div>
         </header>
         <div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>

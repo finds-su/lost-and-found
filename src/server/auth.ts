@@ -22,7 +22,7 @@ declare module 'next-auth' {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface User extends Omit<PrismaUser, 'secretSocialNetworksAuthPayload'> {}
+  interface User extends PrismaUser {}
 }
 
 /**
@@ -67,6 +67,7 @@ export const authOptions: NextAuthOptions = {
           image: profile.avatar_url,
           isBlocked: false,
           blockReason: null,
+          secretSocialNetworksAuthPayload: '',
         }
       },
     }),
@@ -92,6 +93,7 @@ export const authOptions: NextAuthOptions = {
           image: profile.picture,
           isBlocked: false,
           blockReason: null,
+          secretSocialNetworksAuthPayload: '',
         }
       },
     }),
