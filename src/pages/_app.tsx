@@ -66,7 +66,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
           font-family: ${inter.style.fontFamily};
         }
       `}</style>
-      <main className={`${inter.variable} font-sans`}>
+      <main className={`${inter.variable} bg-background font-sans`}>
         <NextNProgress height={3} color='#0ea5e9' options={{ showSpinner: false, speed: 500 }} />
         {getLayout ? (
           getLayout(<Component {...pageProps} />, { error, session })

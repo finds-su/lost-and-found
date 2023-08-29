@@ -104,6 +104,13 @@ services:
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
       TELEGRAM_BOT_NAME: ${TELEGRAM_BOT_NAME}
 
+  image-caption:
+    build: ./image-caption
+    networks:
+      - application
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+
 networks:
   application:
   db:

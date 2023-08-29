@@ -131,6 +131,7 @@ export const usersRouter = createTRPCRouter({
             },
             update: {
               externalId: socialNetwork.externalId,
+              username: socialNetwork.username,
             },
             create: {
               userId: ctx.session.user.id,

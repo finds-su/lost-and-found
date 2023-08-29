@@ -1,0 +1,10 @@
+transformers==4.31.0
+fastapi==0.99.1
+uvicorn[standard]
+langchain==0.0.263
+python-multipart==0.0.6
+pillow==10.0.0
+tokenizer==3.4.2
+tiktoken==0.4.0
+openai==0.27.8
+chromadb==0.4.5

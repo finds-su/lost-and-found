@@ -41,6 +41,8 @@ export const env = createEnv({
       .transform((value) => Number(value)),
     TELEGRAM_BOT_TOKEN: z.string().min(1),
     TELEGRAM_BOT_NAME: z.string().min(1),
+
+    IMAGE_CAPTION_HOST: z.string().url(),
   },
   /*
    * Environment variables available on the client (and server).
@@ -95,6 +97,8 @@ export const env = createEnv({
     VK_GROUP_ID: process.env.VK_GROUP_ID,
     TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
     TELEGRAM_BOT_NAME: process.env.TELEGRAM_BOT_NAME,
+
+    IMAGE_CAPTION_HOST: process.env.IMAGE_CAPTION_HOST,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.

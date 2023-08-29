@@ -1,10 +1,16 @@
-import { createTRPCRouter, protectedProcedure, publicProcedure } from '@/server/api/trpc'
+import {
+  aIRateLimiter,
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from '@/server/api/trpc'
 import { z } from 'zod'
 import { prisma } from '@/server/db'
 import { Campus, LostAndFoundItemStatus, PostItemReason, Role } from '@prisma/client'
 import { SortOption } from '@/lib/types/sort-option'
 import { TRPCError } from '@trpc/server'
 import { slugify } from 'transliteration'
+import { generateImageCaption } from '@/server/image-captions'
 
 export const postsRouter = createTRPCRouter({
   infinitePosts: publicProcedure
@@ -319,6 +325,17 @@ export const postsRouter = createTRPCRouter({
           slug: `${slugify(name)}.${post.id}`,
         },
       })
+    }),
+
+  generateImageCaption: protectedProcedure
+    .input(
+      z.object({
+        imageUrl: z.string(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      // await aIRateLimiter(ctx.session.user.id)
+      return await generateImageCaption(input.imageUrl)
     }),
 })
 
