@@ -58,7 +58,6 @@ jobs:
       - name: Build and Push Image of Image Caption
         run: |
           cd image-caption
-          .
           docker build \
           --pull \
           --cache-from cr.yandex/${{ env.CR_REGISTRY }}/${{ env.CR_IMAGE_IMAGE_CAPTION }}:latest \
