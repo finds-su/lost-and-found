@@ -57,8 +57,9 @@ jobs:
           yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
       - name: Build and Push Image of Image Caption
         run: |
+          cd image-caption
+          .
           docker build \
-          --file image-caption/Dockerfile \
           --pull \
           --cache-from cr.yandex/${{ env.CR_REGISTRY }}/${{ env.CR_IMAGE_IMAGE_CAPTION }}:latest \
           --label "org.image.title=${{ github.repository }}" \
