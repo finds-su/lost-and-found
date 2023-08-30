@@ -148,6 +148,7 @@ services:
       VK_GROUP_ID: ${VK_GROUP_ID}
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
       TELEGRAM_BOT_NAME: ${TELEGRAM_BOT_NAME}
+      IMAGE_CAPTION_HOST: ${IMAGE_CAPTION_HOST}
     labels:
       - traefik.enable=true
       - traefik.constraint-label-stack=lost-and-found
