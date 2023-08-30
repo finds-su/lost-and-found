@@ -172,6 +172,13 @@ services:
       - traefik.http.routers.lost_and_found_https.tls=true
       - traefik.http.routers.lost_and_found_https.tls.certresolver=${CERT_RESOLVER}
 
+  image-caption:
+    build: ./image-caption
+    networks:
+      - application
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      
 networks:
   gateway:
   application:
