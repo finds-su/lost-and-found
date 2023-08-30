@@ -3,15 +3,12 @@ import { Fragment, useRef } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import useEditProfileStore from '@/lib/hooks/store/edit-profile-store'
 import errorToast from '@/components/toasts/error-toast'
-import { api, RouterOutputs, type RouterInputs } from '@/lib/api'
+import { api, type RouterInputs } from '@/lib/api'
 import { useRouter } from 'next/router'
 import successToast from '@/components/toasts/success-toast'
 import { FormProvider, useForm } from 'react-hook-form'
 import EditProfileSlideOverAvatar from '@/components/profile/edit-profile-slide-over/edit-profile-slide-over-avatar'
 import EditProfileSlideOverBody from '@/components/profile/edit-profile-slide-over/edit-profile-slide-over-body'
-import { Session } from 'next-auth'
-import { type GetServerSideProps } from 'next'
-import { getServerAuthSession } from '@/server/auth'
 
 interface EditProfileSlideOverProps {
   user: RouterInputs['users']['editUser']
@@ -36,10 +33,6 @@ export default function EditProfileSlideOver(props: EditProfileSlideOverProps) {
     onError: (error) => errorToast(error.message),
   })
   const cancelButtonRef = useRef(null)
-
-  const generateVkAuthLink = api.users.generateVkAuthLink.useQuery<
-    RouterOutputs['users']['generateVkAuthLink']
-  >(undefined, {})
 
   return (
     <>

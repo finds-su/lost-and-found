@@ -12,7 +12,7 @@ interface PostCardProps {
 
 export const PostCard: React.FC<PostCardProps> = ({ post, displayReasonLabel = false }) => {
   return (
-    <div className='overflow-hidden bg-white transition duration-150 ease-in-out hover:border-gray-300'>
+    <div className='overflow-hidden transition duration-150 ease-in-out hover:border-gray-300'>
       <div className='aspect-w-1 aspect-h-1'>
         <Image
           src={post.images[0] ?? '/assets/placeholder.svg'}

@@ -24,7 +24,7 @@ export default function ProfileBody() {
     if (router.query.open === 'socials') {
       editProfile.open()
     }
-  }, [router.query.open])
+  }, [editProfile, router.query.open])
 
   const profileInfo: { name: string; value: ReactNode }[] = user
     ? [

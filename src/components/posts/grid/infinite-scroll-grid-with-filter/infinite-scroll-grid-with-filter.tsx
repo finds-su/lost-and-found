@@ -8,13 +8,13 @@ import useScrollGridStore from '@/lib/hooks/store/scroll-grids-store'
 import Spinner from '@/components/spinner'
 import { PostCard } from '../../post-card'
 
-function ScrollGridLoader() {
-  return (
+function ScrollGridLoader({ visible }: { visible: boolean }) {
+  return visible ? (
     <p className='col-span-2 flex justify-center py-5 text-center md:col-span-4'>
       <Spinner />
       <span className='sr-only'>Загрузка...</span>
     </p>
-  )
+  ) : null
 }
 
 function ScrollGridEndMessage() {
@@ -74,7 +74,7 @@ export default function InfiniteScrollGridWithFilter({
         dataLength={posts.length}
         next={fetchMoreData}
         hasMore={hasMore}
-        loader={<ScrollGridLoader />}
+        loader={<ScrollGridLoader visible={postsQuery.isFetchingNextPage && posts.length > 0} />}
         className='grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-4'
       >
         {posts.map((post) => (
@@ -83,7 +83,7 @@ export default function InfiniteScrollGridWithFilter({
           </div>
         ))}
       </InfiniteScroll>
-      {postsQuery.isFetched && posts.length === 0 && <ScrollGridEndMessage />}
+      {(postsQuery.isFetched && (!posts || posts.length === 0) && <ScrollGridEndMessage />) || null}
     </>
   )
 }
