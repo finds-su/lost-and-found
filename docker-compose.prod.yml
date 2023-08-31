@@ -115,6 +115,13 @@ services:
       - redis
 
   app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        NEXT_PUBLIC_CDN_ENDPOINT_URL: ${NEXT_PUBLIC_CDN_ENDPOINT_URL}
+        NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS: ${NEXT_PUBLIC_S3_UPLOAD_RESOURCE_FORMATS}
+        NEXT_PUBLIC_NEXTAUTH_URL: ${NEXT_PUBLIC_NEXTAUTH_URL}
     image: cr.yandex/crpi1cf1kcv47hpc0aq7/lost-and-found:latest
     depends_on:
       db:
