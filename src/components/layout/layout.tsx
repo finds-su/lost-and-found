@@ -102,8 +102,8 @@ export default function Layout(props: LayoutProps) {
                       <Image
                         priority
                         className='h-8 w-8'
-                        src='/assets/ninja-logo-black.svg'
-                        alt='Mirea Ninja'
+                        src='/assets/mirea.svg'
+                        alt='РТУ МИРЭА'
                         width={10}
                         height={10}
                       />

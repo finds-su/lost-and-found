@@ -25,12 +25,18 @@ export const env = createEnv({
     REDIS_URL: z.string().url(),
     NEXTAUTH_SECRET: z.string().min(1),
     NEXTAUTH_URL: z.string().url(),
-    MIREA_CLIENT_ID: z.string().min(1),
-    MIREA_CLIENT_SECRET: z.string().min(1),
-    GOOGLE_CLIENT_ID: z.string().min(1),
-    GOOGLE_CLIENT_SECRET: z.string().min(1),
-    GITHUB_CLIENT_ID: z.string().min(1),
-    GITHUB_CLIENT_SECRET: z.string().min(1),
+
+    MIREA_CLIENT_ID: z.string().nullish(),
+    MIREA_CLIENT_SECRET: z.string().nullish(),
+
+    MIREA_LKS_CLIENT_ID: z.string().nullish(),
+    MIREA_LKS_CLIENT_SECRET: z.string().nullish(),
+
+    GOOGLE_CLIENT_ID: z.string().nullish(),
+    GOOGLE_CLIENT_SECRET: z.string().nullish(),
+
+    GITHUB_CLIENT_ID: z.string().nullish(),
+    GITHUB_CLIENT_SECRET: z.string().nullish(),
 
     CALLBACK_URL: z.string().url(),
     CALLBACK_SECRET_URL_STRING: z.string().min(1).max(32),
@@ -86,6 +92,10 @@ export const env = createEnv({
 
     MIREA_CLIENT_ID: process.env.MIREA_CLIENT_ID,
     MIREA_CLIENT_SECRET: process.env.MIREA_CLIENT_SECRET,
+
+    MIREA_LKS_CLIENT_ID: process.env.MIREA_LKS_CLIENT_ID,
+    MIREA_LKS_CLIENT_SECRET: process.env.MIREA_LKS_CLIENT_SECRET,
+
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
