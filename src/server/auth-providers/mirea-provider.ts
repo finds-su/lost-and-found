@@ -19,14 +19,14 @@ export default function MireaProvider(options: MireaProviderConfig): Provider {
     name: 'RTU MIREA',
     type: 'oauth',
     version: '2.0',
-    accessTokenUrl: 'https://login.mirea.ru/oauth2/v1/token',
-    requestTokenUrl: 'https://login.mirea.ru/oauth2/v1/token',
+    accessTokenUrl: 'https://login.mirea.ru/oauth2/v1/token/',
+    requestTokenUrl: 'https://login.mirea.ru/oauth2/v1/token/',
     authorization: {
-      url: 'https://login.mirea.ru/oauth2/v1/authorize',
+      url: 'https://login.mirea.ru/oauth2/v1/authorize/',
       params: { scope: 'basic' },
     },
     token: {
-      url: 'https://login.mirea.ru/oauth2/v1/token',
+      url: 'https://login.mirea.ru/oauth2/v1/token/',
     },
     userinfo: {
       url: 'https://login.mirea.ru/resources/v1/userinfo',
