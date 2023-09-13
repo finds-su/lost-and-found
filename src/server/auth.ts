@@ -18,10 +18,11 @@ import MireaProvider from './auth-providers/mirea-provider'
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
 declare module 'next-auth' {
-  type AuthUser = Omit<PrismaUser, 'secretSocialNetworksAuthPayload'>
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface User extends Omit<PrismaUser, 'secretSocialNetworksAuthPayload'> {}
 
   interface Session {
-    user: AuthUser
+    user: User
   }
 }
 
