@@ -18,12 +18,11 @@ import MireaProvider from './auth-providers/mirea-provider'
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
 declare module 'next-auth' {
-  interface Session {
-    user: User
-  }
+  type AuthUser = Omit<PrismaUser, 'secretSocialNetworksAuthPayload'>
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface User extends PrismaUser {}
+  interface Session {
+    user: AuthUser
+  }
 }
 
 const getProviders = () => {
@@ -45,7 +44,6 @@ const getProviders = () => {
             image: profile.avatar_url,
             isBlocked: false,
             blockReason: null,
-            secretSocialNetworksAuthPayload: '',
           }
         },
       }),
@@ -88,7 +86,6 @@ const getProviders = () => {
             image: profile.picture,
             isBlocked: false,
             blockReason: null,
-            secretSocialNetworksAuthPayload: '',
           }
         },
       }),

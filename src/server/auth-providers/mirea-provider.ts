@@ -45,7 +45,6 @@ export default function MireaProvider(options: MireaProviderConfig): Provider {
         image: null,
         isBlocked: false,
         blockReason: null,
-        secretSocialNetworksAuthPayload: '',
       }
     },
     clientId: options.clientId,

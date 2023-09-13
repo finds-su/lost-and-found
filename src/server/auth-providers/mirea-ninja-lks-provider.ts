@@ -51,7 +51,6 @@ export default function MireaNinjaLksProvider(options: MireaNinjaLKSProviderConf
         image: 'https://lk.mirea.ru' + profile.arUser.PHOTO,
         isBlocked: false,
         blockReason: null,
-        secretSocialNetworksAuthPayload: '',
       }
     },
     clientId: options.clientId,
