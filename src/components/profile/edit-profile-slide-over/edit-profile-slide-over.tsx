@@ -96,8 +96,7 @@ export default function EditProfileSlideOver(props: EditProfileSlideOverProps) {
                             )
                           }
                         >
-                          <div className='pb-6'>
-                            <div className='h-24 bg-blue-700 sm:h-20 lg:h-28' />
+                          <div className='mt-4 px-4 py-5 sm:mt-0'>
                             <EditProfileSlideOverAvatar user={user} />
                           </div>
                           <EditProfileSlideOverBody user={user} />

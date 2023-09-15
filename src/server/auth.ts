@@ -9,6 +9,7 @@ import { Role } from '@prisma/client'
 import { env } from '@/env.mjs'
 import { type User as PrismaUser } from '@prisma/client'
 import MireaNinjaLksProvider from '@/server/auth-providers/mirea-ninja-lks-provider'
+import MireaProvider from './auth-providers/mirea-provider'
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -17,12 +18,82 @@ import MireaNinjaLksProvider from '@/server/auth-providers/mirea-ninja-lks-provi
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
 declare module 'next-auth' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface User extends Omit<PrismaUser, 'secretSocialNetworksAuthPayload'> {}
+
   interface Session {
     user: User
   }
+}
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface User extends PrismaUser {}
+const getProviders = () => {
+  const providers = []
+  if (env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET) {
+    providers.push(
+      GithubProvider({
+        clientId: env.GITHUB_CLIENT_ID,
+        clientSecret: env.GITHUB_CLIENT_SECRET,
+        async profile(profile: GithubProfile) {
+          return {
+            id: profile.id.toString(),
+            name: profile.name ?? profile.login,
+            nickname: await nicknameValidation(profile.login),
+            email: profile.email,
+            emailVerified: new Date(),
+            userInfo: null,
+            role: Role.USER,
+            image: profile.avatar_url,
+            isBlocked: false,
+            blockReason: null,
+          }
+        },
+      }),
+    )
+  }
+  if (env.MIREA_CLIENT_ID && env.MIREA_CLIENT_SECRET) {
+    providers.push(
+      MireaProvider({ clientId: env.MIREA_CLIENT_ID, clientSecret: env.MIREA_CLIENT_SECRET }),
+    )
+  }
+  if (env.MIREA_LKS_CLIENT_ID && env.MIREA_LKS_CLIENT_SECRET) {
+    providers.push(
+      MireaNinjaLksProvider({
+        clientId: env.MIREA_LKS_CLIENT_ID,
+        clientSecret: env.MIREA_LKS_CLIENT_SECRET,
+      }),
+    )
+  }
+  if (env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET) {
+    providers.push(
+      GoogleProvider({
+        clientId: env.GOOGLE_CLIENT_ID,
+        clientSecret: env.GOOGLE_CLIENT_SECRET,
+        authorization: {
+          params: {
+            prompt: 'consent',
+            access_type: 'offline',
+            response_type: 'code',
+          },
+        },
+        async profile(profile: GoogleProfile) {
+          return {
+            id: profile.sub,
+            name: profile.name,
+            nickname: await nicknameValidation(profile.email.split('@')[0] ?? ''),
+            email: profile.email,
+            emailVerified: new Date(),
+            userInfo: null,
+            role: Role.USER,
+            image: profile.picture,
+            isBlocked: false,
+            blockReason: null,
+          }
+        },
+      }),
+    )
+  }
+
+  return providers
 }
 
 /**
@@ -52,52 +123,7 @@ export const authOptions: NextAuthOptions = {
   },
   adapter: PrismaAdapter(prisma),
   providers: [
-    GithubProvider({
-      clientId: env.GITHUB_CLIENT_ID,
-      clientSecret: env.GITHUB_CLIENT_SECRET,
-      async profile(profile: GithubProfile) {
-        return {
-          id: profile.id.toString(),
-          name: profile.name ?? profile.login,
-          nickname: await nicknameValidation(profile.login),
-          email: profile.email,
-          emailVerified: new Date(),
-          userInfo: null,
-          role: Role.USER,
-          image: profile.avatar_url,
-          isBlocked: false,
-          blockReason: null,
-          secretSocialNetworksAuthPayload: '',
-        }
-      },
-    }),
-    GoogleProvider({
-      clientId: env.GOOGLE_CLIENT_ID,
-      clientSecret: env.GOOGLE_CLIENT_SECRET,
-      authorization: {
-        params: {
-          prompt: 'consent',
-          access_type: 'offline',
-          response_type: 'code',
-        },
-      },
-      async profile(profile: GoogleProfile) {
-        return {
-          id: profile.sub,
-          name: profile.name,
-          nickname: await nicknameValidation(profile.email.split('@')[0] ?? ''),
-          email: profile.email,
-          emailVerified: new Date(),
-          userInfo: null,
-          role: Role.USER,
-          image: profile.picture,
-          isBlocked: false,
-          blockReason: null,
-          secretSocialNetworksAuthPayload: '',
-        }
-      },
-    }),
-    MireaNinjaLksProvider({ clientId: env.MIREA_CLIENT_ID, clientSecret: env.MIREA_CLIENT_SECRET }),
+    ...getProviders(),
     /**
      * ...add more providers here.
      *

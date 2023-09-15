@@ -21,8 +21,8 @@ type MireaNinjaLKSProviderConfig = Required<Pick<OAuthConfig<any>, 'clientId' | 
 
 export default function MireaNinjaLksProvider(options: MireaNinjaLKSProviderConfig): Provider {
   return {
-    id: 'mirea',
-    name: 'Mirea',
+    id: 'lks',
+    name: 'LKS',
     type: 'oauth',
     version: '2.0',
     accessTokenUrl: 'https://auth-app.mirea.ru/oauth/token',
@@ -51,7 +51,6 @@ export default function MireaNinjaLksProvider(options: MireaNinjaLKSProviderConf
         image: 'https://lk.mirea.ru' + profile.arUser.PHOTO,
         isBlocked: false,
         blockReason: null,
-        secretSocialNetworksAuthPayload: '',
       }
     },
     clientId: options.clientId,

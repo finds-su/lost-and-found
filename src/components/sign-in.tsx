@@ -1,30 +1,52 @@
 import Image from 'next/image'
-import { signIn } from 'next-auth/react'
+import { signIn, getProviders } from 'next-auth/react'
 import Logo from '@/components/logo'
 import { useRouter } from 'next/router'
+import { useQuery } from '@tanstack/react-query'
+import React from 'react'
+
+const getProviderImage = (provider: string) => {
+  switch (provider) {
+    case 'mirea':
+      return '/assets/providers/mirea.svg'
+    case 'google':
+      return '/assets/providers/google.svg'
+    case 'github':
+      return '/assets/providers/github.svg'
+    default:
+      return '/assets/providers/mirea.svg'
+  }
+}
 
 export default function SignIn() {
   const router = useRouter()
   const callbackUrl = router.query.callbackUrl ? (router.query.callbackUrl as string) : '/'
   const error = router.query.error
 
-  const providers: { id: string; name: string; image: string }[] = [
-    {
-      id: 'mirea',
-      name: 'ЛКC',
-      image: '/assets/providers/mirea.svg',
+  const [providers, setProviders] = React.useState<{ id: string; name: string; image: string }[]>(
+    [],
+  )
+
+  useQuery(
+    ['providers'],
+    async () => {
+      const providers = await getProviders()
+      return providers
     },
     {
-      id: 'google',
-      name: 'Google',
-      image: '/assets/providers/google.svg',
+      onSuccess: (providers) => {
+        if (!providers) return
+
+        setProviders(
+          Object.values(providers).map((provider) => ({
+            id: provider.id,
+            name: provider.name,
+            image: getProviderImage(provider.id),
+          })),
+        )
+      },
     },
-    {
-      id: 'github',
-      name: 'GitHub',
-      image: '/assets/providers/github.svg',
-    },
-  ]
+  )
 
   return (
     <main className='h-screen bg-white'>

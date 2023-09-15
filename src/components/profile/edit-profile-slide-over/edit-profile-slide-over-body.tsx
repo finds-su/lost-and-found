@@ -214,7 +214,13 @@ const SocialNetworkDialogButton = ({
       <ConnectDialog network={network} open={open} setOpen={setOpen} />
       <div className='flex flex-row items-center justify-between space-x-8 md:justify-start'>
         <div className='flex flex-row items-center space-x-2'>
-          <Image src={`/icons/${network}.svg`} alt={network} width={24} height={24} color='blue' />
+          <Image
+            src={`/icons/${network.toLowerCase()}.svg`}
+            alt={network}
+            width={24}
+            height={24}
+            color='blue'
+          />
           <span>{socialNetworkName}</span>
         </div>
         {isLinked ? (

@@ -354,6 +354,7 @@ async function searchPosts(query: string, reason: PostItemReason) {
         name: true,
         description: true,
         reason: true,
+        slug: true,
       },
       where: {
         status,
@@ -376,6 +377,7 @@ async function searchPosts(query: string, reason: PostItemReason) {
         name: true,
         description: true,
         reason: true,
+        slug: true,
       },
       where: {
         status,
