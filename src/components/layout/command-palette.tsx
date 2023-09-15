@@ -52,10 +52,10 @@ export default function CommandPalette({ open, setOpen }: CommandPaletteProps) {
     },
   )
 
-  const fetchPost = (postId: number, reason: PostItemReason) => {
+  const fetchPost = (slug: string, reason: PostItemReason) => {
     return () => {
       setOpen(false)
-      void router.push(reason === PostItemReason.FOUND ? `/finds/${postId}` : `/losses/${postId}`)
+      void router.push(reason === PostItemReason.FOUND ? `/finds/${slug}` : `/losses/${slug}`)
     }
   }
 
@@ -65,13 +65,13 @@ export default function CommandPalette({ open, setOpen }: CommandPaletteProps) {
 
   const onSelectedOptionEnter = (
     open: boolean,
-    selectedOption: { id: number; reason: PostItemReason } | null,
+    selectedOption: { id: number; slug: string; reason: PostItemReason } | null,
   ) => {
     return (event: KeyboardEventHandler<HTMLInputElement>) => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       if (open && selectedOption && event.key === 'Enter') {
-        fetchPost(selectedOption.id, selectedOption.reason)()
+        fetchPost(selectedOption.slug, selectedOption.reason)()
       }
     }
   }
@@ -117,7 +117,11 @@ export default function CommandPalette({ open, setOpen }: CommandPaletteProps) {
                         onKeyDown={(e: any) =>
                           onSelectedOptionEnter(
                             open,
-                            activeOption as { id: number; reason: PostItemReason } | null,
+                            activeOption as {
+                              id: number
+                              slug: string
+                              reason: PostItemReason
+                            } | null,
                             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                           )(e)
                         }
@@ -156,7 +160,7 @@ export default function CommandPalette({ open, setOpen }: CommandPaletteProps) {
                                 <Combobox.Option
                                   key={item.id}
                                   value={item}
-                                  onClick={fetchPost(item.id, item.reason)}
+                                  onClick={fetchPost(item.slug, item.reason)}
                                   className={({ active }) =>
                                     classNames(
                                       'cursor-default select-none px-4 py-2',
