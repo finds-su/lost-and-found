@@ -12,6 +12,7 @@ import OverviewPostSkeleton from '@/components/posts/overview/overview-post/over
 import Image from 'next/image'
 import Link from 'next/link'
 import useSessionStore from '@/lib/hooks/store/session-store'
+import { IsInStoragePlaceBanner } from '../../is-in-storage-place-banner'
 
 interface OverviewPostProps {
   reason: PostItemReason
@@ -110,6 +111,7 @@ export default function OverviewPost(props: OverviewPostProps) {
                   </div>
                 ))}
               </dl>
+              <div className='mt-6'>{post.isInStoragePlace && <IsInStoragePlaceBanner />}</div>
             </div>
             <div className='mt-6 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-2 lg:grid-cols-3'>
               {post?.images.map((image, index) => (

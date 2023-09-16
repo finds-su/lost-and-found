@@ -36,6 +36,7 @@ export const postsRouter = createTRPCRouter({
           campus: true,
           images: true,
           created: true,
+          isInStoragePlace: true,
           user: {
             select: {
               name: true,
@@ -78,6 +79,7 @@ export const postsRouter = createTRPCRouter({
         images: z.array(z.string()).max(10),
         campus: z.nativeEnum(Campus),
         reason: z.nativeEnum(PostItemReason),
+        isInStoragePlace: z.boolean().nullable(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -89,6 +91,7 @@ export const postsRouter = createTRPCRouter({
           campus: input.campus,
           images: input.images,
           userId: ctx.session.user.id,
+          isInStoragePlace: input.isInStoragePlace,
         },
       })
 
@@ -115,6 +118,7 @@ export const postsRouter = createTRPCRouter({
         created: true,
         expires: true,
         reason: true,
+        isInStoragePlace: true,
         user: {
           select: {
             id: true,
@@ -149,6 +153,7 @@ export const postsRouter = createTRPCRouter({
           status: true,
           created: true,
           expires: true,
+          isInStoragePlace: true,
           user: {
             select: {
               id: true,
@@ -288,10 +293,11 @@ export const postsRouter = createTRPCRouter({
         description: z.string().max(512, 'Описание должно содержать не больше 512 символов'),
         images: z.array(z.string()).max(10),
         campus: z.nativeEnum(Campus),
+        isInStoragePlace: z.boolean().nullable(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { postId, reason, name, description, images, campus } = input
+      const { postId, reason, name, description, images, campus, isInStoragePlace } = input
       const post = await prisma.lostAndFoundItem.findFirst({
         where: {
           id: postId,
@@ -322,6 +328,7 @@ export const postsRouter = createTRPCRouter({
           description,
           images,
           campus,
+          isInStoragePlace,
           slug: `${slugify(name)}.${post.id}`,
         },
       })

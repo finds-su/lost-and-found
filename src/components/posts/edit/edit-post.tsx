@@ -2,35 +2,42 @@ import Window from '@/components/form/window'
 import { Campus } from '@/lib/campus'
 import { api } from '@/lib/api'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import successToast from '@/components/toasts/success-toast'
 import errorToast from '@/components/toasts/error-toast'
 import { LostAndFoundItem, PostItemReason } from '@prisma/client'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import DynamicDropzone from '@/components/form/dropzone/dynamic-dropzone'
 import Image from 'next/image'
+import { IsInStoragePlaceChecker } from '../is-in-storage-place-checker'
 
 type Post = Pick<
   LostAndFoundItem,
-  'id' | 'name' | 'description' | 'campus' | 'images' | 'reason' | 'slug'
+  'id' | 'name' | 'description' | 'campus' | 'images' | 'reason' | 'slug' | 'isInStoragePlace'
 >
 
 export default function EditPost() {
   const router = useRouter()
   const [post, setPost] = useState<Post>()
 
+  const [isInStoragePlace, setIsInStoragePlace] = useState<boolean | null>(null)
+
   const id = Number(router.query.id)
   const postQuery = api.posts.getPost.useQuery(
     { postId: id },
     {
-      onSuccess: (data) => {
+      onSuccess: (data: Post) => {
         if (data) {
           setPost(data)
+          setIsInStoragePlace(data.isInStoragePlace)
         }
       },
       onError: (error) => {
         errorToast(error.message)
       },
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
     },
   )
 
@@ -59,30 +66,35 @@ export default function EditPost() {
     }
   }, [post])
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const formData = new FormData(event.currentTarget)
-    const name = formData.get('name') as string
-    const description = formData.get('description') as string
-    const campus = formData.get('campus') as string
+  const handleSubmit = useCallback(
+    async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault()
+      const formData = new FormData(event.currentTarget)
+      const name = formData.get('name') as string
+      const description = formData.get('description') as string
+      const campus = formData.get('campus') as string
+      const inStoragePlace = campus === 'V78' ? isInStoragePlace : null
 
-    if (!post) {
-      errorToast('При обновлении поста произошла ошибка!')
-      return
-    }
+      if (!post) {
+        errorToast('При обновлении поста произошла ошибка!')
+        return
+      }
 
-    const newPost = await mutatePost.mutateAsync({
-      postId: post?.id,
-      reason: post?.reason,
-      campus: campus as keyof typeof Campus,
-      images,
-      name,
-      description,
-    })
+      const newPost = await mutatePost.mutateAsync({
+        postId: post?.id,
+        reason: post?.reason,
+        campus: campus as keyof typeof Campus,
+        images,
+        name,
+        description,
+        isInStoragePlace: inStoragePlace,
+      })
 
-    successToast('Пост успешно обновлен!')
-    await router.push(`/${post.reason === 'LOST' ? 'losses' : 'finds'}/${newPost.slug}`)
-  }
+      successToast('Пост успешно обновлен!')
+      await router.push(`/${post.reason === 'LOST' ? 'losses' : 'finds'}/${newPost.slug}`)
+    },
+    [isInStoragePlace],
+  )
 
   const handleDelete = async () => {
     if (!post) {
@@ -155,6 +167,11 @@ export default function EditPost() {
                     </select>
                   </div>
                 </div>
+
+                <IsInStoragePlaceChecker
+                  checked={isInStoragePlace ?? false}
+                  onChange={(checked) => setIsInStoragePlace(checked)}
+                />
 
                 <div className='sm:col-span-6'>
                   <label

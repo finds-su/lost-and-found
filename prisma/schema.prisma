@@ -86,19 +86,20 @@ enum Role {
 }
 
 model LostAndFoundItem {
-  id             Int                              @id @default(autoincrement())
-  name           String                           @db.VarChar(100)
-  description    String                           @default("") @db.VarChar(512)
-  campus         Campus
-  reason         PostItemReason
-  status         LostAndFoundItemStatus           @default(ACTIVE)
-  images         String[]
-  userId         String
-  user           User                             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  socialNetworks LostAndFoundItemSocialNetworks[]
-  created        DateTime                         @default(now())
-  expires        DateTime                         @default(dbgenerated("NOW() + interval '1 week'"))
-  slug           String                           @unique @default(cuid())
+  id               Int                              @id @default(autoincrement())
+  name             String                           @db.VarChar(100)
+  description      String                           @default("") @db.VarChar(512)
+  campus           Campus
+  reason           PostItemReason
+  status           LostAndFoundItemStatus           @default(ACTIVE)
+  images           String[]
+  userId           String
+  user             User                             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  socialNetworks   LostAndFoundItemSocialNetworks[]
+  created          DateTime                         @default(now())
+  expires          DateTime                         @default(dbgenerated("NOW() + interval '1 week'"))
+  slug             String                           @unique @default(cuid())
+  isInStoragePlace Boolean?                         @default(false)
 
   @@index([name], type: Hash)
 }

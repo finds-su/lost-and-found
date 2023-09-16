@@ -1,6 +1,6 @@
 import Window from '@/components/form/window'
 import { type LostAndFoundItem, type PostItemReason, Campus as PrismaCamus } from '@prisma/client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { Campus } from '@/lib/campus'
 import { api } from '@/lib/api'
@@ -8,6 +8,8 @@ import errorToast from '@/components/toasts/error-toast'
 import DynamicDropzone from '@/components/form/dropzone/dynamic-dropzone'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
+import Link from 'next/link'
+import { IsInStoragePlaceChecker } from '../is-in-storage-place-checker'
 
 interface CreatePostProps {
   name: string
@@ -16,7 +18,10 @@ interface CreatePostProps {
   routePushOnExit: string
 }
 
-type Post = Pick<LostAndFoundItem, 'name' | 'description' | 'campus' | 'images'>
+type Post = Pick<
+  LostAndFoundItem,
+  'name' | 'description' | 'campus' | 'images' | 'isInStoragePlace'
+>
 
 export default function CreatePost(props: CreatePostProps) {
   const router = useRouter()
@@ -31,6 +36,7 @@ export default function CreatePost(props: CreatePostProps) {
     description: '',
     campus: PrismaCamus.V78,
     images: [],
+    isInStoragePlace: null,
   })
 
   const generateImageCaption = api.posts.generateImageCaption.useMutation({
@@ -41,6 +47,12 @@ export default function CreatePost(props: CreatePostProps) {
     },
     onError: (error) => errorToast(error.message),
   })
+
+  useEffect(() => {
+    if (post.campus !== PrismaCamus.V78) {
+      setPost((current) => ({ ...current, isInStoragePlace: null }))
+    }
+  }, [post.campus])
 
   const inputs: { name: string; className: string; input: React.ReactNode }[] = [
     {
@@ -194,6 +206,12 @@ export default function CreatePost(props: CreatePostProps) {
                   <div className='mt-1'>{field.input}</div>
                 </div>
               ))}
+              {post.campus === PrismaCamus.V78 && (
+                <IsInStoragePlaceChecker
+                  checked={post.isInStoragePlace ?? false}
+                  onChange={(checked) => setPost({ ...post, isInStoragePlace: checked })}
+                />
+              )}
             </div>
           </div>
         </div>
