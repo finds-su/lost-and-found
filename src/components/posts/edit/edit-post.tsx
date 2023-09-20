@@ -93,18 +93,22 @@ export default function EditPost() {
     [isInStoragePlace, post, images],
   )
 
-  const handleDelete = async () => {
-    if (!post) {
-      errorToast('При удалении поста произошла ошибка!')
-      return
-    }
+  const handleDelete = useCallback(
+    async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      event.preventDefault()
+      if (!post) {
+        errorToast('При удалении поста произошла ошибка!')
+        return
+      }
 
-    if (confirm('Вы уверены, что хотите удалить этот пост?')) {
-      await deletePost.mutateAsync({ postId: post.id })
-      successToast('Пост успешно удален!')
-      await router.push('/')
-    }
-  }
+      if (confirm('Вы уверены, что хотите удалить этот пост?')) {
+        await deletePost.mutateAsync({ postId: post.id })
+        successToast('Пост успешно удален!')
+        await router.push('/')
+      }
+    },
+    [post],
+  )
 
   return (
     <Window>
@@ -219,7 +223,7 @@ export default function EditPost() {
                 </button>
                 <button
                   type='button'
-                  onClick={void handleDelete}
+                  onClick={(event) => void handleDelete(event)}
                   className='inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
                 >
                   Удалить
