@@ -35,9 +35,6 @@ export default function EditPost() {
       onError: (error) => {
         errorToast(error.message)
       },
-      refetchOnWindowFocus: false,
-      refetchOnMount: false,
-      refetchOnReconnect: false,
     },
   )
 
@@ -93,28 +90,32 @@ export default function EditPost() {
       successToast('Пост успешно обновлен!')
       await router.push(`/${post.reason === 'LOST' ? 'losses' : 'finds'}/${newPost.slug}`)
     },
-    [isInStoragePlace],
+    [isInStoragePlace, post, images],
   )
 
-  const handleDelete = async () => {
-    if (!post) {
-      errorToast('При удалении поста произошла ошибка!')
-      return
-    }
+  const handleDelete = useCallback(
+    async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      event.preventDefault()
+      if (!post) {
+        errorToast('При удалении поста произошла ошибка!')
+        return
+      }
 
-    if (confirm('Вы уверены, что хотите удалить этот пост?')) {
-      await deletePost.mutateAsync({ postId: post.id })
-      successToast('Пост успешно удален!')
-      await router.push('/')
-    }
-  }
+      if (confirm('Вы уверены, что хотите удалить этот пост?')) {
+        await deletePost.mutateAsync({ postId: post.id })
+        successToast('Пост успешно удален!')
+        await router.push('/')
+      }
+    },
+    [post],
+  )
 
   return (
     <Window>
       <div className='mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:max-w-7xl lg:px-8'>
-        {postQuery.isLoading ? (
-          <p>Загрузка...</p>
-        ) : post ? (
+        {postQuery.isLoading && <p>Загрузка...</p>}
+
+        {post && (
           <>
             <form onSubmit={(event) => void handleSubmit(event)}>
               <div className='grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-6'>
@@ -222,7 +223,7 @@ export default function EditPost() {
                 </button>
                 <button
                   type='button'
-                  onClick={void handleDelete}
+                  onClick={(event) => void handleDelete(event)}
                   className='inline-flex items-center rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
                 >
                   Удалить
@@ -230,7 +231,9 @@ export default function EditPost() {
               </div>
             </form>
           </>
-        ) : (
+        )}
+
+        {postQuery.isFetched && !post && (
           <div className='flex h-110 flex-col items-center justify-center text-center font-medium text-gray-700 lg:h-130'>
             Пост не найден
           </div>

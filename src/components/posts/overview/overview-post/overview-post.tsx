@@ -74,7 +74,9 @@ export default function OverviewPost(props: OverviewPostProps) {
 
   const findSocialNetworkByName = (network: string, socialNetworks: Record<string, any>[]) => {
     return socialNetworks.find(
-      (socialNetwork) => socialNetwork.socialNetwork === network,
+      (socialNetwork) =>
+        socialNetwork.socialNetwork === network &&
+        (socialNetwork.externalId || socialNetwork.username),
     ) as Record<string, string>
   }
 
@@ -121,7 +123,7 @@ export default function OverviewPost(props: OverviewPostProps) {
 
             {post.user.socialNetworks.length > 0 && (
               <div className='mt-6 flex flex-col space-y-2'>
-                <h3 className='text-xl font-medium text-gray-900'>Связаться</h3>
+                <h3 className='text-xl font-medium text-gray-900'>Связаться с автором</h3>
                 <div className='flex space-x-2'>
                   {findSocialNetworkByName('VK', post.user.socialNetworks) && (
                     <Link
