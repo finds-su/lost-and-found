@@ -112,9 +112,9 @@ export default function EditPost() {
   return (
     <Window>
       <div className='mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:max-w-7xl lg:px-8'>
-        {postQuery.isLoading ? (
-          <p>Загрузка...</p>
-        ) : post ? (
+        {postQuery.isLoading && <p>Загрузка...</p>}
+
+        {post && (
           <>
             <form onSubmit={(event) => void handleSubmit(event)}>
               <div className='grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-6'>
@@ -230,7 +230,9 @@ export default function EditPost() {
               </div>
             </form>
           </>
-        ) : (
+        )}
+
+        {postQuery.isFetched && !post && (
           <div className='flex h-110 flex-col items-center justify-center text-center font-medium text-gray-700 lg:h-130'>
             Пост не найден
           </div>

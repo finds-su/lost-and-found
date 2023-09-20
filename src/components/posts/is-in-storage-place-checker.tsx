@@ -35,19 +35,19 @@ export const IsInStoragePlaceChecker: React.FC<IsInStoragePlaceCheckerProps> = (
             <p className='mt-1 text-gray-500'>
               А-131 - это аудитория, в которую вы можете отнести находку. Сотрудники студенческого
               союза заберут её и позаботятся о том, чтобы с предметом ничего не случилось! <br />
-              <span className='font-bold'>Мы рекомендуем отнести найденный предмет туда</span>
+              <span className='font-semibold'>Мы рекомендуем отнести найденный предмет туда</span>
             </p>
             <Link
               target='_blank'
               href='https://map.mirea.ru/?object=2318:6159'
-              className='mt-1 flex items-center text-blue-600 hover:text-blue-500'
+              className='mt-1 flex items-center text-sm text-blue-600 hover:text-blue-500'
             >
               Аудитория на карте <AiOutlineRight className='ml-1 h-4 w-4 text-blue-600' />
             </Link>
           </div>
         </div>
       </div>
-      <AiOutlineSafety className='m-3 h-12 w-12 text-blue-600' aria-hidden='true' />
+      <AiOutlineSafety className='m-3 hidden h-12 w-12 text-blue-600 sm:block' aria-hidden='true' />
     </div>
   )
 }
