@@ -57,7 +57,7 @@ export default async function generateRssFeed() {
   })
 
   allPosts.forEach((post) => {
-    const url = `${siteURL}/${post.slug}`
+    const url = `${siteURL}/${post.reason === 'LOST' ? 'losses' : 'finds'}/${post.slug}`
     feed.addItem({
       title: post.name,
       id: post.id.toString(),
