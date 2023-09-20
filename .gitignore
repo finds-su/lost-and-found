@@ -54,5 +54,5 @@ yarn-error.log*
 /public/workbox-*.js.map
 
 # RSS
-/public/rss/feed.xml
-/public/rss/feed.json
+feed.xml
+feed.json
