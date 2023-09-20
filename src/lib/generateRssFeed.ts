@@ -82,6 +82,11 @@ export default async function generateRssFeed() {
     })
   })
 
-  fs.writeFileSync('./public/rss/feed.xml', feed.rss2())
-  fs.writeFileSync('./public/rss/feed.json', feed.json1())
+  const xml = feed.rss2()
+  const json = feed.json1()
+
+  fs.writeFileSync('./public/rss/feed.xml', xml)
+  fs.writeFileSync('./public/rss/feed.json', json)
+
+  return { xml, json }
 }
