@@ -18,7 +18,7 @@ export const IsInStoragePlaceBanner: React.FC = () => {
               href='https://map.mirea.ru/?object=2318:6159'
               className='mt-1 flex items-center text-blue-600 hover:text-blue-500'
             >
-              Аудиторя на карте <AiOutlineRight className='ml-1 h-4 w-4 text-blue-600' />
+              Аудитория на карте <AiOutlineRight className='ml-1 h-4 w-4 text-blue-600' />
             </Link>
           </div>
         </div>
