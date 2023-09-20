@@ -77,7 +77,7 @@ export default async function generateRssFeed() {
           link: `${siteURL}/u/${post.user.nickname}`,
         },
       ],
-
+      image: post.images[0] || undefined,
       date: post.created,
     })
   })
