@@ -86,8 +86,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 
-RUN chmod 777 ./public/rss/feed.xml
-RUN chmod 777 ./public/rss/feed.json
+RUN chmod -R 777 ./public/rss
 
 EXPOSE 3000
 ENV PORT 3000
