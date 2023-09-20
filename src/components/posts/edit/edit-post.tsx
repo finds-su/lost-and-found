@@ -35,9 +35,6 @@ export default function EditPost() {
       onError: (error) => {
         errorToast(error.message)
       },
-      refetchOnWindowFocus: false,
-      refetchOnMount: false,
-      refetchOnReconnect: false,
     },
   )
 
@@ -93,7 +90,7 @@ export default function EditPost() {
       successToast('Пост успешно обновлен!')
       await router.push(`/${post.reason === 'LOST' ? 'losses' : 'finds'}/${newPost.slug}`)
     },
-    [isInStoragePlace],
+    [isInStoragePlace, post, images],
   )
 
   const handleDelete = async () => {
