@@ -19,7 +19,7 @@ export default function EditProfileSlideOver(props: EditProfileSlideOverProps) {
   const utils = api.useContext()
   const { user } = props
   const editProfile = useEditProfileStore()
-  const editProfileForm = useForm<RouterInputs['users']['editUser']>({
+  const editProfileForm = useForm<Omit<RouterInputs['users']['editUser'], 'socialNetworks'>>({
     values: user,
     // resolver: zodResolver(zodEditUserInput),
   })
@@ -57,7 +57,7 @@ export default function EditProfileSlideOver(props: EditProfileSlideOverProps) {
 
           <div className='fixed inset-0 overflow-hidden'>
             <div className='absolute inset-0 overflow-hidden'>
-              <div className='pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16'>
+              <div className='pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-0 sm:pl-16'>
                 <Transition.Child
                   as={Fragment}
                   enter='transform transition ease-in-out duration-500 sm:duration-700'
