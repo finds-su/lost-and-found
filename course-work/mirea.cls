@@ -37,7 +37,7 @@
 %\RequirePackage{tocbibind} % Добавить раздел оглавление в оглавление
 
 % Настройка заголовка оглавления
-\addto\captionsrussian{\renewcommand{\contentsname}{Оглавление}}
+\addto\captionsrussian{\renewcommand{\contentsname}{Содержание}}
 
 \RequirePackage[normalem]{ulem} % underline some lines
 
