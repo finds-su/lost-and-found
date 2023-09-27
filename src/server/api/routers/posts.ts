@@ -11,12 +11,13 @@ import { SortOption } from '@/lib/types/sort-option'
 import { TRPCError } from '@trpc/server'
 import { slugify } from 'transliteration'
 import { generateImageCaption } from '@/server/image-captions'
+import generateRssFeed from '@/lib/generateRssFeed'
 
 export const postsRouter = createTRPCRouter({
   infinitePosts: publicProcedure
     .input(
       z.object({
-        limit: z.number().min(1).max(16, 'Превышен лимит запроса').nullish(),
+        limit: z.number().min(1).max(100, 'Превышен лимит запроса').nullish(),
         cursor: z.number().nullish(), // <-- "cursor" needs to exist, but can be any type
         reason: z.nativeEnum(PostItemReason).or(z.literal('ANY')), // if ANY, then we don't filter by reason
         orderByCreationDate: z.nativeEnum(SortOption),
@@ -103,6 +104,8 @@ export const postsRouter = createTRPCRouter({
           slug: `${slugify(newPost.name)}.${newPost.id}`,
         },
       })
+
+      await generateRssFeed()
     }),
 
   getPost: publicProcedure.input(z.object({ postId: z.number() })).query(async ({ input }) => {
@@ -282,6 +285,8 @@ export const postsRouter = createTRPCRouter({
           status: LostAndFoundItemStatus.BLOCKED,
         },
       })
+
+      await generateRssFeed()
     }),
 
   updatePost: protectedProcedure
@@ -319,7 +324,7 @@ export const postsRouter = createTRPCRouter({
         })
       }
 
-      return await prisma.lostAndFoundItem.update({
+      const updated = await prisma.lostAndFoundItem.update({
         where: {
           id: post.id,
         },
@@ -332,6 +337,10 @@ export const postsRouter = createTRPCRouter({
           slug: `${slugify(name)}.${post.id}`,
         },
       })
+
+      await generateRssFeed()
+
+      return updated
     }),
 
   generateImageCaption: protectedProcedure
