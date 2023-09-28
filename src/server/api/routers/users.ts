@@ -120,28 +120,29 @@ export const usersRouter = createTRPCRouter({
         },
       })
 
-      if (input.socialNetworks) {
-        input.socialNetworks.map(async (socialNetwork) => {
-          await prisma.userSocialNetwork.upsert({
-            where: {
-              userId_socialNetwork: {
-                userId: ctx.session.user.id,
-                socialNetwork: socialNetwork.socialNetwork,
-              },
-            },
-            update: {
-              externalId: socialNetwork.externalId,
-              username: socialNetwork.username,
-            },
-            create: {
-              userId: ctx.session.user.id,
-              socialNetwork: socialNetwork.socialNetwork,
-              externalId: socialNetwork.externalId,
-              username: socialNetwork.username,
-            },
-          })
-        })
-      }
+      // Social networks linking with other services
+      // if (input.socialNetworks) {
+      //   input.socialNetworks.map(async (socialNetwork) => {
+      //     await prisma.userSocialNetwork.upsert({
+      //       where: {
+      //         userId_socialNetwork: {
+      //           userId: ctx.session.user.id,
+      //           socialNetwork: socialNetwork.socialNetwork,
+      //         },
+      //       },
+      //       update: {
+      //         externalId: socialNetwork.externalId,
+      //         username: socialNetwork.username,
+      //       },
+      //       create: {
+      //         userId: ctx.session.user.id,
+      //         socialNetwork: socialNetwork.socialNetwork,
+      //         externalId: socialNetwork.externalId,
+      //         username: socialNetwork.username,
+      //       },
+      //     })
+      //   })
+      // }
     })
   }),
 

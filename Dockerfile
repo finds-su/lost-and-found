@@ -68,13 +68,16 @@ ENV NEXT_TELEMETRY_DISABLED 1
 # Prisma telemetry disabled
 ENV CHECKPOINT_DISABLE 1
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/next.config.mjs ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/prisma ./prisma
+
+RUN chmod -R 777 ./public/rss
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
 # TODO: Remove this line after fix
 # https://github.com/vercel/next.js/issues/48077
