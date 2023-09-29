@@ -95,7 +95,9 @@ export default function OverviewPost(props: OverviewPostProps) {
                   </h2>
                   <PostStatusBadge status={post.status} />
                 </div>
-                {post.user.id === session?.user.id && (
+                {(post.user.id === session?.user.id ||
+                  session?.user.role === 'ADMIN' ||
+                  session?.user.role === 'MODERATOR') && (
                   <Link
                     className='text-sm font-medium text-blue-600 hover:underline dark:text-blue-500'
                     href={`/edit/${post.id}`}
