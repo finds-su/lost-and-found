@@ -322,10 +322,6 @@ export const postsRouter = createTRPCRouter({
       const post = await prisma.lostAndFoundItem.findFirst({
         where: {
           id: postId,
-          userId:
-            ctx.session.user.role !== Role.ADMIN && ctx.session.user.role !== Role.MODERATOR
-              ? ctx.session.user.id
-              : undefined,
           reason,
         },
       })
