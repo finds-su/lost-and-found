@@ -324,8 +324,8 @@ export const postsRouter = createTRPCRouter({
           id: postId,
           userId:
             ctx.session.user.role !== Role.ADMIN && ctx.session.user.role !== Role.MODERATOR
-              ? undefined
-              : ctx.session.user.id,
+              ? ctx.session.user.id
+              : undefined,
           reason,
         },
       })
