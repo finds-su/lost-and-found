@@ -8,8 +8,8 @@ import { serve } from 'inngest/next'
 const inngest = new Inngest({ name: 'finds.mirea.ru' })
 
 const deleteOutdatedPosts = inngest.createFunction(
-  { name: 'Delete outdated posts every day at 00:00' },
-  { cron: '0 0 * * *' },
+  { name: 'Delete outdated posts every day at 18:00' },
+  { cron: '0 18 * * *' },
   async () => {
     const allPosts = await prisma.lostAndFoundItem.findMany({
       select: {
