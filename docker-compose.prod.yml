@@ -160,6 +160,7 @@ services:
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
       TELEGRAM_BOT_NAME: ${TELEGRAM_BOT_NAME}
       IMAGE_CAPTION_HOST: ${IMAGE_CAPTION_HOST}
+      INNGEST_SIGNING_KEY: ${INNGEST_SIGNING_KEY}
     labels:
       - traefik.enable=true
       - traefik.constraint-label-stack=lost-and-found
