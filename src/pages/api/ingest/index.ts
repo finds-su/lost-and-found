@@ -1,5 +1,5 @@
 import { prisma } from '@/server/db'
-import { LostAndFoundItemStatus, SocialNetwork } from '@prisma/client'
+import { LostAndFoundItemStatus, PostItemReason, SocialNetwork } from '@prisma/client'
 import VkApi from '@/server/messengers-api/vk'
 import TelegramApi from '@/server/messengers-api/telegram'
 import { Inngest } from 'inngest'
@@ -20,6 +20,8 @@ const deleteOutdatedPosts = inngest.createFunction(
             id: true,
           },
         },
+        slug: true,
+        reason: true,
         status: true,
         expires: true,
       },
@@ -40,7 +42,10 @@ const deleteOutdatedPosts = inngest.createFunction(
         },
       })
 
-      const notificationText = `Ваше объявление "${post.name}" было удалено, так как срок его действия истёк.`
+      const postUrl = `https://finds.mirea.ru/${
+        post.reason === PostItemReason.FOUND ? `finds/${post.slug}` : `losses/${post.slug}`
+      }`
+      const notificationText = `Ваше объявление "${post.name}" было удалено, так как срок его действия истёк. Если объявление ещё актуально, пожалуйста, опубликуйте его снова.\n\n${postUrl}`
 
       for (const userSocialNetwork of userSocialNetworks) {
         switch (userSocialNetwork.socialNetwork) {
