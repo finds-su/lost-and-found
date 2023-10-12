@@ -2,7 +2,7 @@
 % !TeX encoding = UTF-8
 % !TeX root     = course-work.tex
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{mirea-prog-lang}[2023/09/01 KB-14 course work]
+\ProvidesClass{mirea-prog-lang}[2023/09/01 KB-14 final classification work]
 
 
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{extarticle}} 
@@ -34,16 +34,16 @@
 
 \linespread{1.3} % полуторный межстрочный интервал
 
-%\RequirePackage{tocbibind} % Добавить раздел оглавление в оглавление
+%\RequirePackage{tocbibind} % Добавить раздел содержание в содержание
 
-% Настройка заголовка оглавления
+% Настройка заголовка содержания
 \addto\captionsrussian{\renewcommand{\contentsname}{Содержание}}
 
 \RequirePackage[normalem]{ulem} % underline some lines
 
 
 \RequirePackage{tocloft}
-% Формат оглавления
+% Формат содержания
 \renewcommand\cfttoctitlefont{\hfill\fontsize{16pt}{16pt}\selectfont\bfseries\MakeUppercase}
 \renewcommand\cftaftertoctitle{\hfill\hfill}
 
@@ -53,7 +53,7 @@
 %\setlength{\cftsubsecindent}{0pt} % Remove indent in toc for \subsection
 %\setlength{\cftsubsubsecindent}{0pt} % Remove indent in toc for \subsubsection
 
-\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}} % Добавить точки у разделов в оглавлении
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}} % Добавить точки у разделов в содержании
 
 \RequirePackage{placeins} % Команда \FloatBarrier для размещения плавающего окружения в пределах раздела, подраздела, пункта
 
@@ -62,6 +62,8 @@
 \titleformat{\section}{\FloatBarrier\parskip=6pt\filcenter\fontsize{16pt}{16pt}\selectfont\bfseries\uppercase}{\thesection}{.5em}{}
 \titleformat{\subsection}{\FloatBarrier\filcenter\bfseries}{\thesubsection}{.5em}{}
 \titleformat{\subsubsection}{\FloatBarrier\filcenter\bfseries}{\thesubsubsection}{.5em}{}
+%\titlespacing*{\subsection}{0pt}{*2}{0pt} % Remove indent for \subsection 
+%\titlespacing*{\subsubsection}{0pt}{*2}{0pt} % Remove indent for \subsubsection 
 
 
 \AddToHook{cmd/section/before}{\clearpage} % Начинать раздел с новой страницы
@@ -84,7 +86,7 @@
 
 % Форматирование списков
 \RequirePackage{enumitem}
-\setlist{itemsep=0pt, parsep=0pt} % Возможна опция wide
+\setlist{itemsep=0pt, parsep=0pt, topsep=0mm, } % Возможна опция wide
 \makeatletter
 \AddEnumerateCounter*{\asbuk}{\c@asbuk}
 \makeatother
@@ -103,7 +105,7 @@
 	Р\or С\or Т\or У\or Ф\or Х\or Ц\or 
 	Ш\or Э\or Ю\or Я\else\@ctrerr\fi}
 
-\patchcmd{\l@section}{#1}{\textnormal{\uppercase{#1}}}{}{} % Разделы в оглавлении без выделения жирным, в верхнем регистре
+\patchcmd{\l@section}{#1}{\textnormal{\uppercase{#1}}}{}{} % Разделы в содержании без выделения жирным, в верхнем регистре
 \patchcmd{\l@section}{#2}{\textnormal{#2}}{}{} % Страницы без выделения жирным
 
 \apptocmd{\appendix}{
@@ -138,7 +140,7 @@
 \addto\captionsrussian{\renewcommand{\refname}{СПИСОК ИСПОЛЬЗОВАННЫХ ИСТОЧНИКОВ}}
 
 \BeforeBeginEnvironment{thebibliography}{
-	\phantomsection % для корректной ссылки в оглавлении 
+	\phantomsection % для корректной ссылки в содержании 
 	\makeatletter
 	\renewcommand*{\@biblabel}[1]{#1.\hfill} % формат нумерации списка
 	\makeatother}
