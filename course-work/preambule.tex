@@ -32,5 +32,15 @@
 \hyphenpenalty=10000
 \exhyphenpenalty=100
 
+\usepackage{multirow}
+
+\usepackage{array}
+\usepackage{setspace}
+\newcolumntype{x}[1]{>{\setstretch{0.8}\small\centering\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{y}[1]{>{\centering\arraybackslash\hspace{0pt}}m{#1}}
+\usepackage{longtable}
+
+\usepackage{float}
+
 %\usepackage{color,xesearch}
 %\SearchList{make-red}{\textcolor{red}{#1}}{эффективность,эффективности,эффективностью,эффективностей,эффективностям,эффективностями,эффективностях,эффективный,эффективная,эффективное,инновационный,иновационная,иновационные,инновация,иновационных,надежность,оптимизация,качество}
