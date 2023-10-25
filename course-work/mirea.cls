@@ -47,7 +47,7 @@
 \renewcommand\cfttoctitlefont{\hfill\fontsize{16pt}{16pt}\selectfont\bfseries\MakeUppercase}
 \renewcommand\cftaftertoctitle{\hfill\hfill}
 
-%\setlength{\cftbeforesecskip}{0pt} % Addtional space between sections in toc
+\setlength{\cftbeforesecskip}{0pt} % Addtional space between sections in toc
 
 %\setlength{\cftsecindent}{0pt} % Remove indent in toc for \section
 %\setlength{\cftsubsecindent}{0pt} % Remove indent in toc for \subsection
