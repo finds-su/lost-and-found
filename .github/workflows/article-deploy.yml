@@ -1,0 +1,29 @@
+name: Article 1 Deploy
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'course-work/article1/article1.pdf'
+
+jobs:
+  course-work-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get current time
+        uses: josStorer/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYY-MM-DD-HH:mm
+          utcOffset: '+03:00'
+          timezone: 'Europe/Moscow'
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Upload to gdrive
+        uses: adityak74/google-drive-upload-git-action@main
+        with:
+          credentials: ${{ secrets.DRIVE_CREDENTIALS }}
+          filename: course-work/article1/article1.pdf
+          folderId: ${{ secrets.DRIVE_FOLDER_ID }}
+          name: article1-${{ steps.current-time.outputs.formattedTime }}.pdf
+          overwrite: 'true'

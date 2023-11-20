@@ -2,10 +2,10 @@ name: Course Work Deploy
 on:
   push:
     branches:
-        - main
+      - main
     paths:
-        - 'course-work/course-work.pdf'
-        - '.github/workflows/course-work-deploy.yml'
+      - 'course-work/course-work.pdf'
+      - '.github/workflows/course-work-deploy.yml'
 
 jobs:
   course-work-deploy:
@@ -16,8 +16,8 @@ jobs:
         id: current-time
         with:
           format: YYYY-MM-DD-HH:mm
-          utcOffset: "+03:00"
-          timezone: "Europe/Moscow"
+          utcOffset: '+03:00'
+          timezone: 'Europe/Moscow'
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Upload to gdrive
@@ -26,5 +26,5 @@ jobs:
           credentials: ${{ secrets.DRIVE_CREDENTIALS }}
           filename: course-work/course-work.pdf
           folderId: ${{ secrets.DRIVE_FOLDER_ID }}
-          name: ${{ steps.current-time.outputs.formattedTime }}-sha-${{ github.sha }}.pdf
-          overwrite: "true"
+          name: diploma-${{ steps.current-time.outputs.formattedTime }}.pdf
+          overwrite: 'true'
