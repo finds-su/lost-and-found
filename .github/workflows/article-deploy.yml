@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths:
-      - 'course-work/article1/article1.pdf'
+      - 'course-work/article/article1.pdf'
 
 jobs:
   course-work-deploy:
@@ -23,7 +23,7 @@ jobs:
         uses: adityak74/google-drive-upload-git-action@main
         with:
           credentials: ${{ secrets.DRIVE_CREDENTIALS }}
-          filename: course-work/article1/article1.pdf
+          filename: course-work/article/article1.pdf
           folderId: ${{ secrets.DRIVE_FOLDER_ID }}
           name: article1-${{ steps.current-time.outputs.formattedTime }}.pdf
           overwrite: 'true'
