@@ -3,24 +3,431 @@
 
 \subsection{Выбор технологий для реализации системы}
 
-TODO
+Ниже представлены некоторые из выбранных технологий:
+
+\begin{lstlisting}[caption={Выбранные технологии}, label=lst:deps]
+"dependencies": {
+	"@headlessui/react": "^1.7.14",
+	"@heroicons/react": "^2.0.17",
+	"@hookform/resolvers": "^3.1.0",
+	"@mdx-js/loader": "^2.3.0",
+	"@mdx-js/react": "^2.3.0",
+	"@next-auth/prisma-adapter": "^1.0.5",
+	"@next/bundle-analyzer": "^13.2.4",
+	"@next/mdx": "^13.4.3",
+	"@prisma/client": "^4.15.0",
+	"@react-three/drei": "^9.77.0",
+	"@react-three/fiber": "^8.13.3",
+	"@t3-oss/env-nextjs": "^0.2.2",
+	"@tanstack/react-query": "^4.28.0",
+	"@tanstack/react-table": "^8.9.3",
+	"@trpc/client": "^10.18.0",
+	"@trpc/next": "^10.18.0",
+	"@trpc/react-query": "^10.18.0",
+	"@trpc/server": "^10.18.0",
+	"aws-sdk": "^2.1408.0",
+	"axios": "^1.4.0",
+	"classnames": "^2.3.2",
+	"date-fns": "^2.29.3",
+	"feed": "^4.2.2",
+	"flowbite": "^1.6.5",
+	"flowbite-react": "^0.4.4",
+	"immer": "^10.0.2",
+	"next": "^13.4.1",
+	"next-auth": "4.20.1",
+	"next-pwa": "^5.6.0",
+	"next-s3-upload": "^0.3.0",
+	"next-seo": "^6.0.0",
+	"nextjs-progressbar": "^0.0.16",
+	"nodemailer": "^6.9.1",
+	"openai": "^3.2.1",
+	"react": "^18.2.0",
+	"react-copy-to-clipboard": "^5.1.0",
+	"react-dom": "^18.2.0",
+	"react-dropzone": "^14.2.3",
+	"react-highlight-words": "^0.20.0",
+	"react-hook-form": "^7.44.2",
+	"react-hot-toast": "^2.4.0",
+	"react-hotkeys-hook": "^4.4.1",
+	"react-infinite-scroll-component": "^6.1.0",
+	"react-medium-image-zoom": "^5.1.6",
+	"redis": "^4.6.7",
+	"sharp": "^0.32.0",
+	"spinners-react": "^1.0.7",
+	"superjson": "1.12.2",
+	"three": "^0.153.0",
+	"transliteration": "^2.3.5",
+	"trpc-panel": "^1.3.4",
+	"unique-names-generator": "^4.7.1",
+	"zod": "^3.21.4",
+	"zustand": "^4.3.8"
+},
+"devDependencies": {
+	"@tailwindcss/forms": "^0.5.3",
+	"@tailwindcss/typography": "^0.5.9",
+	"@types/eslint": "^8.21.3",
+	"@types/node": "^18.16.9",
+	"@types/prettier": "^2.7.2",
+	"@types/react": "^18.0.28",
+	"@types/react-copy-to-clipboard": "^5.0.4",
+	"@types/react-dom": "^18.0.11",
+	"@types/react-highlight-words": "^0.16.4",
+	"@types/three": "^0.152.1",
+	"@types/uuid": "^9.0.1",
+	"@typescript-eslint/eslint-plugin": "^5.56.0",
+	"@typescript-eslint/parser": "^5.56.0",
+	"autoprefixer": "^10.4.14",
+	"eslint": "^8.37.0",
+	"eslint-config-next": "^13.4.1",
+	"eslint-config-prettier": "^8.8.0",
+	"eslint-plugin-prettier": "^4.2.1",
+	"eslint-plugin-react": "^7.32.2",
+	"husky": "^8.0.3",
+	"lint-staged": "^13.2.0",
+	"postcss": "^8.4.21",
+	"prettier": "2.8.7",
+	"prettier-plugin-tailwindcss": "^0.2.6",
+	"prisma": "^4.15.0",
+	"tailwindcss": "^3.3.0",
+	"typescript": "^5.0.2"
+},
+\end{lstlisting}
 
 \subsection{Реализация модулей автоматизации процессов}
 
-TODO
+\subsubsection{Модуль регистрации и авторизации пользователей}
+
+Модуль представляет реализацию OAuth через login.mirea.ru с единовременной передачей данных пользователя.
+
+\begin{lstlisting}[caption={Реализация OAuth}, label=lst:oauth]
+export default function MireaNinjaLksProvider(options: MireaNinjaLKSProviderConfig): Provider {
+	return {
+		id: 'lks',
+		name: 'LKS',
+		type: 'oauth',
+		version: '2.0',
+		accessTokenUrl: 'https://auth-app.mirea.ru/oauth/token',
+		requestTokenUrl: 'https://auth-app.mirea.ru/oauth/token',
+		authorization: {
+			url: 'https://auth-app.mirea.ru/oauth/authorize',
+			params: { scope: 'profile' },
+		},
+		token: {
+			url: 'https://auth-app.mirea.ru/oauth/token',
+		},
+		userinfo: {
+			url: 'https://auth-app.mirea.ru/api/?action=getData&url=https://lk.mirea.ru/profile/',
+		},
+		checks: ['state'],
+		async profile(profile: MireaProfile) {
+			const name = [profile.arUser.NAME, profile.arUser.LAST_NAME].join(' ')
+			return {
+				id: profile.arUser.ID,
+				name,
+				nickname: await nicknameValidation(name),
+				email: profile.arUser.LOGIN,
+				emailVerified: new Date(),
+				userInfo: null,
+				role: Role.USER,
+				image: 'https://lk.mirea.ru' + profile.arUser.PHOTO,
+				isBlocked: false,
+				blockReason: null,
+			}
+		},
+		clientId: options.clientId,
+		clientSecret: options.clientSecret,
+	}
+}
+\end{lstlisting}
+
 
 \subsubsection{Модуль бесконечных лент объявлений потерянных, найденных вещей}
 
-TODO
+\begin{lstlisting}[caption={Реализация бесконечной ленты}, label=lst:scroll]
+function ScrollGridLoader({ visible }: { visible: boolean }) {
+	return visible ? (
+	<p className='col-span-2 flex justify-center py-5 text-center md:col-span-4'>
+	<Spinner />
+	<span className='sr-only'>Загрузка...</span>
+	</p>
+	) : null
+}
 
-\subsubsection{Модуль полнотекстового поиска объявлений}
+function ScrollGridEndMessage() {
+	return (
+	<div className='col-span-2 flex flex-col items-center text-sm text-gray-600 md:col-span-4'>
+	<Image
+	src='/assets/svg-illustrations/items-not-found.svg'
+	alt=''
+	width={200}
+	height={200}
+	priority={false}
+	/>
+	<p className='mt-2'>Пока что тут ничего нет</p>
+	</div>
+	)
+}
 
-TODO
+interface InfiniteScrollGridWithFilterProps {
+	reason: PostItemReason
+}
+
+export default function InfiniteScrollGridWithFilter({
+	reason,
+}: InfiniteScrollGridWithFilterProps) {
+	const { enabledSortOption, checkedFilters } = useScrollGridStore((state) => state[reason])
+	const postsQuery = api.posts.infinitePosts.useInfiniteQuery(
+	{
+		limit: 12,
+		reason,
+		orderByCreationDate: enabledSortOption,
+		filters: checkedFilters,
+	},
+	{ getNextPageParam: (lastPage) => lastPage.nextCursor },
+	)
+	const [posts, setPosts] = useState<RouterOutputs['posts']['infinitePosts']['items']>([])
+	const [hasMore, setHasMore] = useState(true)
+	
+	useEffect(() => {
+		if (postsQuery.data) {
+			setPosts(postsQuery.data.pages.map((query) => query.items).flat())
+			setHasMore(postsQuery.data.pages.at(-1)?.nextCursor !== undefined)
+		}
+	}, [postsQuery.data])
+	
+	const fetchMoreData = () => {
+		if (postsQuery.data && postsQuery.data.pages.length * 10 >= 500) {
+			setHasMore(false)
+			return
+		}
+		void postsQuery.fetchNextPage()
+	}
+	
+	return (
+	<>
+	<GridFilter reason={reason} />
+	<InfiniteScroll
+	dataLength={posts.length}
+	next={fetchMoreData}
+	hasMore={hasMore}
+	loader={<ScrollGridLoader visible={postsQuery.isFetchingNextPage && posts.length > 0} />}
+	className='grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-4'
+	>
+	{posts.map((post) => (
+		<div key={post.id.toString()} className='relative'>
+		<PostCard post={post} displayReasonLabel={reason === PostItemReason.ANY} />
+		</div>
+		))}
+	</InfiniteScroll>
+	{(postsQuery.isFetched && (!posts || posts.length === 0) && <ScrollGridEndMessage />) || null}
+	</>
+	)
+}
+\end{lstlisting}
+
+\subsubsection{Модуль добавления и поиска утерянных вещей}
+
+\begin{lstlisting}[caption={Реализация бесконечной ленты}, label=lst:scroll]
+const inputs: { name: string; className: string; input: React.ReactNode }[] = [
+{
+	name: 'Фотографии',
+	className: 'sm:col-span-6',
+	input: (
+	<>
+	<DynamicDropzone
+	images={post.images}
+	addImage={(img: string) =>
+		setPost((current) => ({ ...current, images: [...current.images, img] }))
+	}
+	/>
+	<div className='mt-6 flow-root'>
+	<ul role='list' className='-my-5 divide-y divide-gray-200'>
+	{post.images.map((url, index) => (
+		<li key={index} className='py-4'>
+		<div className='flex items-center space-x-4'>
+		<div className='flex-shrink-0'>
+		<Image
+		className='h-8 w-8 rounded-full'
+		height={30}
+		width={30}
+		src={url}
+		alt=''
+		/>
+		</div>
+		<div className='min-w-0 flex-1'>
+		<p className='truncate text-sm font-medium text-gray-900'>
+		{url.split('/').at(-1)}
+		</p>
+		</div>
+		<div>
+		<button
+		onClick={() =>
+			setPost({
+				...post,
+				images: post.images.filter((currUrl, currIndex) => index !== currIndex),
+			})
+		}
+		className='inline-flex items-center rounded-full border border-gray-300 bg-white px-2.5 py-0.5 text-sm font-medium leading-5 text-gray-700 shadow-sm hover:bg-gray-50'
+		>
+		<XMarkIcon className='h-5 w-5' />
+		</button>
+		</div>
+		</div>
+		</li>
+		))}
+	</ul>
+	</div>
+	</>
+	),
+},
+{
+	name: 'Название',
+	className: 'sm:col-span-3',
+	input: (
+	<div className='flex flex-col sm:flex-row'>
+	<input
+	maxLength={100}
+	value={post.name}
+	onChange={(e) => setPost((value) => ({ ...value, name: e.target.value }))}
+	type='text'
+	name='name'
+	id='name'
+	className='w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
+	/>
+	{post.images.length > 0 && (
+		<button
+		onClick={(e) => {
+				e.preventDefault()
+				void generateImageCaption.mutateAsync({ imageUrl: post.images[0] ?? '' })
+		}}
+		disabled={generateImageCaption.isLoading}
+		className={`mt-2 inline-flex items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 sm:ml-3 sm:mt-0 ${
+				generateImageCaption.isLoading ? 'cursor-not-allowed' : ''
+			}`}
+		>
+		{generateImageCaption.isLoading ? (
+			<span>Загрузка...</span>
+			) : (
+			<>
+			<Image
+			src='/icons/magic-icon.svg'
+			alt=''
+			width={10}
+			height={10}
+			className='mr-1 h-5 w-5'
+			style={{ filter: 'invert(1)' }}
+			aria-hidden='true'
+			/>
+			Сгенерировать
+			</>
+			)}
+		</button>
+		)}
+	</div>
+	),
+},
+{
+	name: 'Описание',
+	className: 'sm:col-span-6',
+	input: (
+	<textarea
+	maxLength={512}
+	value={post.description}
+	onChange={(e) => setPost((value) => ({ ...value, description: e.target.value }))}
+	id='description'
+	name='description'
+	rows={3}
+	className='block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
+	placeholder='Место нахождения или контактная информация'
+	/>
+	),
+},
+{
+	name: 'Кампус',
+	className: 'sm:col-span-3',
+	input: (
+	<select
+	id='campus'
+	name='campus'
+	onChange={(e) => setPost({ ...post, campus: e.target.value as PrismaCamus })}
+	className='block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
+	>
+	{Object.values(PrismaCamus).map((value, index) => (
+		<option key={index} value={value}>
+		{Campus[value]}
+		</option>
+		))}
+	</select>
+	),
+},
+]
+\end{lstlisting}
 
 \subsubsection{Модуль генерации описания объявлений}
 
-TODO
+\begin{lstlisting}[caption={Реализация бесконечной ленты}, label=lst:generation]
+import os
+import re
+import uuid
+from langchain.document_loaders import ImageCaptionLoader
+from langchain.indexes import VectorstoreIndexCreator
+
+from langchain.vectorstores import Chroma
+from fastapi import FastAPI, File, UploadFile, Response
+
+app = FastAPI(title="Image Captioning API")
+
+os.environ["TOKENIZERS_PARALLELISM"] = "true"
+
+
+@app.post("/image-caption")
+def image_caption(file: UploadFile = File(...)):
+	if file.content_type not in ["image/jpeg", "image/png"]:
+		return Response(status_code=415, content="Unsupported Media Type")
+
+	random_filename = str(uuid.uuid4())
+
+	try:
+		with open(random_filename, "wb") as buffer:
+		buffer.write(file.file.read())
+		
+		loader = ImageCaptionLoader(path_images=random_filename)
+		list_docs = loader.load()
+		
+		index = VectorstoreIndexCreator(
+		vectorstore_kwargs={"collection_name": random_filename}
+		).from_documents(list_docs)
+		
+		res = index.query(
+		"Что изображено на фотографии? Только описание предмета, без вводных фраз по типу 'на фотографии изображено'. Ответ на русском языке для заголовка фотографии: "
+		)
+		
+		res = res.strip()
+		res = re.sub(r"\.$", "", res)
+		
+		return res
+	finally:
+		os.remove(random_filename)
+	
+	
+blip_processor = "Salesforce/blip-image-captioning-base"
+blip_model = "Salesforce/blip-image-captioning-base"
+
+
+@app.on_event("startup")
+async def startup_event():
+	print("Starting up...")
+	
+	from transformers import BlipForConditionalGeneration, BlipProcessor
+	
+	# Download model and configuration from huggingface.co and cache.
+	processor = BlipProcessor.from_pretrained(blip_processor)
+	model = BlipForConditionalGeneration.from_pretrained(blip_model)
+	
+	print("Model loaded")
+\end{lstlisting}
 
 \subsection*{Вывод по разделу}
 
-TODO
+Были разработаны модули программы и интегрированы в приложение.
+
