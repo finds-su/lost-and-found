@@ -22,7 +22,7 @@
 
 		\textbf{Игорь Денисович Котилевец} 
 		
-		Старший преподаватель кафедры ИКБ РТУ МИРЭА
+		Научный руководитель, старший преподаватель кафедры ИКБ РТУ МИРЭА
 	\end{FlushRight}
 	
 	\supersection{Сравнительный анализ существующих цифровых решений в сфере поиска потерянных вещей.} 
@@ -87,16 +87,16 @@
 	
 	\begin{Figure}
 		\centering
-		\includegraphics[width=\textwidth]{../images/stolNahodok1}
+		\includegraphics[width=0.5\textwidth]{../images/stolNahodok1}
 		\captionof{figure}{Скриншот системы <<столнаходок.рф>>}
 		\label{fig:stolNahodok1}
 	\end{Figure}
 	
-	<<Find My Stuff>>~\cite{bib:find_my_stuff} --- это мобильное приложение, разработанное для операционных систем iOS и Android. Оно предлагает функцию отслеживания утерянных предметов через GPS-модуль смартфона, представлено на рис.~\ref{fig:findMyStuff1}. Пользователи могут отмечать свои вещи на карте и получать уведомления, когда они находятся рядом с утерянным предметом. Однако, ограничение использования только наличием смартфона с GPS-модулем и низкая точность определения местоположения представляют существенные ограничения данного приложения.
+	<<Find My Stuff>>~\cite{bib:stol_nahodok} --- это мобильное приложение, разработанное для операционных систем iOS и Android. Оно предлагает функцию отслеживания утерянных предметов через GPS-модуль смартфона, представлено на рис.~\ref{fig:findMyStuff1}. Пользователи могут отмечать свои вещи на карте и получать уведомления, когда они находятся рядом с утерянным предметом. Однако, ограничение использования только наличием смартфона с GPS-модулем и низкая точность определения местоположения представляют существенные ограничения данного приложения.
 	
 	\begin{Figure}
 		\centering
-		\includegraphics[width=.5\textwidth]{../images/findMyStuff1.png}
+		\includegraphics[height=.5\textwidth]{../images/findMyStuff1.png}
 		\captionof{figure}{Скриншот системы <<Find My Stuff>>}
 		\label{fig:findMyStuff1}
 	\end{Figure}
@@ -105,14 +105,14 @@
 	
 	\begin{Figure}
 		\centering
-		\includegraphics[width=.95\textwidth]{../images/lostPropertyOffice}
+		\includegraphics[width=.5\textwidth]{../images/lostPropertyOffice}
 		\captionof{figure}{Скриншот системы <<Lost Property Office>>}
 		\label{fig:lostPropertyOffice}
 	\end{Figure}
 
 	
 	\begin{table}[htb]
-		\caption{Сравнительный анализ систем}
+		\caption{Сравнительный анализ систем по 10-бальной системе}
 		\centering
 		
 		\tolerance=0
@@ -123,16 +123,22 @@
 			\hline
 			столнаходок .рф & Find My Stuff & Lost Propery Office \\ 
 			\hline
-			Устаревший UI & Удобный UI/UX & Неудобный UI/UX \\ 
+			Устаревший UI (5 балла) & Удобный UI/UX (7 баллов) & Неудобный UI/UX (3 балла) \\ 
 			\hline
-			Нет уведомлений & Есть push оповещения & Нет уведомлений \\ 
+			Нет уведомлений (0 баллов) & Есть push оповещения (10 аллов) & Нет уведомлений (0 баллов) \\ 
 			\hline
-			Широкий доступ & Только через GPS & Ограничен\-ный доступ \\ 
+			Широкий доступ (10 баллов) & Только через GPS (3 балла) & Ограничен\-ный доступ (5 баллов) \\ 
+			\hline
+			Итого --- 15 баллов & 20 баллов & 8 баллов \\ 
 			\hline
 		\end{tabular}
 	\end{table}
 	
 	\subsection*{Вывод}
+	
+	В статье проведен детальный анализ существующих веб-ресурсов и приложений, предназначенных для поиска и возвращения утерянных вещей. Были изучены и проанализированы их функциональность, характеристики, преимущества и ограничения.
+	
+	Одним из наиболее популярных и востребованных решений в данной сфере являются веб-сервисы и приложения "Бюро находок". Они предоставляют пользователям платформу для регистрации утерянных вещей и связи с их владельцами, что упрощает процесс поиска и возвращения потерянных предметов.
 	
 	\begin{thebibliography}{99\kern\bibindent}
 		\bibitem{bib:m24_losts_article} МОСКВА 24 Что теряют москвичи // www.m24.ru: Новости Москвы, репортажи и интервью об основных событиях города URL: \url{https://www.m24.ru/news/gorod/28112019/98853} (дата обращения: 01.09.2023).
@@ -146,6 +152,8 @@
 		
 		\bibitem{bib:stol_nahodok} Бюро находок // столнаходок.рф: информационно-поисковый портал РФ URL: \url{http://nahodok.ru/} (дата обращения: 01.09.2023).
 		
+		\bibitem{bib:parliament_lost_and_found} Lost Property Office // parliament.uk: веб приложение URL: \url{https://www.parliament.uk/visiting/access/facilities/lost-property/} (дата обращения: 01.09.2023).
+		
 		\bibitem{bib:pona} Потерял Нашел // pona1.ru: бюро находок Пона.рф. Удобный поиск по объявлениям, большая база потерянных вещей и животных URL: \url{https://pona1.ru/sochi} (дата обращения: 01.09.2023).
 		
 		\bibitem{bib:investopedia_rfid} Investopedia // investopedia.com: Radio Frequency Identification (RFID): What It Is, How It Works URL: \url{https://www.investopedia.com/terms/r/radio-frequency-identification-rfid.asp#:~:text=Radio%20Frequency%20Identification%20(RFID)%20is,checked%20out%20of%20a%20library.} (дата обращения: 01.09.2023).
@@ -153,8 +161,6 @@
 		\bibitem{bib:investopedia_rfid} Investopedia // investopedia.com: Radio Frequency Identification (RFID): What It Is, How It Works URL: \url{https://www.investopedia.com/terms/r/radio-frequency-identification-rfid.asp#:~:text=Radio%20Frequency%20Identification%20(RFID)%20is,checked%20out%20of%20a%20library.} (дата обращения: 01.09.2023).
 		
 		\bibitem{bib:airtag} AirTag // apple.com: магазин Apple URL: \url{https://www.apple.com/airtag/} (дата обращения: 01.09.2023).
-		
-		\bibitem{bib:parliament_lost_and_found} Lost Property Office // parliament.uk: веб приложение URL: \url{https://www.parliament.uk/visiting/access/facilities/lost-property/} (дата обращения: 01.09.2023).
 	\end{thebibliography}
 	
 \end{document}
