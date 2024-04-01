@@ -83,7 +83,7 @@ async function handleVkEvent(req: NextApiRequest, res: NextApiResponse) {
 
   await VkApi.sendMessage(
     message.from_id,
-    'Ваш аккаунт ВКонтакте успешно подключен. Теперь вы можете получать уведомления о новых объявлениях.',
+    'Ваш аккаунт ВКонтакте успешно подключен. Теперь вы можете получать уведомления и обратную связь.',
   )
 
   return res.status(200).send('ok')
@@ -136,7 +136,7 @@ async function handleTelegramEvent(req: NextApiRequest, res: NextApiResponse) {
 
   await TelegramApi.sendMessage(
     message.from.id.toString(),
-    'Ваш аккаунт Telegram успешно подключен. Теперь вы можете получать уведомления о новых объявлениях.',
+    'Ваш аккаунт Telegram успешно подключен. Теперь вы можете получать уведомления и обратную связь.',
   )
 
   return res.status(200).send('ok')

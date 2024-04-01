@@ -97,7 +97,7 @@ model LostAndFoundItem {
   user             User                             @relation(fields: [userId], references: [id], onDelete: Cascade)
   socialNetworks   LostAndFoundItemSocialNetworks[]
   created          DateTime                         @default(now())
-  expires          DateTime                         @default(dbgenerated("NOW() + interval '1 week'"))
+  expires          DateTime                         @default(dbgenerated("NOW() + interval '2 week'"))
   slug             String                           @unique @default(cuid())
   isInStoragePlace Boolean?                         @default(false)
 

@@ -24,7 +24,19 @@ export const postsRouter = createTRPCRouter({
         filters: z.array(z.string()).max(30),
       }),
     )
-    .query(async ({ input }) => {
+    .query(async ({ ctx, input }) => {
+      const statusSelector = {
+        status:
+          ctx.session?.user?.role === Role.ADMIN || ctx.session?.user?.role === Role.MODERATOR
+            ? {
+                in: [
+                  LostAndFoundItemStatus.ACTIVE,
+                  LostAndFoundItemStatus.BLOCKED,
+                  LostAndFoundItemStatus.EXPIRED,
+                ],
+              }
+            : { in: [LostAndFoundItemStatus.ACTIVE] },
+      }
       const limit = input.limit ?? 50
       const campusFilters = input.filters.filter((filter) =>
         Object.values(Campus).includes(filter as Campus),
@@ -51,8 +63,9 @@ export const postsRouter = createTRPCRouter({
         take: limit + 1, // get an extra item at the end which we'll use as next cursor
         where:
           reason !== PostItemReason.LOST && reason !== PostItemReason.FOUND
-            ? { campus: { in: campusFilters } }
-            : { reason, campus: { in: campusFilters } },
+            ? { campus: { in: campusFilters }, ...statusSelector }
+            : { reason, campus: { in: campusFilters }, ...statusSelector },
+
         cursor: cursor ? { id: cursor } : undefined,
         orderBy: {
           created: input.orderByCreationDate,
@@ -146,7 +159,10 @@ export const postsRouter = createTRPCRouter({
     .input(z.object({ slug: z.string(), reason: z.nativeEnum(PostItemReason) }))
     .query(async ({ input }) => {
       const post = await prisma.lostAndFoundItem.findFirst({
-        where: { slug: input.slug, reason: input.reason },
+        where: {
+          slug: input.slug,
+          reason: input.reason,
+        },
         select: {
           id: true,
           name: true,
@@ -260,7 +276,7 @@ export const postsRouter = createTRPCRouter({
 
       const post = await prisma.lostAndFoundItem.findFirst({
         where:
-          ctx.session.user.role !== Role.ADMIN
+          ctx.session.user.role !== Role.ADMIN && ctx.session.user.role !== Role.MODERATOR
             ? { id: postId, userId: ctx.session.user.id }
             : { id: postId },
       })
@@ -306,7 +322,6 @@ export const postsRouter = createTRPCRouter({
       const post = await prisma.lostAndFoundItem.findFirst({
         where: {
           id: postId,
-          userId: ctx.session.user.id,
           reason,
         },
       })
@@ -317,7 +332,11 @@ export const postsRouter = createTRPCRouter({
         })
       }
 
-      if (post.userId !== ctx.session.user.id && ctx.session.user.role !== Role.ADMIN) {
+      if (
+        post.userId !== ctx.session.user.id &&
+        ctx.session.user.role !== Role.ADMIN &&
+        ctx.session.user.role !== Role.MODERATOR
+      ) {
         throw new TRPCError({
           code: 'FORBIDDEN',
           message: 'Нет доступа.',

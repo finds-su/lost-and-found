@@ -127,5 +127,4 @@ class VkApi implements IMessengersApi {
   }
 }
 
-// to use: import VkApi from '@/server/messengers-api/vk'
 export default VkApi.getInstance(env.VK_BOT_TOKEN, env.VK_GROUP_ID)

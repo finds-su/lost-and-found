@@ -49,6 +49,8 @@ export const env = createEnv({
     TELEGRAM_BOT_NAME: z.string().min(1),
 
     IMAGE_CAPTION_HOST: z.string().url(),
+
+    INNGEST_SIGNING_KEY: z.string().min(1),
   },
   /*
    * Environment variables available on the client (and server).
@@ -109,6 +111,8 @@ export const env = createEnv({
     TELEGRAM_BOT_NAME: process.env.TELEGRAM_BOT_NAME,
 
     IMAGE_CAPTION_HOST: process.env.IMAGE_CAPTION_HOST,
+
+    INNGEST_SIGNING_KEY: process.env.INNGEST_SIGNING_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
