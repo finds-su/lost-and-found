@@ -1,0 +1,41 @@
+% !TeX program  = xelatex
+% !TeX encoding = UTF-8
+% !TeX root     = article1.tex
+
+\usepackage{hyperref}
+\hypersetup{pdftitle={ВКР на тему "<Разработка системы для поиска и возврата утерянных вещей">}, pdfauthor={В. С. Верхотуров}}
+
+\usepackage{comment}
+
+\usepackage{graphicx}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\lstset{basicstyle=\footnotesize, breaklines=true, numbers=left, captionpos=t, showstringspaces=false, commentstyle=\color{teal}, stringstyle=\color{red}, keywordstyle=\color{violet}}  % Настройки, применяемые ко всем листингам
+
+% Создание введения или заключения
+\newcommand{\supersection}[1]{
+	\section*{#1}
+	\phantomsection
+	\addcontentsline{toc}{section}{#1}
+}
+
+\usepackage{caption}
+\captionsetup[lstlisting]{justification=raggedright, singlelinecheck=false}
+
+\usepackage{pdfpages}
+
+\usepackage{microtype}
+
+\usepackage{multirow}
+
+\usepackage{array}
+\usepackage{setspace}
+\newcolumntype{x}[1]{>{\setstretch{0.8}\small\centering\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{y}[1]{>{\centering\arraybackslash\hspace{0pt}}m{#1}}
+\usepackage{longtable}
+
+\usepackage{float}
+
+%\usepackage{color,xesearch}
+%\SearchList{make-red}{\textcolor{red}{#1}}{эффективность,эффективности,эффективностью,эффективностей,эффективностям,эффективностями,эффективностях,эффективный,эффективная,эффективное,инновационный,иновационная,иновационные,инновация,иновационных,надежность,оптимизация,качество}
