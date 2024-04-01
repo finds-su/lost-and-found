@@ -1,9 +1,9 @@
-FROM node:18-alpine AS base
+FROM node:20-alpine AS base
 
 ##### DEPENDENCIES
 
 FROM base AS deps
-RUN apk update && apk add --no-cache libc6-compat openssl1.1-compat
+RUN apk add --no-cache libc6-compat openssl
 WORKDIR /app
 
 # Install Prisma Client - remove if not using Prisma
