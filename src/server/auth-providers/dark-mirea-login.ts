@@ -14,7 +14,7 @@ interface MireaProfile {
 export default function DarkMireaLoginProvider(): Provider {
   return {
     id: 'ninja',
-    name: 'Dark Mirea Login',
+    name: 'РТУ МИРЭА',
     type: 'oauth',
     version: '2.0',
     accessTokenUrl: 'https://login.mirea.ninja/oauth/token',
@@ -46,5 +46,6 @@ export default function DarkMireaLoginProvider(): Provider {
     },
     clientId: 'public',
     clientSecret: 'public',
+    allowDangerousEmailAccountLinking: true,
   }
 }
