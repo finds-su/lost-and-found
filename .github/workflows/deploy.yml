@@ -72,6 +72,7 @@ jobs:
   #          docker tag cr.yandex/${{ env.CR_REGISTRY }}/${{ env.CR_IMAGE_IMAGE_CAPTION }}:${{ github.sha }} \
   #            cr.yandex/${{ env.CR_REGISTRY }}/${{ env.CR_IMAGE_IMAGE_CAPTION }}:latest
   #          docker push cr.yandex/${{ env.CR_REGISTRY }}/${{ env.CR_IMAGE_IMAGE_CAPTION }}:latest
+
   deploy:
     runs-on: self-hosted
     needs: [build, build-image-caption]
