@@ -10,6 +10,7 @@ import { env } from '@/env.mjs'
 import { type User as PrismaUser } from '@prisma/client'
 import MireaNinjaLksProvider from '@/server/auth-providers/mirea-ninja-lks-provider'
 import MireaProvider from './auth-providers/mirea-provider'
+import DarkMireaLoginProvider from './auth-providers/dark-mirea-login'
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -92,6 +93,8 @@ const getProviders = () => {
       }),
     )
   }
+
+  providers.push(DarkMireaLoginProvider())
 
   return providers
 }
