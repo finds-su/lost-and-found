@@ -49,14 +49,43 @@
 
 \subsection{Проектирование модулей автоматизации процессов}
 
-Проектирование модулей автоматизации процессов включает в себя разработку структуры и функционала модулей, которые будут автоматизировать ключевые процессы приложения для поиска и возврата утерянных вещей. В данном случае, ключевыми процессами являются: регистрация и авторизация пользователей, добавление и поиск утерянных вещей, связь между пользователями и система уведомлений.
+Проектирование модулей автоматизации для приложения по поиску и возврату утерянных вещей требует разработки и планирования (см. рис. \ref{fig:system-componets}). Вот как можно подойти к проектированию каждого из ключевых модулей:
+
+\begin{enumerate}
+	\item Модуль регистрации и авторизации пользователей
+	
+	Этот модуль отвечает за создание учетных записей пользователей и их аутентификацию. Основные аспекты:
+	
+	\begin{enumerate}
+		\item Форма регистрации --- сбор данных о пользователе, таких как имя, email, и пароль.
+		\item Валидация данных --- проверка введенных данных на корректность и уникальность.
+		\item Безопасность --- шифрование паролей и защита данных пользователя.
+	\end{enumerate}
+
+	\item Модуль добавления и поиска утерянных вещей
+	
+	Этот модуль позволяет пользователям добавлять информацию о потерянных вещах и искать их в базе данных.
+	
+	\begin{enumerate}
+		\item Форма добавления --- пользователи могут вводить описание вещи, место и время утери.
+		\item База данных --- хранение информации о всех зарегистрированных вещах.
+		\item Поиск --- возможность поиска вещей по различным параметрам, таким как категория, местоположение, и время утери.
+		\item Фильтрация и сортировка --- улучшение пользовательского опыта за счет фильтров и сортировки результатов поиска.
+	\end{enumerate}
+
+	\item Система уведомлений
+	
+	\begin{enumerate}
+		\item Email-уведомления: отправка регулярных обновлений и важных уведомлений на email.
+	\end{enumerate}
+\end{enumerate}
 
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=.9\textwidth]{images/full-diagram.png}
 	\parskip=6pt
 	\caption{Диаграмма компонентов системы}
-	\label{fig:агддВшфпкфь}
+	\label{fig:system-componets}
 \end{figure}
 
 \begin{comment}
@@ -82,6 +111,38 @@ package "Модуль генерации описания объявлений" 
 InfiniteScroll .up.> AddItems : Использует
 InfiniteScroll .up.> SearchItems : Использует
 DescriptionGeneration .up.> AddItems : Использует для генерации описаний
+@enduml
+\end{comment}
+
+Схема дерева переходов по сайту будет представлена на рис. \ref{fig:site-tree}.
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=.9\textwidth]{images/site-tree.png}
+	\parskip=6pt
+	\caption{Схема дерева переходов по сайту}
+	\label{fig:site-tree}
+\end{figure}
+
+\begin{comment}
+@startuml
+skinparam style strictuml
+
+package "Main Page (Lost and Found Items)" {
+	[Login]
+	[Registration]
+	[Search Items]
+	[Create Post] --> [Lost Item]
+	[Create Post] --> [Found Item]
+	[Profile] --> [Edit Profile]
+}
+
+[Main Page (Lost and Found Items)] --> [Login]
+[Main Page (Lost and Found Items)] --> [Registration]
+[Main Page (Lost and Found Items)] --> [Search Items]
+[Main Page (Lost and Found Items)] --> [Create Post]
+[Main Page (Lost and Found Items)] --> [Profile]
+
 @enduml
 \end{comment}
 
@@ -285,7 +346,7 @@ end note
 	\centering
 	\includegraphics[width=.95\textwidth]{images/generating-diagram.png}
 	\parskip=6pt
-	\caption{Диаграмма классов генеарации описания вещей}
+	\caption{Диаграмма классов генерации описания вещей}
 	\label{fig:generatingDiagram}
 \end{figure}
 
